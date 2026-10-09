@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EkoPortal - Czyste Środowisko</title>
+    <title>Kontakt - Parki Narodowe Polski</title>
     
-    <!-- Wymagane tagi meta (ćwiczenie 2) -->
-    <meta name="author" content="Franciszek Bieniek">
-    <meta name="description" content="Portal edukacyjny poświęcony ochronie środowiska i zrównoważonemu rozwojowi.">
-    <meta name="keywords" content="ekologia, ochrona środowiska, retencja wody, jakość powietrza, edukacja">
+    <meta name="author" content="Franciszek Bieniek, Dominik Gilarski">
+    <meta name="description" content="Formularz kontaktowy oraz dane teleadresowe autorów serwisu o parkach narodowych.">
+    <meta name="keywords" content="kontakt, formularz, Politechnika Łódzka, studenci, parki narodowe">
     
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Nagłówek strony -->
     <header>
         <div class="content">
-            <h1><a href="index.html">EkoPortal</a></h1>
-            <p>Działamy na rzecz zrównoważonej i czystej przyszłości</p>
+            <h1><a href="index.html">Parki Narodowe Polski</a></h1>
+            <p>Najwyższa forma ochrony ojczystej przyrody</p>
         </div>
         <nav>
             <ul>
@@ -30,44 +28,62 @@
         </nav>
     </header>
 
-    <!-- Treść główna -->
     <main>
-        <!-- Sekcja z banerem tekstowym (na razie bez grafiki) -->
         <section class="banner-placeholder">
-            <h2>Główny cel inicjatywy</h2>
-            <p>Edukacja ekologiczna i monitorowanie stanu środowiska naturalnego.</p>
+            <h2>Skontaktuj się z nami</h2>
+            <p>Masz pytania dotyczące projektu lub zauważyłeś błąd w danych? Wypełnij formularz poniżej.</p>
         </section>
 
-        <!-- Blok 1: Wprowadzenie do problematyki -->
-        <section class="section-block">
+        <section class="content-section">
             <article>
-                <h3>Wyzwania współczesnej ochrony środowiska</h3>
-                <p>W obliczu dynamicznych zmian klimatycznych kluczowe staje się racjonalne gospodarowanie zasobami naturalnymi oraz ograniczanie emisji zanieczyszczeń.</p>
-                <a href="o-projekcie.html">Dowiedz się więcej &rarr;</a>
+                <h3>Informacje akademickie</h3>
+                <p>Serwis realizowany w celach dydaktycznych w ramach laboratorium Projektowania Serwisów WWW.</p>
+                <ul>
+                    <li><strong>Wydział:</strong> Elektrotechniki, Elektroniki, Informatyki i Automatyki (WEEIA)</li>
+                    <li><strong>Jednostka:</strong> Instytut Informatyki Stosowanej</li>
+                    <li><strong>Prowadzący:</strong> dr Joanna Sekulska-Jaworska</li>
+                </ul>
             </article>
         </section>
 
-        <!-- Blok 2: Główne obszary działań -->
-        <section class="section-block">
-            <article>
-                <h3>Kluczowe obszary analizy</h3>
-                <p>Skupiamy się na jakości powietrza, retencji wód miejskich oraz nowoczesnych metodach redukcji odpadów.</p>
-                <a href="zagadnienia.html">Zobacz szczegóły &rarr;</a>
-            </article>
+        <section class="content-section">
+            <h3>Formularz zapytania</h3>
+            <form action="#" method="post" class="contact-form">
+                <div class="form-group">
+                    <label for="name">Imię i nazwisko:</label>
+                    <input type="text" id="name" name="name" placeholder="Wpisz swoje imię i nazwisko" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Adres e-mail:</label>
+                    <input type="email" id="email" name="email" placeholder="twoj.mail@domena.pl" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Temat wiadomości:</label>
+                    <input type="text" id="subject" name="subject" placeholder="Wpisz temat" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Treść pytania:</label>
+                    <textarea id="message" name="message" placeholder="Treść wiadomości..." required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Wyślij wiadomość</button>
+            </form>
         </section>
     </main>
 
-    <!-- Stopka -->
     <footer>
         <div class="content">
             <ul>
-                <li><strong>Adres:</strong> ul. Politechniki 1, Łódź</li>
-                <li><strong>E-mail:</strong> <a href="mailto:kontakt@ekoportal.pl">kontakt@ekoportal.pl</a></li>
-                <li><strong>Telefon:</strong> +48 42 631 00 00</li>
+                <li><strong>Instytucja:</strong> Politechnika Łódzka, Wydział EEIA</li>
+                <li><strong>E-mail:</strong> <a href="mailto:kontakt@parkinarodowe-projekt.pl">kontakt@parkinarodowe-projekt.pl</a></li>
+                <li><strong>Lokalizacja:</strong> ul. Stefanowskiego 18/22, 90-537 Łódź</li>
             </ul>
         </div>
         <div class="copyright">
-            <p>Copyright &#169; 2026 EkoPortal. Wszelkie prawa zastrzeżone.</p>
+            <p>Copyright &#169; 2026 Franciszek Bieniek &amp; Dominik Gilarski. Wszelkie prawa zastrzeżone.</p>
         </div>
     </footer>
 
