@@ -11,7 +11,7 @@ body {
     background-color: #f9fbf9;
 }
 
-/* Header & Menu */
+/* Header & Nawigacja */
 header {
     background-color: #2e7d32;
     color: #ffffff;
@@ -51,9 +51,9 @@ nav ul li a:hover {
     text-decoration: underline;
 }
 
-/* Treść główna */
+/* Treść główna i Baner */
 main {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 20px auto;
     padding: 0 15px;
 }
@@ -62,29 +62,47 @@ main {
     background-color: #c8e6c9;
     padding: 30px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     border-radius: 4px;
 }
 
-.section-block {
+/* STYL UKŁADU 3-KOLUMNOWEGO */
+.columns-container {
+    display: flex;          /* ustawia elementy w jednym rzędzie */
+    gap: 20px;             /* równy odstęp między kolumnami */
+    margin-bottom: 30px;
+}
+
+.column {
+    flex: 1;                /* każda kolumna ma identyczną szerokość (1/3 całości) */
     background: #ffffff;
     border: 1px solid #e0e0e0;
     padding: 20px;
-    margin-bottom: 15px;
     border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* równa wysokość i przycisk na dole */
 }
 
-.section-block h3 {
+.column h3 {
     margin-bottom: 10px;
     color: #1b5e20;
 }
 
-.section-block a {
-    display: inline-block;
-    margin-top: 10px;
+.column p {
+    font-size: 0.95rem;
+    color: #555555;
+    margin-bottom: 15px;
+}
+
+.column a {
     color: #2e7d32;
     text-decoration: none;
     font-weight: bold;
+}
+
+.column a:hover {
+    text-decoration: underline;
 }
 
 /* Stopka */
@@ -93,7 +111,8 @@ footer {
     color: #eceff1;
     text-align: center;
     padding: 20px 10px;
-    margin-top: 30px;
+    margin-top: 40px;
+    clear: both;
 }
 
 footer .content ul {
