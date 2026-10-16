@@ -21,12 +21,15 @@
             <p>Najwyższa forma ochrony ojczystej przyrody</p>
         </div>
         <nav>
-            <ul>
-                <li><a href="index.html" class="active">Start</a></li>
-                <li><a href="o-projekcie.html">O projekcie</a></li>
-                <li><a href="zagadnienia.html">Zagadnienia</a></li>
-                <li><a href="kontakt.html">Kontakt</a></li>
-            </ul>
+                <!-- Przycisk hamburgera (widoczny tylko na telefonie) -->
+                <button class="hamburger-btn" id="hamburger-btn" aria-label="Otwórz menu">&#9776;</button>
+    
+                <ul id="nav-menu">
+                    <li><a href="index.html" class="active">Start</a></li>
+                    <li><a href="o-projekcie.html">O projekcie</a></li>
+                    <li><a href="zagadnienia.html">Zagadnienia</a></li>
+                    <li><a href="kontakt.html">Kontakt</a></li>
+                </ul>
         </nav>
     </header>
 
@@ -82,5 +85,13 @@
         </div>
     </footer>
 
+<script>
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navMenu = document.getElementById('nav-menu');
+
+        hamburgerBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('open');
+        });
+    </script>
 </body>
 </html>

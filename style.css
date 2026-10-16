@@ -15,7 +15,7 @@ body {
 }
 
 /* ==========================================================================
-   2. NAGŁÓWEK (HEADER) I MENU NAWIGACYJNE
+   2. NAGŁÓWEK ORAZ HAMBURGER MENU (KOMPUTER + MOBILE)
    ========================================================================== */
 header {
     background-color: #2e7d32;
@@ -37,27 +37,76 @@ header .content p {
     color: #e8f5e9;
 }
 
+/* Przycisk hamburgera - widoczny na KAŻDYM urządzeniu */
+.hamburger-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    font-size: 1.8rem;
+    line-height: 1;
+    padding: 8px 18px;
+    margin-top: 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+
+.hamburger-btn:hover {
+    background-color: rgba(0, 0, 0, 0.32);
+    border-color: #ffffff;
+}
+
+.hamburger-btn:active {
+    transform: scale(0.96);
+}
+
+/* Lista zakładek w menu - domyślnie UKRYTA na wszystkich ekranach */
 nav ul {
+    display: none;
     list-style: none;
-    margin-top: 20px;
+    margin-top: 15px;
     padding: 0;
 }
 
+/* Klasa .open nadawana przez kliknięcie w JavaScript - rozwija menu */
+nav ul.open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: fadeInMenu 0.25s ease-in-out;
+}
+
+@keyframes fadeInMenu {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 nav ul li {
-    display: inline-block;
-    margin: 0 6px;
+    width: 100%;
+    max-width: 320px;
 }
 
 nav ul li a {
+    display: block;
     color: #e8f5e9;
     text-decoration: none;
     font-weight: bold;
-    padding: 7px 15px;
-    border-radius: 4px;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Podświetlenie aktywnej strony oraz efekt najechania */
 nav ul li a:hover,
 nav ul li a.active {
     background-color: #1b5e20;
@@ -65,7 +114,7 @@ nav ul li a.active {
 }
 
 /* ==========================================================================
-   3. TREŚĆ GŁÓWNA (MAIN) I BANER TEKSTOWY
+   3. TREŚĆ GŁÓWNA (MAIN) I BANER
    ========================================================================== */
 main {
     max-width: 1050px;
@@ -78,7 +127,7 @@ main {
     border-left: 6px solid #2e7d32;
     padding: 25px 30px;
     margin-bottom: 25px;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
 .banner-placeholder h2 {
@@ -93,7 +142,7 @@ main {
 }
 
 /* ==========================================================================
-   4. STANDARDOWE BLOKI TEKSTOWE (.content-section)
+   4. BLOKI TEKSTOWE (.content-section)
    ========================================================================== */
 .content-section {
     background: #ffffff;
@@ -173,7 +222,7 @@ main {
 }
 
 /* ==========================================================================
-   6. UKŁAD DWUKOLUMNOWY I FORMULARZ NA STRONIE KONTAKTU
+   6. UKŁAD PODSTRONY KONTAKT I FORMULARZ
    ========================================================================== */
 .contact-layout {
     display: flex;
@@ -206,7 +255,6 @@ main {
     border-radius: 4px;
     font-family: inherit;
     font-size: 0.95rem;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contact-form input:focus,
@@ -272,20 +320,19 @@ footer a:hover {
 }
 
 /* ==========================================================================
-   8. WERSJA MOBILNA I RESPONSYWNOŚĆ (MEDIA QUERIES)
+   8. RESPONSYWNOŚĆ TREŚCI I KOLUMN (@media max-width: 768px)
    ========================================================================== */
 @media (max-width: 768px) {
-    /* 3 kolumny układają się pionowo jedna pod drugą */
+    /* Trzy kolumny przeskakują w pion, jedna pod drugą */
     .columns-container {
         flex-direction: column;
     }
 
-    /* 2 kolumny na podstronie kontaktowej również przechodzą w pion */
+    /* Układ kontaktu (dane + formularz) przeskakuje w pion */
     .contact-layout {
         flex-direction: column;
     }
 
-    /* Dostosowanie marginesów i paddingów na węższych ekranach */
     main {
         margin: 15px auto;
         padding: 0 12px;
@@ -293,16 +340,5 @@ footer a:hover {
 
     .banner-placeholder {
         padding: 20px 15px;
-    }
-
-    /* Menu nawigacyjne w wersji mobilnej układa się pionowo */
-    nav ul li {
-        display: block;
-        margin: 8px 0;
-    }
-
-    nav ul li a {
-        display: inline-block;
-        width: 80%;
     }
 }
