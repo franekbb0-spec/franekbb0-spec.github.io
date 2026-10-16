@@ -270,3 +270,39 @@ footer a:hover {
     padding-top: 15px;
     color: #b0bec5;
 }
+
+/* ==========================================================================
+   8. WERSJA MOBILNA I RESPONSYWNOŚĆ (MEDIA QUERIES)
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* 3 kolumny układają się pionowo jedna pod drugą */
+    .columns-container {
+        flex-direction: column;
+    }
+
+    /* 2 kolumny na podstronie kontaktowej również przechodzą w pion */
+    .contact-layout {
+        flex-direction: column;
+    }
+
+    /* Dostosowanie marginesów i paddingów na węższych ekranach */
+    main {
+        margin: 15px auto;
+        padding: 0 12px;
+    }
+
+    .banner-placeholder {
+        padding: 20px 15px;
+    }
+
+    /* Menu nawigacyjne w wersji mobilnej układa się pionowo */
+    nav ul li {
+        display: block;
+        margin: 8px 0;
+    }
+
+    nav ul li a {
+        display: inline-block;
+        width: 80%;
+    }
+}
