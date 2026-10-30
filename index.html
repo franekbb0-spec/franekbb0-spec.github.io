@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parki Narodowe w Polsce - Ochrona Dziedzictwa Przyrodniczego</title>
     
-    <!-- Wymagane tagi meta (ćwiczenie 2) -->
     <meta name="author" content="Franciszek Bieniek, Dominik Gilarski">
     <meta name="description" content="Portal edukacyjny poświęcony 23 parkom narodowym w Polsce, formom ochrony przyrody i bioróżnorodności.">
     <meta name="keywords" content="parki narodowe, ochrona przyrody, Polska, ekologia, rezerwaty, bioróżnorodność">
@@ -20,25 +19,27 @@
             <h1><a href="index.html">Parki Narodowe Polski</a></h1>
             <p>Najwyższa forma ochrony ojczystej przyrody</p>
         </div>
-        <nav>
-                
-                <button class="hamburger-btn" id="hamburger-btn" aria-label="Otwórz menu">&#9776;</button>
-    
-                <ul id="nav-menu">
-                    <li><a href="index.html" class="active">Start</a></li>
-                    <li><a href="o-projekcie.html">O projekcie</a></li>
-                    <li><a href="zagadnienia.html">Zagadnienia</a></li>
-                    <li><a href="kontakt.html">Kontakt</a></li>
-                </ul>
-        </nav>
     </header>
+
+    <!-- Przyklejona nawigacja (Sticky Nav) -->
+    <nav>
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Otwórz menu">&#9776;</button>
+
+        <ul id="nav-menu">
+            <li><a href="index.html" class="active">Start</a></li>
+            <li><a href="o-projekcie.html">O projekcie</a></li>
+            <li><a href="zagadnienia.html">Zagadnienia</a></li>
+            <li><a href="kontakt.html">Kontakt</a></li>
+        </ul>
+    </nav>
 
     <!-- Treść główna -->
     <main>
-        <!-- Sekcja banera -->
+        <!-- Sekcja banera z przyciskiem do modala -->
         <section class="banner-placeholder">
             <h2>23 Ostoje Dzikiej Przyrody</h2>
             <p>Polskie parki narodowe obejmują łącznie ponad 317 tysięcy hektarów, co stanowi około 1% terytorium całego kraju.</p>
+            <button id="openModal" class="btn-action" type="button">Ważny komunikat dla turystów</button>
         </section>
 
         <!-- Blok wprowadzający -->
@@ -49,7 +50,46 @@
             </article>
         </section>
 
-        <!-- UKŁAD 3-KOLUMNOWY -->
+        <!-- Ćwiczenie 5 Zadanie 1: Przewijana lista 23 Parków Narodowych -->
+        <section class="content-section">
+            <h3>Wykaz Parków Narodowych w Polsce (23 obiekty)</h3>
+            <p>Użyj poniższych przycisków, aby płynnie przewijać rejestr wszystkich parków:</p>
+            
+            <div class="lista-parkow" id="lista">
+                <ul>
+                    <li>1. Babiogórski Park Narodowy (rok utworzenia: 1954)</li>
+                    <li>2. Białowieski Park Narodowy (rok utworzenia: 1932)</li>
+                    <li>3. Biebrzański Park Narodowy (rok utworzenia: 1993)</li>
+                    <li>4. Bieszczadzki Park Narodowy (rok utworzenia: 1973)</li>
+                    <li>5. Drawieński Park Narodowy (rok utworzenia: 1990)</li>
+                    <li>6. Gorczański Park Narodowy (rok utworzenia: 1981)</li>
+                    <li>7. Kampinoski Park Narodowy (rok utworzenia: 1959)</li>
+                    <li>8. Karkonoski Park Narodowy (rok utworzenia: 1959)</li>
+                    <li>9. Magurski Park Narodowy (rok utworzenia: 1995)</li>
+                    <li>10. Narwiański Park Narodowy (rok utworzenia: 1996)</li>
+                    <li>11. Ojcowski Park Narodowy (rok utworzenia: 1956)</li>
+                    <li>12. Park Narodowy Bory Tucholskie (rok utworzenia: 1996)</li>
+                    <li>13. Park Narodowy Gór Stołowych (rok utworzenia: 1993)</li>
+                    <li>14. Park Narodowy „Ujście Warty” (rok utworzenia: 2001)</li>
+                    <li>15. Pieniński Park Narodowy (rok utworzenia: 1932)</li>
+                    <li>16. Poleski Park Narodowy (rok utworzenia: 1990)</li>
+                    <li>17. Roztoczański Park Narodowy (rok utworzenia: 1974)</li>
+                    <li>18. Słowiński Park Narodowy (rok utworzenia: 1967)</li>
+                    <li>19. Świętokrzyski Park Narodowy (rok utworzenia: 1950)</li>
+                    <li>20. Tatrzański Park Narodowy (rok utworzenia: 1954)</li>
+                    <li>21. Wielkopolski Park Narodowy (rok utworzenia: 1957)</li>
+                    <li>22. Wigierski Park Narodowy (rok utworzenia: 1989)</li>
+                    <li>23. Woliński Park Narodowy (rok utworzenia: 1960)</li>
+                </ul>
+            </div>
+
+            <div class="przyciski">
+                <button id="dol" type="button">Przewiń w dół</button>
+                <button id="gora" type="button">Przewiń na górę</button>
+            </div>
+        </section>
+
+        <!-- Układ 3 kolumn -->
         <section class="columns-container">
             <article class="column">
                 <h3>Idea i Misja</h3>
@@ -71,6 +111,16 @@
         </section>
     </main>
 
+    <!-- Ćwiczenie 5 Zadanie 2: Okno modalne -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button id="closeModal" class="close-btn" aria-label="Zamknij okno">&times;</button>
+            <h2>Komunikat dla odwiedzających</h2>
+            <p>Witamy na portalu edukacyjnym poświęconym polskim parkom narodowym.</p>
+            <p>Przypominamy, że na obszarach objętych najwyższym reżimem ochronnym poruszamy się wyłącznie po wyznaczonych szlakach, zachowujemy ciszę i zabieramy wszelkie odpady ze sobą.</p>
+        </div>
+    </div>
+
     <!-- Stopka -->
     <footer>
         <div class="content">
@@ -85,13 +135,6 @@
         </div>
     </footer>
 
-<script>
-        const hamburgerBtn = document.getElementById('hamburger-btn');
-        const navMenu = document.getElementById('nav-menu');
-
-        hamburgerBtn.addEventListener('click', () => {
-            navMenu.classList.toggle('open');
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
