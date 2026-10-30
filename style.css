@@ -53,7 +53,7 @@ nav {
     padding: 10px 15px;
 }
 
-/* Przycisk hamburgera z mikroanimacją obrotu (Ćw. 4 Przykład 4) */
+/* Przycisk hamburgera z płynną animacją obrotu */
 .hamburger-btn {
     display: inline-flex;
     align-items: center;
@@ -66,17 +66,30 @@ nav {
     padding: 8px 18px;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.3s ease;
+    /* Płynne przejście transformacji obrotu i kolorów */
+    transition: transform 0.3s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .hamburger-btn:hover {
     background-color: rgba(0, 0, 0, 0.35);
     border-color: #ffffff;
-    transform: rotate(90deg);
 }
 
+/* Stan aktywny (kliknięcie bez otwartego menu) */
 .hamburger-btn:active {
     transform: scale(0.92);
+}
+
+/* STAN PO KLIKNIĘCIU: obrót o 90 stopni i utrzymanie pozycji */
+.hamburger-btn.open {
+    transform: rotate(90deg);
+    background-color: rgba(0, 0, 0, 0.35);
+    border-color: #ffffff;
+}
+
+/* Kliknięcie w obrócony przycisk z zachowaniem obrotu */
+.hamburger-btn.open:active {
+    transform: rotate(90deg) scale(0.92);
 }
 
 /* Lista linków w menu */

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // ---------------------------------------------------------
+// ---------------------------------------------------------
     // 1. OBSŁUGA HAMBURGER MENU (DLA WSZYSTKICH PODSTRON)
     // ---------------------------------------------------------
     const hamburgerBtn = document.getElementById("hamburger-btn");
@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (hamburgerBtn && navMenu) {
         hamburgerBtn.addEventListener("click", () => {
             navMenu.classList.toggle("open");
+            hamburgerBtn.classList.toggle("open"); // <-- Przełącza obrót przycisku
         });
     }
 
