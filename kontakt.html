@@ -18,18 +18,18 @@
             <h1><a href="index.html">Parki Narodowe Polski</a></h1>
             <p>Najwyższa forma ochrony ojczystej przyrody</p>
         </div>
-        <nav>
-                <!-- Przycisk hamburgera (widoczny tylko na telefonie) -->
-                <button class="hamburger-btn" id="hamburger-btn" aria-label="Otwórz menu">&#9776;</button>
-    
-                <ul id="nav-menu">
-                    <li><a href="index.html">Start</a></li>
-                    <li><a href="o-projekcie.html">O projekcie</a></li>
-                    <li><a href="zagadnienia.html">Zagadnienia</a></li>
-                    <li><a href="kontakt.html" class="active">Kontakt</a></li>
-                </ul>
-        </nav>
     </header>
+
+    <nav>
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Otwórz menu">&#9776;</button>
+
+        <ul id="nav-menu">
+            <li><a href="index.html">Start</a></li>
+            <li><a href="o-projekcie.html">O projekcie</a></li>
+            <li><a href="zagadnienia.html">Zagadnienia</a></li>
+            <li><a href="kontakt.html" class="active">Kontakt</a></li>
+        </ul>
+    </nav>
 
     <main>
         <section class="banner-placeholder">
@@ -37,7 +37,6 @@
             <p>Masz pytania dotyczące projektu lub zauważyłeś błąd w danych? Wypełnij formularz poniżej.</p>
         </section>
 
-        <!-- Układ 2 kolumn dla kontaktu -->
         <div class="contact-layout">
             <section class="content-section">
                 <article>
@@ -47,7 +46,7 @@
                         <li><strong>Uczelnia:</strong> Politechnika Łódzka</li>
                         <li><strong>Wydział:</strong> EEIA</li>
                         <li><strong>Jednostka:</strong> Instytut Informatyki Stosowanej</li>
-                        <li><strong>Prowadzący:</strong> dr Joanna Sekulska-Jaworska</li>
+                        <li><strong>Prowadzący:</strong> dr Joanna Sekulska-Nalewajko</li>
                     </ul>
                 </article>
             </section>
@@ -94,13 +93,6 @@
         </div>
     </footer>
 
-    <script>
-        const hamburgerBtn = document.getElementById('hamburger-btn');
-        const navMenu = document.getElementById('nav-menu');
-
-        hamburgerBtn.addEventListener('click', () => {
-            navMenu.classList.toggle('open');
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
