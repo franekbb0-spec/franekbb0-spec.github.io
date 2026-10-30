@@ -96,7 +96,11 @@ nav {
     transform: rotate(90deg) scale(0.92);
 }
 
-/* Lista zakładek - domyślnie UKRYTA */
+/* ==========================================================================
+   NAWIGACJA - UKŁAD POZIOMY NA PC, PIONOWY NA SMARTFONACH
+   ========================================================================== */
+
+/* Menu domyślnie ukryte */
 nav ul {
     display: none;
     list-style: none;
@@ -104,14 +108,15 @@ nav ul {
     padding: 0;
 }
 
-/* ROZWINIĘCIE NA PC: układ poziomy (row), wyśrodkowany */
+/* 1. EKRANY PC: sztywny układ POZIOMY (row) bez łamania wierszy */
 nav ul.open {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 15px;
+    width: 100%;
     animation: fadeInMenu 0.25s ease-in-out;
 }
 
@@ -126,10 +131,11 @@ nav ul.open {
     }
 }
 
-/* Na PC szerokość dopasowuje się do zawartości */
+/* Kluczowa zmiana: elementy LI nie mogą mieć width: 100% na PC */
 nav ul li {
-    width: auto;
-    max-width: none;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0;
 }
 
 nav ul li a {
@@ -485,22 +491,21 @@ footer a:hover {
    10. RESPONSYWNOŚĆ (@media max-width: 768px)
    ========================================================================== */
 @media (max-width: 768px) {
-    /* ROZWINIĘCIE NA MOBILCE: powrót do pionowej kolumny */
+    /* Tylko na ekranach poniżej 768px przestawiamy menu w pion */
     nav ul.open {
-        flex-direction: column;
-        align-items: center;
+        flex-direction: column !important;
         gap: 8px;
     }
 
     nav ul li {
-        width: 100%;
-        max-width: 320px;
+        width: 100% !important;
+        max-width: 320px !important;
     }
 
     nav ul li a {
         display: block;
-        text-align: center;
         width: 100%;
+        text-align: center;
     }
 
     .columns-container,
