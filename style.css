@@ -14,8 +14,13 @@ body {
     background-color: #f7f9f7;
 }
 
+/* Blokowanie przewijania strony przy otwartym modalu (Ćw. 5 Zadanie 2) */
+.no-scroll {
+    overflow: hidden;
+}
+
 /* ==========================================================================
-   2. NAGŁÓWEK ORAZ HAMBURGER MENU (KOMPUTER + MOBILE)
+   2. NAGŁÓWEK ORAZ STICKY NAVIGATION (Ćw. 4 Punkt 1)
    ========================================================================== */
 header {
     background-color: #2e7d32;
@@ -37,33 +42,44 @@ header .content p {
     color: #e8f5e9;
 }
 
-/* Przycisk hamburgera - widoczny na KAŻDYM urządzeniu */
+/* Przyklejone menu (Sticky Navbar) */
+nav {
+    background-color: #1b5e20;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 10px 15px;
+}
+
+/* Przycisk hamburgera z mikroanimacją obrotu (Ćw. 4 Przykład 4) */
 .hamburger-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.18);
+    background-color: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.4);
     color: #ffffff;
     font-size: 1.8rem;
     line-height: 1;
     padding: 8px 18px;
-    margin-top: 18px;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.3s ease;
 }
 
 .hamburger-btn:hover {
-    background-color: rgba(0, 0, 0, 0.32);
+    background-color: rgba(0, 0, 0, 0.35);
     border-color: #ffffff;
+    transform: rotate(90deg);
 }
 
 .hamburger-btn:active {
-    transform: scale(0.96);
+    transform: scale(0.92);
 }
 
-/* Lista zakładek w menu - domyślnie UKRYTA na wszystkich ekranach */
+/* Lista linków w menu */
 nav ul {
     display: none;
     list-style: none;
@@ -71,7 +87,6 @@ nav ul {
     padding: 0;
 }
 
-/* Klasa .open nadawana przez kliknięcie w JavaScript - rozwija menu */
 nav ul.open {
     display: flex;
     flex-direction: column;
@@ -102,14 +117,14 @@ nav ul li a {
     text-decoration: none;
     font-weight: bold;
     padding: 10px 20px;
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 6px;
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 nav ul li a:hover,
 nav ul li a.active {
-    background-color: #1b5e20;
+    background-color: #2e7d32;
     color: #ffffff;
 }
 
@@ -139,6 +154,7 @@ main {
 .banner-placeholder p {
     color: #2e4a30;
     font-size: 1.05rem;
+    margin-bottom: 15px;
 }
 
 /* ==========================================================================
@@ -175,7 +191,7 @@ main {
 }
 
 /* ==========================================================================
-   5. UKŁAD 3-KOLUMNOWY (.columns-container)
+   5. UKŁAD 3-KOLUMNOWY Z MIKROANIMACJĄ KART (Ćw. 4 Przykład 2)
    ========================================================================== */
 .columns-container {
     display: flex;
@@ -193,6 +209,12 @@ main {
     flex-direction: column;
     justify-content: space-between;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.column:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
 .column h3 {
@@ -222,7 +244,140 @@ main {
 }
 
 /* ==========================================================================
-   6. UKŁAD PODSTRONY KONTAKT I FORMULARZ
+   6. ĆWICZENIE 5 (ZADANIE 1): PRZEWIJANA LISTA PARKÓW
+   ========================================================================== */
+.lista-parkow {
+    max-height: 260px;
+    overflow: hidden;
+    padding: 15px 20px;
+    border: 2px solid #c8e6c9;
+    border-radius: 6px;
+    background-color: #ffffff;
+    scroll-behavior: smooth;
+    margin-bottom: 15px;
+}
+
+.lista-parkow ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lista-parkow li {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #2f3640;
+    font-size: 0.95rem;
+}
+
+.lista-parkow li:last-child {
+    border-bottom: none;
+}
+
+/* Przyciski sterujące przewijaniem z mikroanimacją (Ćw. 4 Przykład 1) */
+.przyciski {
+    display: flex;
+    gap: 12px;
+}
+
+.przyciski button,
+.btn-action,
+.submit-btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #2e7d32;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.przyciski button:hover,
+.btn-action:hover,
+.submit-btn:hover {
+    background-color: #1b5e20;
+    transform: translateY(-2px);
+}
+
+.przyciski button:active,
+.btn-action:active,
+.submit-btn:active {
+    transform: scale(0.95);
+}
+
+/* ==========================================================================
+   7. ĆWICZENIE 5 (ZADANIE 2): OKNO MODALNE
+   ========================================================================== */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.55);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.modal.show {
+    display: flex;
+    animation: fadeInModal 0.25s ease-out;
+}
+
+@keyframes fadeInModal {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.modal-content h2 {
+    color: #1b5e20;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+.modal-content p {
+    color: #333333;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    border: none;
+    background: none;
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #666666;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.close-btn:hover {
+    color: #c62828;
+    transform: scale(1.15);
+}
+
+/* ==========================================================================
+   8. FORMULARZ KONTAKTOWY
    ========================================================================== */
 .contact-layout {
     display: flex;
@@ -264,24 +419,8 @@ main {
     box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
 }
 
-.submit-btn {
-    background-color: #2e7d32;
-    color: #ffffff;
-    border: none;
-    padding: 12px 24px;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.submit-btn:hover {
-    background-color: #1b5e20;
-}
-
 /* ==========================================================================
-   7. STOPKA (FOOTER)
+   9. STOPKA (FOOTER)
    ========================================================================== */
 footer {
     background-color: #212d27;
@@ -320,15 +459,10 @@ footer a:hover {
 }
 
 /* ==========================================================================
-   8. RESPONSYWNOŚĆ TREŚCI I KOLUMN (@media max-width: 768px)
+   10. RESPONSYWNOŚĆ (@media max-width: 768px)
    ========================================================================== */
 @media (max-width: 768px) {
-    /* Trzy kolumny przeskakują w pion, jedna pod drugą */
-    .columns-container {
-        flex-direction: column;
-    }
-
-    /* Układ kontaktu (dane + formularz) przeskakuje w pion */
+    .columns-container,
     .contact-layout {
         flex-direction: column;
     }
