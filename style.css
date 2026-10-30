@@ -53,7 +53,9 @@ nav {
     padding: 10px 15px;
 }
 
-/* Przycisk hamburgera z płynną animacją obrotu */
+/* ==========================================================================
+   PRZYCISK HAMBURGERA - BEZ REAKCJI OBROTU NA HOVER
+   ========================================================================== */
 .hamburger-btn {
     display: inline-flex;
     align-items: center;
@@ -66,28 +68,30 @@ nav {
     padding: 8px 18px;
     border-radius: 6px;
     cursor: pointer;
-    /* Płynne przejście transformacji obrotu i kolorów */
+    /* Płynne przejście obrotu i tła */
     transition: transform 0.3s ease, background-color 0.2s ease, border-color 0.2s ease;
+    transform: rotate(0deg);
 }
 
+/* 1. Najechanie kursorem: TYLKO podświetlenie tła, ZERO obrotu */
 .hamburger-btn:hover {
     background-color: rgba(0, 0, 0, 0.35);
     border-color: #ffffff;
 }
 
-/* Stan aktywny (kliknięcie bez otwartego menu) */
+/* 2. Kliknięcie (gdy menu jest jeszcze ZAMKNIĘTE) - efekt wciśnięcia */
 .hamburger-btn:active {
     transform: scale(0.92);
 }
 
-/* STAN PO KLIKNIĘCIU: obrót o 90 stopni i utrzymanie pozycji */
+/* 3. STAN OTWARTEGO MENU (nadawany przez JS po kliknięciu) - trwały obrót o 90 stopni */
 .hamburger-btn.open {
     transform: rotate(90deg);
     background-color: rgba(0, 0, 0, 0.35);
     border-color: #ffffff;
 }
 
-/* Kliknięcie w obrócony przycisk z zachowaniem obrotu */
+/* 4. Kliknięcie (gdy menu jest OTWARTE) - wciśnięcie bez utraty kąta 90 stopni */
 .hamburger-btn.open:active {
     transform: rotate(90deg) scale(0.92);
 }

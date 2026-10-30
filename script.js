@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (hamburgerBtn && navMenu) {
         hamburgerBtn.addEventListener("click", () => {
             navMenu.classList.toggle("open");
-            hamburgerBtn.classList.toggle("open"); // <-- Przełącza obrót przycisku
+            hamburgerBtn.classList.toggle("open"); // <-- to utrzymuje stan 90 stopni
         });
     }
 
