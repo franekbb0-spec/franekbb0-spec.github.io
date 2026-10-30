@@ -12,28 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ---------------------------------------------------------
-    // 2. ĆWICZENIE 5 (ZADANIE 1): PRZEWIJANA LISTA PARKÓW
-    // ---------------------------------------------------------
-    const lista = document.querySelector("#lista");
-    const przyciskDol = document.querySelector("#dol");
-    const przyciskGora = document.querySelector("#gora");
 
-    if (lista && przyciskDol && przyciskGora) {
-        przyciskDol.addEventListener("click", () => {
-            lista.scrollBy({
-                top: 100,
-                behavior: "smooth"
-            });
-        });
-
-        przyciskGora.addEventListener("click", () => {
-            lista.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-        });
-    }
 
     // ---------------------------------------------------------
     // 3. ĆWICZENIE 5 (ZADANIE 2 + DODATKOWE): OKNO MODALNE
