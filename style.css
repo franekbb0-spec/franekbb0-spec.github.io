@@ -96,7 +96,7 @@ nav {
     transform: rotate(90deg) scale(0.92);
 }
 
-/* Lista linków w menu */
+/* Lista zakładek - domyślnie UKRYTA */
 nav ul {
     display: none;
     list-style: none;
@@ -104,11 +104,14 @@ nav ul {
     padding: 0;
 }
 
+/* ROZWINIĘCIE NA PC: układ poziomy (row), wyśrodkowany */
 nav ul.open {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 12px;
     animation: fadeInMenu 0.25s ease-in-out;
 }
 
@@ -123,26 +126,29 @@ nav ul.open {
     }
 }
 
+/* Na PC szerokość dopasowuje się do zawartości */
 nav ul li {
-    width: 100%;
-    max-width: 320px;
+    width: auto;
+    max-width: none;
 }
 
 nav ul li a {
-    display: block;
+    display: inline-block;
     color: #e8f5e9;
     text-decoration: none;
     font-weight: bold;
-    padding: 10px 20px;
+    padding: 10px 22px;
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 6px;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 nav ul li a:hover,
 nav ul li a.active {
     background-color: #2e7d32;
     color: #ffffff;
+    transform: translateY(-2px);
 }
 
 /* ==========================================================================
@@ -479,6 +485,24 @@ footer a:hover {
    10. RESPONSYWNOŚĆ (@media max-width: 768px)
    ========================================================================== */
 @media (max-width: 768px) {
+    /* ROZWINIĘCIE NA MOBILCE: powrót do pionowej kolumny */
+    nav ul.open {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    nav ul li {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    nav ul li a {
+        display: block;
+        text-align: center;
+        width: 100%;
+    }
+
     .columns-container,
     .contact-layout {
         flex-direction: column;
