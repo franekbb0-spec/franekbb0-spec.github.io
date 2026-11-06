@@ -186,16 +186,18 @@ main {
     margin-bottom: 15px;
 }
 /* ==========================================================================
-   STYL PRZYCISKU BANERA (MODAL) I PRZYCISKÓW AKCJI
+   PRZYCISK MODALA W BANERZE ORAZ PRZYCISKI AKCJI
    ========================================================================== */
-.btn-action {
+#openModal,
+.btn-action,
+.banner-placeholder button {
     display: inline-block;
     padding: 12px 24px;
     border: none;
     border-radius: 6px;
     background-color: #2e7d32;
     color: #ffffff;
-    font-family: inherit;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 0.95rem;
     font-weight: bold;
     cursor: pointer;
@@ -203,13 +205,17 @@ main {
     transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.btn-action:hover {
+#openModal:hover,
+.btn-action:hover,
+.banner-placeholder button:hover {
     background-color: #1b5e20;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.btn-action:active {
+#openModal:active,
+.btn-action:active,
+.banner-placeholder button:active {
     transform: scale(0.95);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
