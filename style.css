@@ -14,13 +14,8 @@ body {
     background-color: #f7f9f7;
 }
 
-/* Blokowanie przewijania strony przy otwartym modalu (Ćw. 5 Zadanie 2) */
-.no-scroll {
-    overflow: hidden;
-}
-
 /* ==========================================================================
-   2. NAGŁÓWEK ORAZ STICKY NAVIGATION (Ćw. 4 Punkt 1)
+   2. NAGŁÓWEK ORAZ HAMBURGER MENU (KOMPUTER + MOBILE)
    ========================================================================== */
 header {
     background-color: #2e7d32;
@@ -42,65 +37,31 @@ header .content p {
     color: #e8f5e9;
 }
 
-/* Przyklejone menu (Sticky Navbar) */
-nav {
-    background-color: #1b5e20;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    padding: 10px 15px;
-}
-
-/* ==========================================================================
-   PRZYCISK HAMBURGERA - BEZ REAKCJI OBROTU NA HOVER
-   ========================================================================== */
 .hamburger-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.18);
     border: 1px solid rgba(255, 255, 255, 0.4);
     color: #ffffff;
     font-size: 1.8rem;
     line-height: 1;
     padding: 8px 18px;
+    margin-top: 18px;
     border-radius: 6px;
     cursor: pointer;
-    /* Płynne przejście obrotu i tła */
-    transition: transform 0.3s ease, background-color 0.2s ease, border-color 0.2s ease;
-    transform: rotate(0deg);
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
 }
 
-/* 1. Najechanie kursorem: TYLKO podświetlenie tła, ZERO obrotu */
 .hamburger-btn:hover {
-    background-color: rgba(0, 0, 0, 0.35);
+    background-color: rgba(0, 0, 0, 0.32);
     border-color: #ffffff;
 }
 
-/* 2. Kliknięcie (gdy menu jest jeszcze ZAMKNIĘTE) - efekt wciśnięcia */
 .hamburger-btn:active {
-    transform: scale(0.92);
+    transform: scale(0.96);
 }
 
-/* 3. STAN OTWARTEGO MENU (nadawany przez JS po kliknięciu) - trwały obrót o 90 stopni */
-.hamburger-btn.open {
-    transform: rotate(90deg);
-    background-color: rgba(0, 0, 0, 0.35);
-    border-color: #ffffff;
-}
-
-/* 4. Kliknięcie (gdy menu jest OTWARTE) - wciśnięcie bez utraty kąta 90 stopni */
-.hamburger-btn.open:active {
-    transform: rotate(90deg) scale(0.92);
-}
-
-/* ==========================================================================
-   NAWIGACJA - UKŁAD POZIOMY NA PC, PIONOWY NA SMARTFONACH
-   ========================================================================== */
-
-/* Menu domyślnie ukryte */
 nav ul {
     display: none;
     list-style: none;
@@ -108,15 +69,11 @@ nav ul {
     padding: 0;
 }
 
-/* 1. EKRANY PC: sztywny układ POZIOMY (row) bez łamania wierszy */
 nav ul.open {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    align-items: center !important;
-    flex-wrap: nowrap !important;
-    gap: 15px;
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
     animation: fadeInMenu 0.25s ease-in-out;
 }
 
@@ -131,39 +88,68 @@ nav ul.open {
     }
 }
 
-/* Kluczowa zmiana: elementy LI nie mogą mieć width: 100% na PC */
 nav ul li {
-    width: auto !important;
-    max-width: none !important;
-    margin: 0;
+    width: 100%;
+    max-width: 320px;
 }
 
 nav ul li a {
-    display: inline-block;
+    display: block;
     color: #e8f5e9;
     text-decoration: none;
     font-weight: bold;
-    padding: 10px 22px;
-    background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.15);
     border-radius: 6px;
-    white-space: nowrap;
-    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 nav ul li a:hover,
 nav ul li a.active {
-    background-color: #2e7d32;
+    background-color: #1b5e20;
     color: #ffffff;
-    transform: translateY(-2px);
 }
 
 /* ==========================================================================
-   3. TREŚĆ GŁÓWNA (MAIN) I BANER
+   3. TREŚĆ GŁÓWNA (MAIN) I HERO BANNER
    ========================================================================== */
 main {
     max-width: 1050px;
     margin: 30px auto;
     padding: 0 20px;
+}
+
+.hero-banner {
+    background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+                url("images/hero.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+    padding: 70px 30px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hero-content {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.hero-banner h2 {
+    font-size: 2.1rem;
+    margin-bottom: 12px;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.hero-banner p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #f1f8e9;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .banner-placeholder {
@@ -183,7 +169,6 @@ main {
 .banner-placeholder p {
     color: #2e4a30;
     font-size: 1.05rem;
-    margin-bottom: 15px;
 }
 
 /* ==========================================================================
@@ -209,7 +194,7 @@ main {
     line-height: 1.65;
 }
 
-.content-section ul, 
+.content-section ul,
 .content-section ol {
     margin-left: 25px;
     margin-bottom: 15px;
@@ -220,7 +205,7 @@ main {
 }
 
 /* ==========================================================================
-   5. UKŁAD 3-KOLUMNOWY Z MIKROANIMACJĄ KART (Ćw. 4 Przykład 2)
+   5. UKŁAD 3-KOLUMNOWY (.columns-container)
    ========================================================================== */
 .columns-container {
     display: flex;
@@ -238,12 +223,6 @@ main {
     flex-direction: column;
     justify-content: space-between;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.column:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
 .column h3 {
@@ -273,140 +252,7 @@ main {
 }
 
 /* ==========================================================================
-   6. ĆWICZENIE 5 (ZADANIE 1): PRZEWIJANA LISTA PARKÓW
-   ========================================================================== */
-.lista-parkow {
-    max-height: 260px;
-    overflow: hidden;
-    padding: 15px 20px;
-    border: 2px solid #c8e6c9;
-    border-radius: 6px;
-    background-color: #ffffff;
-    scroll-behavior: smooth;
-    margin-bottom: 15px;
-}
-
-.lista-parkow ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.lista-parkow li {
-    padding: 10px 12px;
-    border-bottom: 1px solid #f0f0f0;
-    color: #2f3640;
-    font-size: 0.95rem;
-}
-
-.lista-parkow li:last-child {
-    border-bottom: none;
-}
-
-/* Przyciski sterujące przewijaniem z mikroanimacją (Ćw. 4 Przykład 1) */
-.przyciski {
-    display: flex;
-    gap: 12px;
-}
-
-.przyciski button,
-.btn-action,
-.submit-btn {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 6px;
-    background-color: #2e7d32;
-    color: #ffffff;
-    font-size: 0.95rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.przyciski button:hover,
-.btn-action:hover,
-.submit-btn:hover {
-    background-color: #1b5e20;
-    transform: translateY(-2px);
-}
-
-.przyciski button:active,
-.btn-action:active,
-.submit-btn:active {
-    transform: scale(0.95);
-}
-
-/* ==========================================================================
-   7. ĆWICZENIE 5 (ZADANIE 2): OKNO MODALNE
-   ========================================================================== */
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.55);
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    padding: 20px;
-}
-
-.modal.show {
-    display: flex;
-    animation: fadeInModal 0.25s ease-out;
-}
-
-@keyframes fadeInModal {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.modal-content {
-    background-color: #ffffff;
-    padding: 30px;
-    width: 100%;
-    max-width: 480px;
-    border-radius: 8px;
-    position: relative;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-}
-
-.modal-content h2 {
-    color: #1b5e20;
-    margin-bottom: 15px;
-    font-size: 1.4rem;
-}
-
-.modal-content p {
-    color: #333333;
-    font-size: 0.95rem;
-    margin-bottom: 12px;
-    line-height: 1.6;
-}
-
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 12px;
-    border: none;
-    background: none;
-    font-size: 1.6rem;
-    line-height: 1;
-    cursor: pointer;
-    color: #666666;
-    transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.close-btn:hover {
-    color: #c62828;
-    transform: scale(1.15);
-}
-
-/* ==========================================================================
-   8. FORMULARZ KONTAKTOWY
+   6. UKŁAD PODSTRONY KONTAKT I FORMULARZ
    ========================================================================== */
 .contact-layout {
     display: flex;
@@ -446,6 +292,388 @@ main {
     border-color: #2e7d32;
     outline: none;
     box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+}
+
+.submit-btn {
+    background-color: #2e7d32;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: #1b5e20;
+}
+
+/* ==========================================================================
+   7. PRZESUWNA KARUZELA 23 PARKÓW I PANEL DANYCH JSON (INDEX.HTML)
+   ========================================================================== */
+.carousel-header {
+    margin-bottom: 18px;
+}
+
+.carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 8px 4px 14px 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #2e7d32 #e8f5e9;
+    flex: 1;
+}
+
+.carousel-track::-webkit-scrollbar {
+    height: 8px;
+}
+
+.carousel-track::-webkit-scrollbar-track {
+    background: #e8f5e9;
+    border-radius: 4px;
+}
+
+.carousel-track::-webkit-scrollbar-thumb {
+    background: #2e7d32;
+    border-radius: 4px;
+}
+
+.carousel-item {
+    flex: 0 0 190px;
+    background: #f9fbf9;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+    font-family: inherit;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.carousel-item:hover {
+    transform: translateY(-3px);
+    border-color: #66bb6a;
+}
+
+.carousel-item.active {
+    border-color: #2e7d32;
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+    background-color: #e8f5e9;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 115px;
+    object-fit: cover;
+    display: block;
+}
+
+.carousel-item-title {
+    padding: 10px;
+    font-size: 0.86rem;
+    font-weight: bold;
+    color: #1b5e20;
+    line-height: 1.3;
+}
+
+.carousel-btn {
+    background-color: #2e7d32;
+    color: #ffffff;
+    border: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.carousel-btn:hover {
+    background-color: #1b5e20;
+}
+
+.park-details-box {
+    display: flex;
+    gap: 24px;
+    background-color: #f4f9f4;
+    border: 1px solid #c8e6c9;
+    border-radius: 8px;
+    padding: 20px;
+    align-items: center;
+}
+
+.park-details-img {
+    flex: 0 0 320px;
+    height: 220px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.park-details-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.park-details-info {
+    flex: 1;
+}
+
+.park-details-badge {
+    display: inline-block;
+    background-color: #2e7d32;
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.park-details-info h4 {
+    color: #1b5e20;
+    font-size: 1.45rem;
+    margin-bottom: 6px;
+}
+
+.park-details-meta {
+    font-size: 0.92rem;
+    font-weight: bold;
+    color: #2e7d32;
+    margin-bottom: 10px;
+}
+
+.park-details-desc {
+    color: #37474f;
+    margin-bottom: 14px;
+}
+
+.park-details-link {
+    color: #1b5e20;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.park-details-link:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   8. INTERAKTYWNA GALERIA (GALERIA.HTML - CSS GRID + LIGHTBOX)
+   ========================================================================== */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.filter-btn {
+    background-color: #ffffff;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 8px 18px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background-color: #2e7d32;
+    color: #ffffff;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 22px;
+    margin-bottom: 35px;
+}
+
+.gallery-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.gallery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+.gallery-img-wrapper {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background-color: #e8f5e9;
+}
+
+.gallery-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.gallery-card:hover .gallery-img-wrapper img {
+    transform: scale(1.06);
+}
+
+.gallery-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: rgba(27, 94, 32, 0.9);
+    color: #ffffff;
+    font-size: 0.78rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.gallery-card-body {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+}
+
+.gallery-card-body h3 {
+    color: #1b5e20;
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+}
+
+.gallery-location {
+    font-size: 0.9rem;
+    color: #546e7a;
+    margin-bottom: 14px;
+}
+
+.gallery-more-btn {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    color: #2e7d32;
+    font-weight: bold;
+    font-size: 0.92rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.gallery-card:hover .gallery-more-btn {
+    text-decoration: underline;
+}
+
+.lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.82);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.lightbox.open {
+    display: flex;
+    animation: fadeInMenu 0.2s ease;
+}
+
+.lightbox-content {
+    background: #ffffff;
+    max-width: 750px;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: rgba(0, 0, 0, 0.65);
+    color: #ffffff;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.lightbox-close:hover {
+    background: #1b5e20;
+}
+
+.lightbox-content img {
+    width: 100%;
+    max-height: 430px;
+    object-fit: cover;
+    display: block;
+}
+
+.lightbox-info {
+    padding: 20px 25px;
+}
+
+.lightbox-info h3 {
+    color: #1b5e20;
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+}
+
+.lightbox-meta {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #2e7d32;
+    margin-bottom: 12px;
+}
+
+.error-msg {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 15px;
+    border-radius: 6px;
+    text-align: center;
+    grid-column: 1 / -1;
 }
 
 /* ==========================================================================
@@ -491,23 +719,6 @@ footer a:hover {
    10. RESPONSYWNOŚĆ (@media max-width: 768px)
    ========================================================================== */
 @media (max-width: 768px) {
-    /* Tylko na ekranach poniżej 768px przestawiamy menu w pion */
-    nav ul.open {
-        flex-direction: column !important;
-        gap: 8px;
-    }
-
-    nav ul li {
-        width: 100% !important;
-        max-width: 320px !important;
-    }
-
-    nav ul li a {
-        display: block;
-        width: 100%;
-        text-align: center;
-    }
-
     .columns-container,
     .contact-layout {
         flex-direction: column;
@@ -518,7 +729,47 @@ footer a:hover {
         padding: 0 12px;
     }
 
+    .hero-banner {
+        padding: 45px 15px;
+    }
+
+    .hero-banner h2 {
+        font-size: 1.6rem;
+    }
+
+    .hero-banner p {
+        font-size: 1rem;
+    }
+
     .banner-placeholder {
         padding: 20px 15px;
+    }
+
+    .park-details-box {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px;
+    }
+
+    .park-details-img {
+        flex: none;
+        width: 100%;
+        height: 200px;
+    }
+
+    .carousel-btn {
+        display: none;
+    }
+
+    .carousel-item {
+        flex: 0 0 160px;
+    }
+
+    .lightbox-content img {
+        max-height: 260px;
+    }
+
+    .lightbox-info {
+        padding: 15px 18px;
     }
 }

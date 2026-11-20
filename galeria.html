@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria Parków - Parki Narodowe Polski</title>
+    
+    <meta name="author" content="Franciszek Bieniek, Dominik Gilarski">
+    <meta name="description" content="Interaktywna galeria 23 polskich parków narodowych ładowana dynamicznie z bazy JSON.">
+    <meta name="keywords" content="galeria, parki narodowe, zdjęcia przyrody, Polska, JSON, filtrowanie">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="content">
+            <h1><a href="index.html">Parki Narodowe Polski</a></h1>
+            <p>Najwyższa forma ochrony ojczystej przyrody</p>
+        </div>
+        <nav>
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="Otwórz menu">&#9776;</button>
+            <ul id="nav-menu">
+                <li><a href="index.html">Start</a></li>
+                <li><a href="o-projekcie.html">O projekcie</a></li>
+                <li><a href="zagadnienia.html">Zagadnienia</a></li>
+                <li><a href="galeria.html" class="active">Galeria</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-banner">
+            <div class="hero-content">
+                <h2>Galeria 23 Parków Narodowych</h2>
+                <p>Filtruj według strefy krajobrazowej i kliknij wybraną kartę, aby otworzyć powiększenie oraz pełny opis z pliku JSON.</p>
+            </div>
+        </section>
+
+        <!-- Przyciski filtrowania kategorii z JSON -->
+        <section class="filter-bar">
+            <button class="filter-btn active" data-filter="wszystkie">Wszystkie (23)</button>
+            <button class="filter-btn" data-filter="gorskie">Górskie</button>
+            <button class="filter-btn" data-filter="pojezierne">Pojezierne i nizinne</button>
+            <button class="filter-btn" data-filter="nadmorskie">Nadmorskie</button>
+        </section>
+
+        <!-- Siatka wypełniana dynamicznie przez galeria.js na podstawie parki.json -->
+        <section id="gallery-grid" class="gallery-grid"></section>
+    </main>
+
+    <!-- Okno modalne (Lightbox) do podglądu zdjęcia i pełnego opisu -->
+    <div id="lightbox" class="lightbox" aria-hidden="true">
+        <div class="lightbox-content">
+            <button id="lightbox-close" class="lightbox-close" aria-label="Zamknij">&times;</button>
+            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-info">
+                <h3 id="lightbox-title"></h3>
+                <p class="lightbox-meta" id="lightbox-meta"></p>
+                <p id="lightbox-desc"></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="content">
+            <ul>
+                <li><strong>Instytucja:</strong> Politechnika Łódzka, Wydział EEIA</li>
+                <li><strong>E-mail:</strong> <a href="mailto:kontakt@parkinarodowe-projekt.pl">kontakt@parkinarodowe-projekt.pl</a></li>
+                <li><strong>Lokalizacja:</strong> ul. Stefanowskiego 18/22, 90-537 Łódź</li>
+            </ul>
+        </div>
+        <div class="copyright">
+            <p>Copyright &#169; 2026 Franciszek Bieniek &amp; Dominik Gilarski. Wszelkie prawa zastrzeżone.</p>
+        </div>
+    </footer>
+
+    <script src="galeria.js"></script>
+</body>
+</html>

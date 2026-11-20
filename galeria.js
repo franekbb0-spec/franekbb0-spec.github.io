@@ -1,0 +1,133 @@
+// 1. Obsługa menu hamburgera
+const hamburgerBtn = document.getElementById('hamburger-btn');
+const navMenu = document.getElementById('nav-menu');
+
+if (hamburgerBtn && navMenu) {
+    hamburgerBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('open');
+    });
+}
+
+// 2. Referencje do elementów galerii i przycisków filtrowania
+const galleryGrid = document.getElementById('gallery-grid');
+const filterButtons = document.querySelectorAll('.filter-btn');
+
+// Referencje do okna modalnego (Lightbox)
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxTitle = document.getElementById('lightbox-title');
+const lightboxMeta = document.getElementById('lightbox-meta');
+const lightboxDesc = document.getElementById('lightbox-desc');
+const lightboxClose = document.getElementById('lightbox-close');
+
+let wszystkieParki = [];
+
+// Zamiana kluczy z JSON na estetyczne etykiety z polskimi znakami
+const etykietyKategorii = {
+    gorskie: 'Górski',
+    pojezierne: 'Pojezierny / Nizinny',
+    nadmorskie: 'Nadmorski'
+};
+
+// 3. Asynchroniczne pobranie danych z pliku parki.json
+async function zaladujDane() {
+    try {
+        const response = await fetch('parki.json');
+        if (!response.ok) {
+            throw new Error(`Błąd HTTP: ${response.status}`);
+        }
+        wszystkieParki = await response.json();
+        renderujGalerie(wszystkieParki);
+    } catch (error) {
+        galleryGrid.innerHTML = `
+            <p class="error-msg">
+                Nie udało się wczytać danych z pliku <strong>parki.json</strong>. 
+                Uruchom stronę przez <strong>Live Server</strong> w VS Code lub na <strong>GitHub Pages</strong>.
+            </p>`;
+        console.error('Błąd ładowania JSON:', error);
+    }
+}
+
+// 4. Dynamiczne generowanie kart w drzewie DOM
+function renderujGalerie(listaParkow) {
+    galleryGrid.innerHTML = '';
+
+    listaParkow.forEach(park => {
+        const card = document.createElement('article');
+        card.className = 'gallery-card';
+        const etykieta = etykietyKategorii[park.kategoria] || park.kategoria;
+
+        card.innerHTML = `
+            <div class="gallery-img-wrapper">
+                <img src="${park.zdjecie}" alt="${park.nazwa}" loading="lazy" onerror="this.onerror=null; this.src='images/hero.jpg';">
+                <span class="gallery-badge">${etykieta}</span>
+            </div>
+            <div class="gallery-card-body">
+                <h3>${park.nazwa}</h3>
+                <p class="gallery-location">Woj. ${park.wojewodztwo} &bull; ${park.powierzchnia}</p>
+                <button type="button" class="gallery-more-btn">Powiększ i zobacz opis &rarr;</button>
+            </div>
+        `;
+
+        card.addEventListener('click', () => otworzLightbox(park));
+        galleryGrid.appendChild(card);
+    });
+}
+
+// 5. Obsługa filtrowania po strefach krajobrazowych
+filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const wybranaKategoria = btn.dataset.filter;
+        if (wybranaKategoria === 'wszystkie') {
+            renderujGalerie(wszystkieParki);
+        } else {
+            const przefiltrowane = wszystkieParki.filter(park => park.kategoria === wybranaKategoria);
+            renderujGalerie(przefiltrowane);
+        }
+    });
+});
+
+// 6. Otwieranie i zamykanie podglądu powiększenia (Lightbox)
+function otworzLightbox(park) {
+    lightboxImg.onerror = function () {
+        this.onerror = null;
+        this.src = 'images/hero.jpg';
+    };
+    lightboxImg.src = park.zdjecie;
+    lightboxImg.alt = park.nazwa;
+    lightboxTitle.textContent = park.nazwa;
+    lightboxMeta.textContent = `Województwo: ${park.wojewodztwo} | Powierzchnia: ${park.powierzchnia}`;
+    lightboxDesc.textContent = park.opis;
+
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+}
+
+function zamknijLightbox() {
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+}
+
+if (lightboxClose) {
+    lightboxClose.addEventListener('click', zamknijLightbox);
+}
+
+if (lightbox) {
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            zamknijLightbox();
+        }
+    });
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox && lightbox.classList.contains('open')) {
+        zamknijLightbox();
+    }
+});
+
+// Uruchomienie pobierania po załadowaniu skryptu
+zaladujDane();

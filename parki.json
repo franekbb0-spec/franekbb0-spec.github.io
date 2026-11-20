@@ -1,0 +1,209 @@
+[
+  {
+    "id": 1,
+    "nazwa": "Tatrzański Park Narodowy",
+    "kategoria": "gorskie",
+    "wojewodztwo": "małopolskie",
+    "powierzchnia": "211,97 km²",
+    "zdjecie": "images/tatrzanski.jpg",
+    "opis": "Jedyny w Polsce park o charakterze wysokogórskim. Chroni piętra roślinne Tatr, kozice, świstaki oraz polodowcowe jeziora, takie jak Morskie Oko."
+  },
+  {
+    "id": 2,
+    "nazwa": "Babiogórski Park Narodowy",
+    "kategoria": "gorskie",
+    "wojewodztwo": "małopolskie",
+    "powierzchnia": "33,92 km²",
+    "zdjecie": "images/babiogorski.jpg",
+    "opis": "Obejmuje masyw Babiej Góry (Diablak – 1725 m n.p.m.) w Beskidzie Żywieckim, słynący z wyraźnie wykształconej piętrowości roślinnej oraz alpejskiego piętra hal."
+  },
+  {
+    "id": 3,
+    "nazwa": "Białowieski Park Narodowy",
+    "kategoria": "pojezierne",
+    "wojewodztwo": "podlaskie",
+    "powierzchnia": "105,17 km²",
+    "zdjecie": "images/bialowieski.jpg",
+    "opis": "Najstarszy park narodowy w Polsce, wpisany na listę UNESCO. Chroni najlepiej zachowany fragment lasu pierwotnego na Niżu Europejskim oraz wolnościową populację żubra."
+  },
+  {
+    "id": 4,
+    "nazwa": "Biebrzański Park Narodowy",
+    "kategoria": "pojezierne",
+    "wojewodztwo": "podlaskie",
+    "powierzchnia": "592,23 km²",
+    "zdjecie": "images/biebrzanski.jpg",
+    "opis": "Największy park narodowy w Polsce. Obejmuje rozległe torfowiska i bagna Doliny Biebrzy, stanowiące kluczową ostoję ptactwa wodno-błotnego i łosia."
+  },
+  {
+    "id": 5,
+    "nazwa": "Bieszczadzki Park Narodowy",
+    "kategoria": "gorskie",
+    "wojewodztwo": "podkarpackie",
+    "powierzchnia": "292,02 km²",
+    "zdjecie": "images/bieszczadzki.jpg",
+    "opis": "Największy górski park narodowy w Polsce. Chroni unikatowe połoniny (Wetlińską i Caryńską), lasy bukowe oraz ostoję niedźwiedzia brunatnego, wilka i rysia."
+  },
+  {
+    "id": 6,
+    "nazwa": "Park Narodowy „Bory Tucholskie”",
+    "kategoria": "pojezierne",
+    "wojewodztwo": "pomorskie",
+    "powierzchnia": "46,13 km²",
+    "zdjecie": "images/borytucholskie.jpg",
+    "opis": "Obejmuje centralną część sandru Brdy z kompleksem borów sosnowych i 21 czystymi jeziorami lobeliowymi, w tym połączonymi Strugą Siedmiu Jezior."
+  },
+  {
+    "id": 7,
+    "nazwa": "Drawieński Park Narodowy",
+    "kategoria": "pojezierne",
+    "wojewodztwo": "lubuskie, wielkopolskie, zachodniopomorskie",
+    "powierzchnia": "115,36 km²",
+    "zdjecie": "images/drawienski.jpg",
+    "opis": "Chroni malownicze doliny rzek Drawy i Płocicznej na Równinie Drawskiej, stare lasy bukowe, jeziora rynnowe oraz liczne gatunki ryb łososiowatych."
+  },
+  {
+    "id": 8,
+    "nazwa": "Gorczański Park Narodowy",
+    "kategoria": "gorskie",
+    "wojewodztwo": "małopolskie",
+    "powierzchnia": "70,30 km²",
+    "zdjecie": "images/gorczanski.jpg",
+    "opis": "Obejmuje centralne pasmo Gorców z masywem Turbacza, znane z malowniczych polan reglowych, puszczy karpackiej oraz salamandry plamistej będącej symbolem parku."
+  },
+  {
+    "id": 9,
+    "nazwa": "Park Narodowy Gór Stołowych",
+    "kategoria": "gorskie",
+    "wojewodztwo": "dolnośląskie",
+    "powierzchnia": "63,40 km²",
+    "zdjecie": "images/gorstolowych.jpg",
+    "opis": "Jedyny w Polsce park chroniący góry płytowe, słynący z fantazyjnych form skalnych i labiryntów piaskowcowych na Szczelińcu Wielkim oraz w Błędnych Skałach."
+  },
+  {
+    "id": 10,
+    "nazwa": "Kampinoski Park Narodowy",
+    "kategoria": "pojezierne",
+    "wojewodztwo": "mazowieckie",
+    "powierzchnia": "385,44 km²",
+    "zdjecie": "images/kampinowski.jpg",
+    "opis": "Położony w pradolinie Wisły tuż pod Warszawą, łączy pasy zalesionych wydm śródlądowych z pasami bagien i torfowisk; stanowi ostoję łosia, bobra i rysia."
+  },
+  {
+    "id": 11,
+    "nazwa": "Karkonoski Park Narodowy",
+    "kategoria": "gorskie",
+    "wojewodztwo": "dolnośląskie",
+    "powierzchnia": "59,51 km²",
+    "zdjecie": "images/karkonoski.jpg",
+    "opis": "Chroni najwyższe pasmo Sudetów wraz z kotłami polodowcowymi (Śnieżne Kotły), torfowiskami subalpejskimi oraz masywem Śnieżki."
+  },
+  {
+    "id": 12,
+    "nazwa": "Magurski Park Narodowy",
+    "kategoria": "gorskie",
+    "wojewodztwo": "podkarpackie, małopolskie",
+    "powierzchnia": "194,39 km²",
+    "zdjecie": "images/magurski.jpg",
+    "opis": "Położony w sercu Beskidu Niskiego na pograniczu Karpat Zachodnich i Wschodnich, chroni naturalne lasy bukowo-jodłowe oraz ostoję orlika krzykliwego."
+  },
+  {
+    "id": 13,
+    "nazwa": "Narwiański Park Narodowy",
+    "kategoria": "pojezierne",
+    "wojewodztwo": "podlaskie",
+    "powierzchnia": "68,10 km²",
+    "zdjecie": "images/narwianski.jpg",
+    "opis": "Nazywany Polską Amazonią – chroni bagienną dolinę górnej Narwi płynącej systemem wielu splatających się ze sobą koryt rzecznych (rzeka anastomozująca)."
+  },
+  {
+    "id": 14,
+    "nazwa": "Ojcowski Park Narodowy",
+    "kategoria": "pojezierne",
+    "wojewodztwo": "małopolskie",
+    "powierzchnia": "21,46 km²",
+    "zdjecie": "images/ojcowski.jpg",
+    "opis": "Najmniejszy park narodowy w Polsce, położony w Dolinie Prądnika na Wyżynie Krakowsko-Częstochowskiej, słynący z wapiennych ostańców (Maczuga Herkulesa) i jaskiń."
+  },
+  {
+    "id": 15,
+    "nazwa": "Pieniński Park Narodowy",
+    "kategoria": "gorskie",
+    "wojewodztwo": "małopolskie",
+    "powierzchnia": "23,72 km²",
+    "zdjecie": "images/pieninski.jpg",
+    "opis": "Obejmuje najcenniejsze przyrodniczo fragmenty Pienin Właściwych z masywem Trzech Koron, Sokolicą oraz malowniczym przełomem rzeki Dunajec."
+  },
+  {
+    "id": 16,
+    "nazwa": "Poleski Park Narodowy",
+    "kategoria": "pojezierne",
+    "wojewodztwo": "lubelskie",
+    "powierzchnia": "97,62 km²",
+    "zdjecie": "images/poleski.jpg",
+    "opis": "Pierwszy w Polsce park o charakterze wodno-torfowiskowym na Równinie Łęczyńsko-Włodawskiej, stanowiący ostoję żółwia błotnego oraz wodniczki."
+  },
+  {
+    "id": 17,
+    "nazwa": "Roztoczański Park Narodowy",
+    "kategoria": "pojezierne",
+    "wojewodztwo": "lubelskie",
+    "powierzchnia": "84,83 km²",
+    "zdjecie": "images/roztoczanski.jpg",
+    "opis": "Chroni najcenniejsze obszary leśne Roztocza Środkowego z buczyną karpacką i borami jodłowymi; symbolem parku jest hodowany tu konik polski."
+  },
+  {
+    "id": 18,
+    "nazwa": "Słowiński Park Narodowy",
+    "kategoria": "nadmorskie",
+    "wojewodztwo": "pomorskie",
+    "powierzchnia": "327,44 km²",
+    "zdjecie": "images/slowinski.jpg",
+    "opis": "Słynie z unikatowych w skali Europy ruchomych wydm przemieszczających się z prędkością kilku metrów rocznie oraz przymorskich jezior Łebsko i Gardno."
+  },
+  {
+    "id": 19,
+    "nazwa": "Świętokrzyski Park Narodowy",
+    "kategoria": "gorskie",
+    "wojewodztwo": "świętokrzyskie",
+    "powierzchnia": "76,26 km²",
+    "zdjecie": "images/swientokrzyski.jpg",
+    "opis": "Obejmuje najwyższe pasmo Gór Świętokrzyskich – Łysogóry z Łysicą i Łysą Górą, znane z charakterystycznych gołoborzy kwarcytowych oraz puszczy jodłowej."
+  },
+  {
+    "id": 20,
+    "nazwa": "Park Narodowy „Ujście Warty”",
+    "kategoria": "pojezierne",
+    "wojewodztwo": "lubuskie",
+    "powierzchnia": "80,74 km²",
+    "zdjecie": "images/ujsciewarty.jpg",
+    "opis": "Najmłodszy polski park narodowy, chroniący rozległe rozlewiska, starorzecza i łąki u ujścia Warty do Odry, będące jednym z najważniejszych lęgowisk ptaków w Europie."
+  },
+  {
+    "id": 21,
+    "nazwa": "Wielkopolski Park Narodowy",
+    "kategoria": "pojezierne",
+    "wojewodztwo": "wielkopolskie",
+    "powierzchnia": "75,84 km²",
+    "zdjecie": "images/wielkopolski.jpg",
+    "opis": "Położony na południe od Poznania, stanowi żywe muzeum form polodowcowymi z rynnami jeziornymi, ozami, kemami oraz głazami narzutowymi."
+  },
+  {
+    "id": 22,
+    "nazwa": "Wigierski Park Narodowy",
+    "kategoria": "pojezierne",
+    "wojewodztwo": "podlaskie",
+    "powierzchnia": "150,86 km²",
+    "zdjecie": "images/wigierski.jpg",
+    "opis": "Obejmuje północny skraj Puszczy Augustowskiej wraz z głębokim jeziorem Wigry, ponad 40 mniejszymi zbiornikami polodowcowymi oraz żeremiami bobrów."
+  },
+  {
+    "id": 23,
+    "nazwa": "Woliński Park Narodowy",
+    "kategoria": "nadmorskie",
+    "wojewodztwo": "zachodniopomorskie",
+    "powierzchnia": "109,37 km²",
+    "zdjecie": "images/wolinski.jpg",
+    "opis": "Obejmuje ochroną najpiękniejszy odcinek polskiego wybrzeża klifowego, lasy bukowe na wyspie Wolin, deltę Świny oraz przybrzeżne wody Bałtyku."
+  }
+]
