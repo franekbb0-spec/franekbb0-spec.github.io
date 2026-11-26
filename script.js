@@ -39,6 +39,7 @@ const sortButtons = document.querySelectorAll('.chart-sort-btn');
 
 const etykietyStref = {
     gorskie: 'Park górski',
+    wyzynne: 'Park wyżynny',
     pojezierne: 'Park pojezierny / nizinny',
     nadmorskie: 'Park nadmorski'
 };
@@ -166,7 +167,7 @@ if (carouselTrack) {
     }
 
     function utworzIkoneMarkera(kategoria, czyAktywny = false) {
-        const klasaStrefy = ['gorskie', 'pojezierne', 'nadmorskie'].includes(kategoria)
+        const klasaStrefy = ['gorskie', 'wyzynne', 'pojezierne', 'nadmorskie'].includes(kategoria)
             ? kategoria
             : 'pojezierne';
         const klasaAktywna = czyAktywny ? ' active' : '';

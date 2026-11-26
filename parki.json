@@ -184,7 +184,7 @@
   {
     "id": 14,
     "nazwa": "Ojcowski Park Narodowy",
-    "kategoria": "pojezierne",
+    "kategoria": "wyzynne",
     "wojewodztwo": "małopolskie",
     "siedziba": "Ojców",
     "powierzchnia": "21,46 km²",
@@ -226,7 +226,7 @@
   {
     "id": 17,
     "nazwa": "Roztoczański Park Narodowy",
-    "kategoria": "pojezierne",
+    "kategoria": "wyzynne",
     "wojewodztwo": "lubelskie",
     "siedziba": "Zwierzyniec",
     "powierzchnia": "84,83 km²",
@@ -254,7 +254,7 @@
   {
     "id": 19,
     "nazwa": "Świętokrzyski Park Narodowy",
-    "kategoria": "gorskie",
+    "kategoria": "wyzynne",
     "wojewodztwo": "świętokrzyskie",
     "siedziba": "Bodzentyn",
     "powierzchnia": "76,26 km²",

@@ -26,6 +26,7 @@ let wszystkieParki = [];
 
 const etykietyKategorii = {
     gorskie: 'Górski',
+    wyzynne: 'Wyżynny',
     pojezierne: 'Pojezierny / Nizinny',
     nadmorskie: 'Nadmorski'
 };
