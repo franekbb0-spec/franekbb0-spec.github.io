@@ -13,7 +13,42 @@ if (hamburgerBtn && navCollapse) {
 }
 
 // ==========================================================================
-// 2. OBSŁUGA FORMULARZA KONTAKTOWEGO (KONTAKT.HTML)
+// 2. PRZYCISK POWROTU NA GÓRĘ STRONY (DZIAŁA NA KAŻDEJ PODSTRONIE)
+// ==========================================================================
+function inicjalizujPrzyciskPowrotuNaGore() {
+    if (document.getElementById('scroll-top-btn')) return;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'scroll-top-btn';
+    btn.className = 'scroll-top-btn';
+    btn.setAttribute('aria-label', 'Wróć na górę strony');
+    btn.setAttribute('title', 'Wróć na górę');
+    btn.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 19V5"></path>
+            <path d="M5 12l7-7 7 7"></path>
+        </svg>
+    `;
+
+    document.body.appendChild(btn);
+
+    const aktualizujWidocznosc = () => {
+        btn.classList.toggle('visible', window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', aktualizujWidocznosc, { passive: true });
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    aktualizujWidocznosc();
+}
+
+inicjalizujPrzyciskPowrotuNaGore();
+
+// ==========================================================================
+// 3. OBSŁUGA FORMULARZA KONTAKTOWEGO (KONTAKT.HTML)
 // ==========================================================================
 const contactForm = document.getElementById('contact-form');
 const formFeedback = document.getElementById('form-feedback');
@@ -30,7 +65,7 @@ if (contactForm && formFeedback) {
 }
 
 // ==========================================================================
-// 3. KARUZELA, POGODA, MAPA I WYKRESY (INDEX.HTML)
+// 4. KARUZELA, POGODA, MAPA I WYKRESY (INDEX.HTML)
 // ==========================================================================
 const carouselTrack = document.getElementById('carousel-track');
 const prevBtn = document.getElementById('carousel-prev');

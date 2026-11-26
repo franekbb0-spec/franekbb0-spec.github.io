@@ -10,7 +10,40 @@ if (hamburgerBtn && navCollapse) {
     });
 }
 
-// 2. Referencje do elementów galerii i przycisków filtrowania
+// 2. Przycisk powrotu na górę strony
+function inicjalizujPrzyciskPowrotuNaGore() {
+    if (document.getElementById('scroll-top-btn')) return;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'scroll-top-btn';
+    btn.className = 'scroll-top-btn';
+    btn.setAttribute('aria-label', 'Wróć na górę strony');
+    btn.setAttribute('title', 'Wróć na górę');
+    btn.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 19V5"></path>
+            <path d="M5 12l7-7 7 7"></path>
+        </svg>
+    `;
+
+    document.body.appendChild(btn);
+
+    const aktualizujWidocznosc = () => {
+        btn.classList.toggle('visible', window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', aktualizujWidocznosc, { passive: true });
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    aktualizujWidocznosc();
+}
+
+inicjalizujPrzyciskPowrotuNaGore();
+
+// 3. Referencje do elementów galerii i przycisków filtrowania
 const galleryGrid = document.getElementById('gallery-grid');
 const filterButtons = document.querySelectorAll('.filter-btn');
 
@@ -31,7 +64,7 @@ const etykietyKategorii = {
     nadmorskie: 'Nadmorski'
 };
 
-// 3. Pobranie danych o parkach
+// 4. Pobranie danych o parkach
 async function zaladujDane() {
     try {
         const response = await fetch('parki.json');
@@ -46,7 +79,7 @@ async function zaladujDane() {
     }
 }
 
-// 4. Dynamiczne generowanie kart
+// 5. Dynamiczne generowanie kart
 function renderujGalerie(listaParkow) {
     galleryGrid.innerHTML = '';
 
@@ -72,7 +105,7 @@ function renderujGalerie(listaParkow) {
     });
 }
 
-// 5. Obsługa filtrowania po strefach krajobrazowych
+// 6. Obsługa filtrowania po strefach krajobrazowych
 filterButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         filterButtons.forEach(b => b.classList.remove('active'));
@@ -88,7 +121,7 @@ filterButtons.forEach(btn => {
     });
 });
 
-// 6. Otwieranie i zamykanie podglądu powiększenia (Lightbox + blokada scrolla)
+// 7. Otwieranie i zamykanie podglądu powiększenia (Lightbox + blokada scrolla)
 function otworzLightbox(park) {
     lightboxImg.onerror = function () {
         this.onerror = null;
