@@ -1,5 +1,5 @@
 /* ==========================================================================
-   1. RESET I USTAWIENIA BAZOWE
+   1. RESET I USTAWIENIA BAZOWE (STICKY FOOTER FLEXBOX)
    ========================================================================== */
 * {
     box-sizing: border-box;
@@ -12,20 +12,42 @@ body {
     line-height: 1.6;
     color: #2f3640;
     background-color: #f7f9f7;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+body.no-scroll {
+    overflow: hidden;
 }
 
 /* ==========================================================================
-   2. NAGŁÓWEK, HAMBURGER MENU ORAZ HERO BANNER W <HEADER>
+   2. JEDNOLITY HERO HEADER ZE ZDJĘCIEM, OBROTOWYM PRZYCISKIEM I PŁYNNYM MENU
    ========================================================================== */
-header {
-    background-color: #2e7d32;
+header.hero-header {
+    position: relative;
+    width: 100%;
     color: #ffffff;
     text-align: center;
-    padding: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(15, 42, 18, 0.74) 0%,
+        rgba(18, 48, 22, 0.52) 55%,
+        rgba(15, 42, 18, 0.78) 100%
+    ),
+    url("images/hero.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
 }
 
-.header-bar {
-    padding: 25px 15px;
+.header-top {
+    padding: 24px 20px 18px;
+    background-color: rgba(15, 42, 18, 0.34);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 header .content h1 a {
@@ -33,55 +55,176 @@ header .content h1 a {
     text-decoration: none;
     font-size: 2.2rem;
     letter-spacing: 0.5px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
 }
 
 header .content p {
     font-size: 1.05rem;
-    margin-top: 6px;
+    margin-top: 4px;
     color: #e8f5e9;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
 }
 
+/* Przycisk menu: obrót o 90° wyłącznie przy kliknięciu (otwarcie/zamknięcie) */
 .hamburger-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.18);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    width: 48px;
+    height: 48px;
+    margin-top: 16px;
+    background-color: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.48);
     color: #ffffff;
-    font-size: 1.8rem;
+    font-size: 1.7rem;
     line-height: 1;
-    padding: 8px 18px;
-    margin-top: 18px;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    transform: rotate(0deg);
+    transition:
+        transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
-.hamburger-btn:hover {
-    background-color: rgba(0, 0, 0, 0.32);
+.hamburger-icon {
+    display: inline-block;
+    line-height: 1;
+    pointer-events: none;
+}
+
+@media (hover: hover) {
+    .hamburger-btn:hover {
+        background-color: rgba(255, 255, 255, 0.26);
+        border-color: #ffffff;
+    }
+}
+
+.hamburger-btn.open {
+    transform: rotate(90deg);
+    background-color: rgba(46, 125, 50, 0.88);
     border-color: #ffffff;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
 }
 
-.hamburger-btn:active {
-    transform: scale(0.96);
+/* Płynne rozwijanie i zwijanie menu (CSS Grid 0fr -> 1fr) */
+.nav-collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    margin-top: 0;
+    visibility: hidden;
+    transition:
+        grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.28s ease,
+        margin-top 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        visibility 0.35s;
+}
+
+.nav-collapse.open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: 16px;
+    visibility: visible;
 }
 
 nav ul {
-    display: none;
     list-style: none;
-    margin-top: 15px;
-    padding: 0;
-}
-
-nav ul.open {
+    overflow: hidden;
+    min-height: 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    gap: 8px;
-    animation: fadeInMenu 0.25s ease-in-out;
+    gap: 10px;
+    padding: 0;
+    transform: translateY(-10px);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes fadeInMenu {
+.nav-collapse.open ul {
+    transform: translateY(0);
+}
+
+nav ul li {
+    padding: 3px 0;
+}
+
+nav ul li a {
+    position: relative;
+    display: block;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: rgba(15, 42, 18, 0.56);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 6px;
+    transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease;
+}
+
+/* Pseudoelement ::after - animowane podkreślenie odnośników w menu */
+nav ul li a::after {
+    content: "";
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 5px;
+    height: 2px;
+    background-color: #a5d6a7;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.25s ease;
+}
+
+nav ul li a.active {
+    background-color: rgba(46, 125, 50, 0.92);
+    border-color: #a5d6a7;
+}
+
+nav ul li a.active::after {
+    transform: scaleX(1);
+}
+
+@media (hover: hover) {
+    nav ul li a:hover {
+        background-color: rgba(46, 125, 50, 0.88);
+        border-color: rgba(255, 255, 255, 0.7);
+        transform: scale(1.04);
+    }
+
+    nav ul li a:hover::after {
+        transform: scaleX(1);
+    }
+}
+
+/* Treść hero bannera bezpośrednio na tle zdjęcia w headerze */
+.hero-content {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 20px 72px;
+}
+
+.hero-content h2 {
+    font-size: 2.25rem;
+    margin-bottom: 12px;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.65);
+}
+
+.hero-content p {
+    font-size: 1.12rem;
+    line-height: 1.6;
+    color: #f1f8e9;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
+}
+
+@keyframes fadeInModal {
     from {
         opacity: 0;
         transform: translateY(-8px);
@@ -92,91 +235,19 @@ nav ul.open {
     }
 }
 
-nav ul li {
-    width: 100%;
-    max-width: 320px;
-}
-
-nav ul li a {
-    display: block;
-    color: #e8f5e9;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 10px 20px;
-    background-color: rgba(0, 0, 0, 0.15);
-    border-radius: 6px;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-nav ul li a:hover,
-nav ul li a.active {
-    background-color: #1b5e20;
-    color: #ffffff;
-}
-
-.hero-banner {
-    width: 100%;
-    background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
-                url("images/hero.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-top: 3px solid #1b5e20;
-    padding: 75px 20px;
-    text-align: center;
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.hero-content {
-    max-width: 780px;
-    margin: 0 auto;
-}
-
-.hero-banner h2 {
-    font-size: 2.2rem;
-    margin-bottom: 12px;
-    color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-}
-
-.hero-banner p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #f1f8e9;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-}
-
 /* ==========================================================================
    3. TREŚĆ GŁÓWNA (MAIN)
    ========================================================================== */
 main {
+    flex: 1;
+    width: 100%;
     max-width: 1050px;
     margin: 30px auto;
     padding: 0 20px;
 }
 
-.banner-placeholder {
-    background-color: #c8e6c9;
-    border-left: 6px solid #2e7d32;
-    padding: 25px 30px;
-    margin-bottom: 25px;
-    border-radius: 6px;
-}
-
-.banner-placeholder h2 {
-    color: #1b5e20;
-    margin-bottom: 8px;
-    font-size: 1.5rem;
-}
-
-.banner-placeholder p {
-    color: #2e4a30;
-    font-size: 1.05rem;
-}
-
 /* ==========================================================================
-   4. BLOKI TEKSTOWE (.content-section)
+   4. BLOKI TEKSTOWE (.content-section) I PSEUDOELEMENT ::before
    ========================================================================== */
 .content-section {
     background: #ffffff;
@@ -191,6 +262,17 @@ main {
     margin-bottom: 12px;
     color: #1b5e20;
     font-size: 1.3rem;
+}
+
+.content-section h3::before {
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 1.05em;
+    background-color: #2e7d32;
+    border-radius: 3px;
+    margin-right: 10px;
+    vertical-align: -0.15em;
 }
 
 .content-section p {
@@ -227,6 +309,14 @@ main {
     flex-direction: column;
     justify-content: space-between;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (hover: hover) {
+    .column:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    }
 }
 
 .column h3 {
@@ -307,15 +397,16 @@ main {
     font-weight: bold;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .submit-btn:hover {
     background-color: #1b5e20;
+    transform: translateY(-2px);
 }
 
 /* ==========================================================================
-   7. PRZESUWNA KARUZELA 23 PARKÓW, POGODA I PANEL DANYCH JSON (INDEX.HTML)
+   7. PRZESUWNA KARUZELA 23 PARKÓW, POGODA OPEN-METEO I PANEL JSON (INDEX.HTML)
    ========================================================================== */
 .carousel-header {
     margin-bottom: 18px;
@@ -408,11 +499,12 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .carousel-btn:hover {
     background-color: #1b5e20;
+    transform: scale(1.06);
 }
 
 .park-details-box {
@@ -422,12 +514,12 @@ main {
     border: 1px solid #c8e6c9;
     border-radius: 8px;
     padding: 20px;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .park-details-img {
     flex: 0 0 320px;
-    height: 235px;
+    height: 260px;
     border-radius: 6px;
     overflow: hidden;
 }
@@ -477,9 +569,12 @@ main {
     border: 1px solid #c8e6c9;
     border-left: 4px solid #2e7d32;
     border-radius: 6px;
-    padding: 10px 14px;
+    padding: 12px 14px;
     margin-bottom: 14px;
     font-size: 0.92rem;
+}
+
+.weather-current-row {
     display: flex;
     flex-wrap: wrap;
     gap: 6px 10px;
@@ -493,6 +588,29 @@ main {
 
 .weather-value {
     color: #37474f;
+}
+
+.weather-forecast {
+    margin-top: 10px;
+    overflow-x: auto;
+}
+
+.weather-forecast table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+}
+
+.weather-forecast th,
+.weather-forecast td {
+    border: 1px solid #dcedc8;
+    padding: 6px 8px;
+    text-align: left;
+}
+
+.weather-forecast th {
+    background-color: #e8f5e9;
+    color: #1b5e20;
 }
 
 .park-details-link {
@@ -904,7 +1022,7 @@ main {
     position: fixed;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.82);
-    z-index: 1000;
+    z-index: 2000;
     align-items: center;
     justify-content: center;
     padding: 20px;
@@ -912,7 +1030,7 @@ main {
 
 .lightbox.open {
     display: flex;
-    animation: fadeInMenu 0.2s ease;
+    animation: fadeInModal 0.2s ease;
 }
 
 .lightbox-content {
@@ -1026,29 +1144,46 @@ footer a:hover {
         flex-direction: column;
     }
 
-    .header-bar {
-        padding: 20px 12px;
+    .header-top {
+        padding: 18px 14px 14px;
     }
 
-    .hero-banner {
-        padding: 45px 15px;
+    header .content h1 a {
+        font-size: 1.75rem;
     }
 
-    .hero-banner h2 {
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    nav ul li {
+        width: 100%;
+        max-width: 320px;
+        padding: 0;
+    }
+
+    nav ul li a {
+        text-align: center;
+        padding: 14px 20px;
+    }
+
+    .hero-content {
+        padding: 38px 15px 46px;
+    }
+
+    .hero-content h2 {
         font-size: 1.6rem;
     }
 
-    .hero-banner p {
+    .hero-content p {
         font-size: 1rem;
     }
 
     main {
         margin: 20px auto;
         padding: 0 12px;
-    }
-
-    .banner-placeholder {
-        padding: 20px 15px;
     }
 
     .park-details-box {

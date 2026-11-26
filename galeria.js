@@ -1,10 +1,12 @@
-// 1. Obsługa menu hamburgera
+// 1. Obsługa hamburger menu z obrotem 90° i płynnym rozwijaniem
 const hamburgerBtn = document.getElementById('hamburger-btn');
-const navMenu = document.getElementById('nav-menu');
+const navCollapse = document.getElementById('nav-collapse');
 
-if (hamburgerBtn && navMenu) {
+if (hamburgerBtn && navCollapse) {
     hamburgerBtn.addEventListener('click', () => {
-        navMenu.classList.toggle('open');
+        const czyOtwarte = navCollapse.classList.toggle('open');
+        hamburgerBtn.classList.toggle('open', czyOtwarte);
+        hamburgerBtn.setAttribute('aria-expanded', String(czyOtwarte));
     });
 }
 
@@ -22,7 +24,6 @@ const lightboxClose = document.getElementById('lightbox-close');
 
 let wszystkieParki = [];
 
-// Zamiana kluczy z JSON na estetyczne etykiety z polskimi znakami
 const etykietyKategorii = {
     gorskie: 'Górski',
     pojezierne: 'Pojezierny / Nizinny',
@@ -90,7 +91,7 @@ filterButtons.forEach(btn => {
     });
 });
 
-// 6. Otwieranie i zamykanie podglądu powiększenia (Lightbox)
+// 6. Otwieranie i zamykanie podglądu powiększenia (Lightbox + blokada scrolla)
 function otworzLightbox(park) {
     lightboxImg.onerror = function () {
         this.onerror = null;
@@ -99,16 +100,18 @@ function otworzLightbox(park) {
     lightboxImg.src = park.zdjecie;
     lightboxImg.alt = park.nazwa;
     lightboxTitle.textContent = park.nazwa;
-    lightboxMeta.textContent = `Województwo: ${park.wojewodztwo} | Powierzchnia: ${park.powierzchnia}`;
+    lightboxMeta.textContent = `Województwo: ${park.wojewodztwo} | Siedziba: ${park.siedziba} | Powierzchnia: ${park.powierzchnia}`;
     lightboxDesc.textContent = park.opis;
 
     lightbox.classList.add('open');
     lightbox.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('no-scroll');
 }
 
 function zamknijLightbox() {
     lightbox.classList.remove('open');
     lightbox.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('no-scroll');
 }
 
 if (lightboxClose) {
@@ -129,5 +132,4 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Uruchomienie pobierania po załadowaniu skryptu
 zaladujDane();

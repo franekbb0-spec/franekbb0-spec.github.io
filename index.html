@@ -14,30 +14,38 @@
 </head>
 <body>
 
-    <header>
-        <div class="header-bar">
+    <header class="hero-header">
+        <div class="header-top">
             <div class="content">
                 <h1><a href="index.html">Parki Narodowe Polski</a></h1>
                 <p>Najwyższa forma ochrony ojczystej przyrody</p>
             </div>
-            <nav>
-                <button class="hamburger-btn" id="hamburger-btn" aria-label="Otwórz menu">&#9776;</button>
-                <ul id="nav-menu">
-                    <li><a href="index.html" class="active">Start</a></li>
-                    <li><a href="o-projekcie.html">O projekcie</a></li>
-                    <li><a href="zagadnienia.html">Zagadnienia</a></li>
-                    <li><a href="galeria.html">Galeria</a></li>
-                    <li><a href="kontakt.html">Kontakt</a></li>
-                </ul>
+            <nav aria-label="Menu główne">
+                <button
+                    type="button"
+                    class="hamburger-btn"
+                    id="hamburger-btn"
+                    aria-label="Otwórz lub zamknij menu"
+                    aria-expanded="false"
+                    aria-controls="nav-menu"
+                >
+                    <span class="hamburger-icon" aria-hidden="true">&#9776;</span>
+                </button>
+                <div class="nav-collapse" id="nav-collapse">
+                    <ul id="nav-menu">
+                        <li><a href="index.html" class="active">Start</a></li>
+                        <li><a href="o-projekcie.html">O projekcie</a></li>
+                        <li><a href="zagadnienia.html">Zagadnienia</a></li>
+                        <li><a href="galeria.html">Galeria</a></li>
+                        <li><a href="kontakt.html">Kontakt</a></li>
+                    </ul>
+                </div>
             </nav>
         </div>
 
-        <!-- Hero Banner w header -->
-        <div class="hero-banner">
-            <div class="hero-content">
-                <h2>23 Ostoje Dzikiej Przyrody</h2>
-                <p>Polskie parki narodowe obejmują łącznie ponad 317 tysięcy hektarów, co stanowi około 1% terytorium całego kraju.</p>
-            </div>
+        <div class="hero-content">
+            <h2>23 Ostoje Dzikiej Przyrody</h2>
+            <p>Polskie parki narodowe obejmują łącznie ponad 317 tysięcy hektarów, co stanowi około 1% terytorium całego kraju.</p>
         </div>
     </header>
 
@@ -57,7 +65,7 @@
                 <button type="button" class="carousel-btn next" id="carousel-next" aria-label="Przesuń w prawo">&#10095;</button>
             </div>
 
-            <!-- Karta z danymi wybranego parku z JSON oraz aktualną pogodą Open-Meteo -->
+            <!-- Karta z danymi wybranego parku z JSON oraz pogodą Open-Meteo -->
             <div class="park-details-box" id="park-details-box">
                 <div class="park-details-img">
                     <img id="detail-img" src="images/hero.jpg" alt="Podgląd parku narodowego">
@@ -68,10 +76,13 @@
                     <p class="park-details-meta" id="detail-meta"></p>
                     <p class="park-details-desc" id="detail-desc"></p>
 
-                    <!-- Sekcja aktualnej pogody (Open-Meteo) -->
+                    <!-- Sekcja aktualnej pogody i prognozy 3-dniowej (Open-Meteo) -->
                     <div class="park-weather-box" id="park-weather">
-                        <span class="weather-label">Aktualna pogoda (Open-Meteo):</span>
-                        <span class="weather-value" id="weather-data">Pobieranie danych pogodowych...</span>
+                        <div class="weather-current-row">
+                            <span class="weather-label">Aktualna pogoda (Open-Meteo):</span>
+                            <span class="weather-value" id="weather-data">Ładowanie danych...</span>
+                        </div>
+                        <div class="weather-forecast" id="weather-forecast"></div>
                     </div>
 
                     <a href="galeria.html" class="park-details-link">Zobacz pełną galerię z filtrowaniem &rarr;</a>
@@ -105,7 +116,7 @@
                 <p>Zestawienia wygenerowane w HTML5 <code>&lt;canvas&gt;</code> na podstawie pliku <code>parki.json</code> oraz danych pogodowych Open-Meteo. Kliknięcie dowolnego słupka na wykresie parków synchronizuje kartę opisu, wykres temperatury oraz mapę Leaflet.</p>
             </div>
 
-            <!-- Część 2: Wykres słupkowy z danymi z JSON (Powierzchnia / Rok utworzenia) -->
+            <!-- Wykres słupkowy z danymi z JSON (Powierzchnia / Rok utworzenia) -->
             <div class="chart-card">
                 <div class="chart-toolbar">
                     <div>
@@ -130,7 +141,7 @@
                 </div>
             </div>
 
-            <!-- Siatka dwóch mniejszych wykresów: Temperatura Open-Meteo + Wykres statyczny (Część 1) -->
+            <!-- Dwa mniejsze wykresy: Temperatura Open-Meteo + Wykres statyczny -->
             <div class="charts-grid">
                 <div class="chart-card">
                     <h4 id="temp-chart-heading">Prognoza temperatury na 24h (Open-Meteo)</h4>

@@ -13,29 +13,38 @@
 </head>
 <body>
 
-    <header>
-        <div class="header-bar">
+    <header class="hero-header">
+        <div class="header-top">
             <div class="content">
                 <h1><a href="index.html">Parki Narodowe Polski</a></h1>
                 <p>Najwyższa forma ochrony ojczystej przyrody</p>
             </div>
-            <nav>
-                <button class="hamburger-btn" id="hamburger-btn" aria-label="Otwórz menu">&#9776;</button>
-                <ul id="nav-menu">
-                    <li><a href="index.html">Start</a></li>
-                    <li><a href="o-projekcie.html" class="active">O projekcie</a></li>
-                    <li><a href="zagadnienia.html">Zagadnienia</a></li>
-                    <li><a href="galeria.html">Galeria</a></li>
-                    <li><a href="kontakt.html">Kontakt</a></li>
-                </ul>
+            <nav aria-label="Menu główne">
+                <button
+                    type="button"
+                    class="hamburger-btn"
+                    id="hamburger-btn"
+                    aria-label="Otwórz lub zamknij menu"
+                    aria-expanded="false"
+                    aria-controls="nav-menu"
+                >
+                    <span class="hamburger-icon" aria-hidden="true">&#9776;</span>
+                </button>
+                <div class="nav-collapse" id="nav-collapse">
+                    <ul id="nav-menu">
+                        <li><a href="index.html">Start</a></li>
+                        <li><a href="o-projekcie.html" class="active">O projekcie</a></li>
+                        <li><a href="zagadnienia.html">Zagadnienia</a></li>
+                        <li><a href="galeria.html">Galeria</a></li>
+                        <li><a href="kontakt.html">Kontakt</a></li>
+                    </ul>
+                </div>
             </nav>
         </div>
 
-        <div class="hero-banner">
-            <div class="hero-content">
-                <h2>Geneza i Założenia Projektu</h2>
-                <p>Serwis powstał w ramach przedmiotu Projektowanie Serwisów WWW na Politechnice Łódzkiej.</p>
-            </div>
+        <div class="hero-content">
+            <h2>Geneza i Założenia Projektu</h2>
+            <p>Serwis powstał w ramach przedmiotu Projektowanie Serwisów WWW na Politechnice Łódzkiej.</p>
         </div>
     </header>
 
@@ -51,7 +60,7 @@
         <section class="content-section">
             <article>
                 <h3>Zespół projektowy</h3>
-                <p>Projekt jest rozwijany iteracyjnie przez dwuosobowy zespół studencki z wykorzystaniem standardów HTML5, CSS3, JavaScript (JSON + Fetch API), repozytorium GitHub oraz platformy hostingowej GitHub Pages.</p>
+                <p>Projekt jest rozwijany iteracyjnie przez dwuosobowy zespół studencki z wykorzystaniem standardów HTML5, CSS3, JavaScript (JSON + Fetch API), bibliotek Leaflet oraz Chart.js, repozytorium GitHub i hostingu GitHub Pages.</p>
                 <ul>
                     <li><strong>Franciszek Bieniek</strong> – architektura informacji, struktura semantyczna HTML5, baza JSON, teksty.</li>
                     <li><strong>Dominik Gilarski</strong> – stylizacja CSS, układ responsywny Flexbox/Grid, opracowanie źródeł merytorycznych.</li>

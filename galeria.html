@@ -13,29 +13,38 @@
 </head>
 <body>
 
-    <header>
-        <div class="header-bar">
+    <header class="hero-header">
+        <div class="header-top">
             <div class="content">
                 <h1><a href="index.html">Parki Narodowe Polski</a></h1>
                 <p>Najwyższa forma ochrony ojczystej przyrody</p>
             </div>
-            <nav>
-                <button class="hamburger-btn" id="hamburger-btn" aria-label="Otwórz menu">&#9776;</button>
-                <ul id="nav-menu">
-                    <li><a href="index.html">Start</a></li>
-                    <li><a href="o-projekcie.html">O projekcie</a></li>
-                    <li><a href="zagadnienia.html">Zagadnienia</a></li>
-                    <li><a href="galeria.html" class="active">Galeria</a></li>
-                    <li><a href="kontakt.html">Kontakt</a></li>
-                </ul>
+            <nav aria-label="Menu główne">
+                <button
+                    type="button"
+                    class="hamburger-btn"
+                    id="hamburger-btn"
+                    aria-label="Otwórz lub zamknij menu"
+                    aria-expanded="false"
+                    aria-controls="nav-menu"
+                >
+                    <span class="hamburger-icon" aria-hidden="true">&#9776;</span>
+                </button>
+                <div class="nav-collapse" id="nav-collapse">
+                    <ul id="nav-menu">
+                        <li><a href="index.html">Start</a></li>
+                        <li><a href="o-projekcie.html">O projekcie</a></li>
+                        <li><a href="zagadnienia.html">Zagadnienia</a></li>
+                        <li><a href="galeria.html" class="active">Galeria</a></li>
+                        <li><a href="kontakt.html">Kontakt</a></li>
+                    </ul>
+                </div>
             </nav>
         </div>
 
-        <div class="hero-banner">
-            <div class="hero-content">
-                <h2>Galeria 23 Parków Narodowych</h2>
-                <p>Filtruj według strefy krajobrazowej i kliknij wybraną kartę, aby otworzyć powiększenie oraz pełny opis z pliku JSON.</p>
-            </div>
+        <div class="hero-content">
+            <h2>Galeria 23 Parków Narodowych</h2>
+            <p>Filtruj według strefy krajobrazowej i kliknij wybraną kartę, aby otworzyć powiększenie oraz pełny opis z pliku JSON.</p>
         </div>
     </header>
 

@@ -1,12 +1,14 @@
 // ==========================================================================
-// 1. OBSŁUGA HAMBURGER MENU (DZIAŁA NA KAŻDEJ PODSTRONIE)
+// 1. OBSŁUGA HAMBURGER MENU Z OBROTEM 90° I PŁYNNYM ROZWIJANIEM (KAŻDA STRONA)
 // ==========================================================================
 const hamburgerBtn = document.getElementById('hamburger-btn');
-const navMenu = document.getElementById('nav-menu');
+const navCollapse = document.getElementById('nav-collapse');
 
-if (hamburgerBtn && navMenu) {
+if (hamburgerBtn && navCollapse) {
     hamburgerBtn.addEventListener('click', () => {
-        navMenu.classList.toggle('open');
+        const czyOtwarte = navCollapse.classList.toggle('open');
+        hamburgerBtn.classList.toggle('open', czyOtwarte);
+        hamburgerBtn.setAttribute('aria-expanded', String(czyOtwarte));
     });
 }
 
@@ -23,6 +25,7 @@ const detailTitle = document.getElementById('detail-title');
 const detailMeta = document.getElementById('detail-meta');
 const detailDesc = document.getElementById('detail-desc');
 const weatherDataEl = document.getElementById('weather-data');
+const weatherForecastEl = document.getElementById('weather-forecast');
 const mapContainer = document.getElementById('mapa');
 const mapResetBtn = document.getElementById('map-reset-btn');
 
@@ -40,6 +43,21 @@ const etykietyStref = {
     nadmorskie: 'Park nadmorski'
 };
 
+// Formatowanie daty ISO na polską nazwę dnia tygodnia (Ćwiczenie 7)
+function formatujDzien(dataISO) {
+    const dniTygodnia = [
+        'Niedziela',
+        'Poniedziałek',
+        'Wtorek',
+        'Środa',
+        'Czwartek',
+        'Piątek',
+        'Sobota'
+    ];
+    const dataObj = new Date(`${dataISO}T12:00:00`);
+    return `${dniTygodnia[dataObj.getDay()]} (${dataObj.toLocaleDateString('pl-PL')})`;
+}
+
 // Mapowanie kodów pogodowych WMO (Open-Meteo) na opisy po polsku
 function opiszKodPogody(code) {
     if (code === 0) return 'Bezchmurnie';
@@ -49,13 +67,13 @@ function opiszKodPogody(code) {
     if (code >= 61 && code <= 67) return 'Opady deszczu';
     if (code >= 71 && code <= 77) return 'Opady śniegu';
     if (code >= 80 && code <= 82) return 'Przelotny deszcz';
-    if (code >= 85 && code <= 86) return 'Przelotny śnieg';
+    if (code >= 85 || code === 86) return 'Przelotny śnieg';
     if (code >= 95 && code <= 99) return 'Burza';
     return 'Zmienne warunki';
 }
 
 // --------------------------------------------------------------------------
-// Część 1 z instrukcji: Statyczny wykres słupkowy horyzontalny (Chart.js)
+// Statyczny wykres słupkowy horyzontalny (Ćwiczenie 9 - Część 1)
 // --------------------------------------------------------------------------
 function inicjalizujWykresStatyczny() {
     if (!wykresStatycznyCanvas || typeof Chart === 'undefined') return;
@@ -186,7 +204,7 @@ if (carouselTrack) {
     }
 
     // ----------------------------------------------------------------------
-    // Część 2 z instrukcji: Wykres słupkowy z danymi z parki.json (Chart.js)
+    // Wykres słupkowy z danymi z parki.json (Ćwiczenie 9 - Część 2)
     // ----------------------------------------------------------------------
     function posortujParkiDoWykresu(lista) {
         const kopia = [...lista];
@@ -307,7 +325,6 @@ if (carouselTrack) {
         });
     }
 
-    // Aktualizacja samego podświetlenia słupka po zmianie parku (bez niszczenia wykresu)
     function zaktualizujPodswietlenieWykresu() {
         if (!wykresJsonInstancja || aktualnaKolejnoscWykresu.length === 0) return;
 
@@ -415,15 +432,18 @@ if (carouselTrack) {
         });
     });
 
-    // Pobieranie aktualnej pogody i godzinowej prognozy 24h z Open-Meteo
+    // Pobieranie aktualnej pogody, tabeli na 3 dni i godzinowej prognozy 24h z Open-Meteo
     async function pobierzPogode(park) {
         if (!weatherDataEl) return;
 
         const biezaceZapytanie = ++numerZapytaniaPogody;
-        weatherDataEl.textContent = 'Pobieranie danych pogodowych...';
+        weatherDataEl.textContent = 'Ładowanie danych...';
+        if (weatherForecastEl) {
+            weatherForecastEl.innerHTML = '';
+        }
 
         try {
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${park.lat}&longitude=${park.lon}&current_weather=true&hourly=temperature_2m&forecast_days=2&timezone=Europe%2FWarsaw`;
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${park.lat}&longitude=${park.lon}&current_weather=true&hourly=temperature_2m&daily=temperature_2m_min,temperature_2m_max,precipitation_sum&forecast_days=3&timezone=Europe%2FWarsaw`;
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`Błąd HTTP: ${response.status}`);
@@ -437,6 +457,35 @@ if (carouselTrack) {
                 const opis = opiszKodPogody(weathercode);
                 weatherDataEl.textContent = `${temperature} °C • Wiatr: ${windspeed} km/h • ${opis}`;
 
+                // Tabela 3-dniowa (Ćwiczenie 7 - zadanie dodatkowe)
+                if (weatherForecastEl && data.daily && Array.isArray(data.daily.time)) {
+                    let wiersze = '';
+                    for (let i = 0; i < Math.min(3, data.daily.time.length); i++) {
+                        wiersze += `
+                            <tr>
+                                <td>${formatujDzien(data.daily.time[i])}</td>
+                                <td>${data.daily.temperature_2m_min[i]} °C</td>
+                                <td>${data.daily.temperature_2m_max[i]} °C</td>
+                                <td>${data.daily.precipitation_sum[i]} mm</td>
+                            </tr>
+                        `;
+                    }
+                    weatherForecastEl.innerHTML = `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Prognoza na 3 dni</th>
+                                    <th>Min</th>
+                                    <th>Max</th>
+                                    <th>Opady</th>
+                                </tr>
+                            </thead>
+                            <tbody>${wiersze}</tbody>
+                        </table>
+                    `;
+                }
+
+                // Wykres godzinowy 24h (Chart.js)
                 if (data.hourly && Array.isArray(data.hourly.time) && Array.isArray(data.hourly.temperature_2m)) {
                     const biezacaGodzina = time ? time.slice(0, 13) : '';
                     let startIdx = data.hourly.time.findIndex(t => t.startsWith(biezacaGodzina));
@@ -454,7 +503,7 @@ if (carouselTrack) {
             }
         } catch (error) {
             if (biezaceZapytanie !== numerZapytaniaPogody) return;
-            weatherDataEl.textContent = 'Nie udało się pobrać pogody (sprawdź połączenie z internetem).';
+            weatherDataEl.textContent = 'Nie udało się pobrać danych pogodowych.';
             if (tempChartSubtitle) {
                 tempChartSubtitle.textContent = 'Brak połączenia z Open-Meteo – nie udało się wygenerować wykresu temperatury.';
             }
@@ -488,7 +537,6 @@ if (carouselTrack) {
     function pokazSzczegolyParku(park, opcje = {}) {
         const { wycentrujMape = true, przewinKaruzela = false } = opcje;
 
-        // 1. Podświetlenie aktywnego kafelka w karuzeli
         document.querySelectorAll('.carousel-item').forEach(el => el.classList.remove('active'));
         const aktywnyKafelek = kafelkiKaruzeli.get(park.id);
         if (aktywnyKafelek) {
@@ -498,7 +546,6 @@ if (carouselTrack) {
             }
         }
 
-        // 2. Wypełnienie karty szczegółów parku
         detailImg.onerror = function () {
             this.onerror = null;
             this.src = 'images/hero.jpg';
@@ -512,7 +559,6 @@ if (carouselTrack) {
         detailMeta.textContent = `Województwo: ${park.wojewodztwo} | Siedziba: ${park.siedziba} | Rok utworzenia: ${park.rok_utworzenia} | Powierzchnia: ${park.powierzchnia}`;
         detailDesc.textContent = park.opis;
 
-        // 3. Synchronizacja mapy, wykresu JSON i prognozy pogody
         zaktualizujMarkerNaMapie(park, wycentrujMape);
         aktywnyParkId = park.id;
         zaktualizujPodswietlenieWykresu();
@@ -531,7 +577,6 @@ if (carouselTrack) {
             carouselTrack.innerHTML = '';
 
             wszystkieParki.forEach(park => {
-                // Kafelek karuzeli
                 const item = document.createElement('button');
                 item.type = 'button';
                 item.className = 'carousel-item';
@@ -547,7 +592,6 @@ if (carouselTrack) {
                 carouselTrack.appendChild(item);
                 kafelkiKaruzeli.set(park.id, item);
 
-                // Marker na mapie Leaflet
                 if (mapa && typeof park.lat === 'number' && typeof park.lon === 'number') {
                     const marker = L.marker([park.lat, park.lon], {
                         icon: utworzIkoneMarkera(park.kategoria, false)
@@ -563,7 +607,6 @@ if (carouselTrack) {
                 }
             });
 
-            // Wyrenderowanie wykresu z JSON i wybór domyślnego parku na start
             if (wszystkieParki.length > 0) {
                 aktywnyParkId = wszystkieParki[0].id;
                 renderujWykresJSON();
