@@ -38,14 +38,14 @@ header.hero-header {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
 }
 
-/* Tło w ::before o stałej wysokości - zdjęcie nie przybliża się podczas otwierania menu */
+/* Tło w ::before o stałej wysokości z dużym zapasem - zdjęcie nie skacze przy rozwijaniu menu */
 header.hero-header::before {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: max(100%, 460px);
+    height: max(100%, 680px);
     background: linear-gradient(
         180deg,
         rgba(15, 42, 18, 0.74) 0%,
@@ -54,7 +54,7 @@ header.hero-header::before {
     ),
     url("images/hero.jpg");
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     background-repeat: no-repeat;
     z-index: 0;
     pointer-events: none;
@@ -1656,7 +1656,7 @@ body.no-scroll .scroll-top-btn {
     }
 
     header.hero-header::before {
-        height: max(100%, 720px);
+        height: max(100%, 920px);
         background-position: center top;
     }
 
