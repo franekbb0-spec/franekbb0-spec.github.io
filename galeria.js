@@ -30,7 +30,7 @@ const etykietyKategorii = {
     nadmorskie: 'Nadmorski'
 };
 
-// 3. Asynchroniczne pobranie danych z pliku parki.json
+// 3. Pobranie danych o parkach
 async function zaladujDane() {
     try {
         const response = await fetch('parki.json');
@@ -40,16 +40,12 @@ async function zaladujDane() {
         wszystkieParki = await response.json();
         renderujGalerie(wszystkieParki);
     } catch (error) {
-        galleryGrid.innerHTML = `
-            <p class="error-msg">
-                Nie udało się wczytać danych z pliku <strong>parki.json</strong>. 
-                Uruchom stronę przez <strong>Live Server</strong> w VS Code lub na <strong>GitHub Pages</strong>.
-            </p>`;
-        console.error('Błąd ładowania JSON:', error);
+        galleryGrid.innerHTML = `<p class="error-msg">Nie udało się wczytać galerii parków.</p>`;
+        console.error('Błąd ładowania danych:', error);
     }
 }
 
-// 4. Dynamiczne generowanie kart w drzewie DOM
+// 4. Dynamiczne generowanie kart
 function renderujGalerie(listaParkow) {
     galleryGrid.innerHTML = '';
 

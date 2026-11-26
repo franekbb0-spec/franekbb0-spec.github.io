@@ -6,8 +6,8 @@
     <title>Galeria Parków - Parki Narodowe Polski</title>
     
     <meta name="author" content="Franciszek Bieniek, Dominik Gilarski">
-    <meta name="description" content="Interaktywna galeria 23 polskich parków narodowych ładowana dynamicznie z bazy JSON.">
-    <meta name="keywords" content="galeria, parki narodowe, zdjęcia przyrody, Polska, JSON, filtrowanie">
+    <meta name="description" content="Galeria 23 polskich parków narodowych z podziałem na strefy krajobrazowe.">
+    <meta name="keywords" content="galeria, parki narodowe, zdjęcia przyrody, Polska, filtrowanie">
     
     <link rel="stylesheet" href="style.css">
 </head>
@@ -44,12 +44,11 @@
 
         <div class="hero-content">
             <h2>Galeria 23 Parków Narodowych</h2>
-            <p>Filtruj według strefy krajobrazowej i kliknij wybraną kartę, aby otworzyć powiększenie oraz pełny opis z pliku JSON.</p>
+            <p>Wybierz strefę krajobrazową lub kliknij kartę, aby powiększyć zdjęcie i przeczytać opis.</p>
         </div>
     </header>
 
     <main>
-        <!-- Przyciski filtrowania kategorii z JSON -->
         <section class="filter-bar">
             <button class="filter-btn active" data-filter="wszystkie">Wszystkie (23)</button>
             <button class="filter-btn" data-filter="gorskie">Górskie</button>
@@ -57,11 +56,10 @@
             <button class="filter-btn" data-filter="nadmorskie">Nadmorskie</button>
         </section>
 
-        <!-- Siatka wypełniana dynamicznie przez galeria.js na podstawie parki.json -->
         <section id="gallery-grid" class="gallery-grid"></section>
     </main>
 
-    <!-- Okno modalne (Lightbox) do podglądu zdjęcia i pełnego opisu -->
+    <!-- Okno modalne (Lightbox) -->
     <div id="lightbox" class="lightbox" aria-hidden="true">
         <div class="lightbox-content">
             <button id="lightbox-close" class="lightbox-close" aria-label="Zamknij">&times;</button>

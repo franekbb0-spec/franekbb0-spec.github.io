@@ -13,7 +13,7 @@ if (hamburgerBtn && navCollapse) {
 }
 
 // ==========================================================================
-// 2. KARUZELA, POGODA OPEN-METEO, MAPA LEAFLET I WYKRESY CHART.JS (INDEX.HTML)
+// 2. KARUZELA, POGODA, MAPA I WYKRESY (INDEX.HTML)
 // ==========================================================================
 const carouselTrack = document.getElementById('carousel-track');
 const prevBtn = document.getElementById('carousel-prev');
@@ -43,7 +43,6 @@ const etykietyStref = {
     nadmorskie: 'Park nadmorski'
 };
 
-// Formatowanie daty ISO na polską nazwę dnia tygodnia (Ćwiczenie 7)
 function formatujDzien(dataISO) {
     const dniTygodnia = [
         'Niedziela',
@@ -58,7 +57,6 @@ function formatujDzien(dataISO) {
     return `${dniTygodnia[dataObj.getDay()]} (${dataObj.toLocaleDateString('pl-PL')})`;
 }
 
-// Mapowanie kodów pogodowych WMO (Open-Meteo) na opisy po polsku
 function opiszKodPogody(code) {
     if (code === 0) return 'Bezchmurnie';
     if (code >= 1 && code <= 3) return 'Częściowe zachmurzenie';
@@ -73,7 +71,7 @@ function opiszKodPogody(code) {
 }
 
 // --------------------------------------------------------------------------
-// Statyczny wykres słupkowy horyzontalny (Ćwiczenie 9 - Część 1)
+// Statyczny wykres słupkowy horyzontalny
 // --------------------------------------------------------------------------
 function inicjalizujWykresStatyczny() {
     if (!wykresStatycznyCanvas || typeof Chart === 'undefined') return;
@@ -84,7 +82,7 @@ function inicjalizujWykresStatyczny() {
             labels: ['1955', '1965', '1975', '1990', '1996', '2001–2026'],
             datasets: [
                 {
-                    label: 'Łączna liczba parków narodowych w Polsce',
+                    label: 'Liczba parków narodowych',
                     data: [5, 10, 13, 17, 22, 23],
                     backgroundColor: 'rgba(54, 162, 235, 0.72)',
                     borderColor: '#1565c0',
@@ -109,7 +107,7 @@ function inicjalizujWykresStatyczny() {
                     suggestedMax: 25,
                     title: {
                         display: true,
-                        text: 'Liczba utworzonych parków [szt.]'
+                        text: 'Liczba parków'
                     }
                 },
                 y: {
@@ -126,7 +124,6 @@ function inicjalizujWykresStatyczny() {
 inicjalizujWykresStatyczny();
 
 if (carouselTrack) {
-    // Obsługa przycisków strzałek karuzeli
     if (prevBtn) {
         prevBtn.addEventListener('click', () => {
             carouselTrack.scrollBy({ left: -320, behavior: 'smooth' });
@@ -139,9 +136,6 @@ if (carouselTrack) {
         });
     }
 
-    // ----------------------------------------------------------------------
-    // Stan aplikacji, mapa Leaflet i instancje wykresów Chart.js
-    // ----------------------------------------------------------------------
     let mapa = null;
     let wszystkieParki = [];
     let aktualnaKolejnoscWykresu = [];
@@ -171,7 +165,6 @@ if (carouselTrack) {
         }
     }
 
-    // Własna ikona markera Leaflet według strefy krajobrazowej
     function utworzIkoneMarkera(kategoria, czyAktywny = false) {
         const klasaStrefy = ['gorskie', 'pojezierne', 'nadmorskie'].includes(kategoria)
             ? kategoria
@@ -187,7 +180,6 @@ if (carouselTrack) {
         });
     }
 
-    // Rozszerzone okienko informacyjne markera ze zdjęciem
     function zbudujTrescPopupu(park) {
         return `
             <div class="popup-card">
@@ -204,7 +196,7 @@ if (carouselTrack) {
     }
 
     // ----------------------------------------------------------------------
-    // Wykres słupkowy z danymi z parki.json (Ćwiczenie 9 - Część 2)
+    // Wykres porównawczy parków
     // ----------------------------------------------------------------------
     function posortujParkiDoWykresu(lista) {
         const kopia = [...lista];
@@ -341,7 +333,7 @@ if (carouselTrack) {
     }
 
     // ----------------------------------------------------------------------
-    // Wykres temperatury na najbliższe 24h z Open-Meteo dla wybranego parku
+    // Wykres temperatury na najbliższe 24h dla wybranego parku
     // ----------------------------------------------------------------------
     function renderujWykresTemperatury(park, godziny, temperatury) {
         if (!wykresTemperaturyCanvas || typeof Chart === 'undefined') return;
@@ -350,7 +342,7 @@ if (carouselTrack) {
             tempChartHeading.textContent = `Prognoza temperatury (24h) – ${park.nazwa}`;
         }
         if (tempChartSubtitle) {
-            tempChartSubtitle.textContent = `Współrzędne: ${park.lat.toFixed(3)}°N, ${park.lon.toFixed(3)}°E • Źródło: Open-Meteo`;
+            tempChartSubtitle.textContent = `Współrzędne: ${park.lat.toFixed(3)}°N, ${park.lon.toFixed(3)}°E`;
         }
 
         if (wykresTempInstancja) {
@@ -396,7 +388,7 @@ if (carouselTrack) {
                     x: {
                         title: {
                             display: true,
-                            text: 'Godzina (czas lokalny)'
+                            text: 'Godzina'
                         },
                         ticks: {
                             maxTicksLimit: 8
@@ -413,7 +405,6 @@ if (carouselTrack) {
         });
     }
 
-    // Obsługa przełączników metryki i sortowania wykresu z JSON
     metricButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             metricButtons.forEach(b => b.classList.remove('active'));
@@ -432,12 +423,11 @@ if (carouselTrack) {
         });
     });
 
-    // Pobieranie aktualnej pogody, tabeli na 3 dni i godzinowej prognozy 24h z Open-Meteo
     async function pobierzPogode(park) {
         if (!weatherDataEl) return;
 
         const biezaceZapytanie = ++numerZapytaniaPogody;
-        weatherDataEl.textContent = 'Ładowanie danych...';
+        weatherDataEl.textContent = 'Ładowanie...';
         if (weatherForecastEl) {
             weatherForecastEl.innerHTML = '';
         }
@@ -457,7 +447,6 @@ if (carouselTrack) {
                 const opis = opiszKodPogody(weathercode);
                 weatherDataEl.textContent = `${temperature} °C • Wiatr: ${windspeed} km/h • ${opis}`;
 
-                // Tabela 3-dniowa (Ćwiczenie 7 - zadanie dodatkowe)
                 if (weatherForecastEl && data.daily && Array.isArray(data.daily.time)) {
                     let wiersze = '';
                     for (let i = 0; i < Math.min(3, data.daily.time.length); i++) {
@@ -485,7 +474,6 @@ if (carouselTrack) {
                     `;
                 }
 
-                // Wykres godzinowy 24h (Chart.js)
                 if (data.hourly && Array.isArray(data.hourly.time) && Array.isArray(data.hourly.temperature_2m)) {
                     const biezacaGodzina = time ? time.slice(0, 13) : '';
                     let startIdx = data.hourly.time.findIndex(t => t.startsWith(biezacaGodzina));
@@ -505,13 +493,12 @@ if (carouselTrack) {
             if (biezaceZapytanie !== numerZapytaniaPogody) return;
             weatherDataEl.textContent = 'Nie udało się pobrać danych pogodowych.';
             if (tempChartSubtitle) {
-                tempChartSubtitle.textContent = 'Brak połączenia z Open-Meteo – nie udało się wygenerować wykresu temperatury.';
+                tempChartSubtitle.textContent = 'Nie udało się pobrać prognozy temperatury.';
             }
-            console.error('Błąd Open-Meteo:', error);
+            console.error('Błąd pobierania pogody:', error);
         }
     }
 
-    // Podświetlenie wybranego markera na mapie oraz centrowanie
     function zaktualizujMarkerNaMapie(park, wycentrujMape = true) {
         if (!mapa) return;
 
@@ -533,7 +520,6 @@ if (carouselTrack) {
         }
     }
 
-    // Główna funkcja synchronizująca karuzelę, kartę szczegółów, pogodę, mapę i wykresy
     function pokazSzczegolyParku(park, opcje = {}) {
         const { wycentrujMape = true, przewinKaruzela = false } = opcje;
 
@@ -565,7 +551,6 @@ if (carouselTrack) {
         pobierzPogode(park);
     }
 
-    // Pobranie 23 parków z parki.json i inicjalizacja wszystkich komponentów
     async function zaladujKaruzelaJSON() {
         try {
             const response = await fetch('parki.json');
@@ -613,8 +598,8 @@ if (carouselTrack) {
                 pokazSzczegolyParku(wszystkieParki[0], { wycentrujMape: false, przewinKaruzela: false });
             }
         } catch (error) {
-            carouselTrack.innerHTML = `<p class="error-msg">Nie udało się pobrać pliku <strong>parki.json</strong>. Uruchom projekt przez Live Server lub GitHub Pages.</p>`;
-            console.error('Błąd ładowania JSON:', error);
+            carouselTrack.innerHTML = `<p class="error-msg">Nie udało się wczytać listy parków.</p>`;
+            console.error('Błąd ładowania danych:', error);
         }
     }
 
