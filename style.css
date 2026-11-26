@@ -311,7 +311,7 @@ main {
 }
 
 /* ==========================================================================
-   7. PRZESUWNA KARUZELA 23 PARKÓW I PANEL DANYCH JSON (INDEX.HTML)
+   7. PRZESUWNA KARUZELA 23 PARKÓW, POGODA I PANEL DANYCH JSON (INDEX.HTML)
    ========================================================================== */
 .carousel-header {
     margin-bottom: 18px;
@@ -423,7 +423,7 @@ main {
 
 .park-details-img {
     flex: 0 0 320px;
-    height: 220px;
+    height: 235px;
     border-radius: 6px;
     overflow: hidden;
 }
@@ -465,7 +465,30 @@ main {
 
 .park-details-desc {
     color: #37474f;
+    margin-bottom: 12px;
+}
+
+.park-weather-box {
+    background-color: #ffffff;
+    border: 1px solid #c8e6c9;
+    border-left: 4px solid #2e7d32;
+    border-radius: 6px;
+    padding: 10px 14px;
     margin-bottom: 14px;
+    font-size: 0.92rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    align-items: center;
+}
+
+.weather-label {
+    font-weight: bold;
+    color: #1b5e20;
+}
+
+.weather-value {
+    color: #37474f;
 }
 
 .park-details-link {
@@ -479,7 +502,173 @@ main {
 }
 
 /* ==========================================================================
-   8. INTERAKTYWNA GALERIA (GALERIA.HTML - CSS GRID + LIGHTBOX)
+   8. MAPA INTERNETOWA LEAFLET + OPENSTREETMAP (INDEX.HTML)
+   ========================================================================== */
+.map-section {
+    margin-top: 26px;
+    padding-top: 22px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.map-header h4 {
+    color: #1b5e20;
+    font-size: 1.25rem;
+    margin-bottom: 4px;
+}
+
+.map-subtitle {
+    font-size: 0.92rem;
+    color: #546e7a;
+    margin-bottom: 0;
+}
+
+.map-reset-btn {
+    background-color: #ffffff;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.map-reset-btn:hover {
+    background-color: #2e7d32;
+    color: #ffffff;
+}
+
+.map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin-bottom: 12px;
+    font-size: 0.88rem;
+    color: #37474f;
+}
+
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    display: inline-block;
+}
+
+.dot-gorskie {
+    background-color: #6d4c41;
+}
+
+.dot-pojezierne {
+    background-color: #2e7d32;
+}
+
+.dot-nadmorskie {
+    background-color: #0277bd;
+}
+
+#mapa {
+    margin-top: 12px;
+    height: 440px;
+    width: 100%;
+    border: 2px solid #bac2ca;
+    border-radius: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Własne ikony markerów (Zadanie dodatkowe) */
+.custom-park-icon {
+    background: transparent;
+    border: none;
+}
+
+.park-marker-pin {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 3px solid #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: bold;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.park-marker-pin.gorskie {
+    background-color: #6d4c41;
+}
+
+.park-marker-pin.pojezierne {
+    background-color: #2e7d32;
+}
+
+.park-marker-pin.nadmorskie {
+    background-color: #0277bd;
+}
+
+.park-marker-pin.active {
+    transform: scale(1.32);
+    border-color: #ffeb3b;
+    box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.35), 0 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Rozszerzone okienko informacyjne (Popup ze zdjęciem) */
+.leaflet-popup-content {
+    margin: 10px 12px;
+    min-width: 220px;
+    max-width: 260px;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.45;
+}
+
+.popup-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.popup-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 5px;
+    display: block;
+}
+
+.popup-title {
+    color: #1b5e20;
+    font-size: 1rem;
+    display: block;
+}
+
+.popup-meta {
+    font-size: 0.85rem;
+    color: #37474f;
+}
+
+/* ==========================================================================
+   9. INTERAKTYWNA GALERIA (GALERIA.HTML - CSS GRID + LIGHTBOX)
    ========================================================================== */
 .filter-bar {
     display: flex;
@@ -677,7 +866,7 @@ main {
 }
 
 /* ==========================================================================
-   9. STOPKA (FOOTER)
+   10. STOPKA (FOOTER)
    ========================================================================== */
 footer {
     background-color: #212d27;
@@ -716,7 +905,7 @@ footer a:hover {
 }
 
 /* ==========================================================================
-   10. RESPONSYWNOŚĆ (@media max-width: 768px)
+   11. RESPONSYWNOŚĆ (@media max-width: 768px)
    ========================================================================== */
 @media (max-width: 768px) {
     .columns-container,
@@ -763,6 +952,19 @@ footer a:hover {
 
     .carousel-item {
         flex: 0 0 160px;
+    }
+
+    .map-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .map-reset-btn {
+        align-self: flex-start;
+    }
+
+    #mapa {
+        height: 350px;
     }
 
     .lightbox-content img {
