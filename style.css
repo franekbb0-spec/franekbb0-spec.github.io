@@ -15,12 +15,16 @@ body {
 }
 
 /* ==========================================================================
-   2. NAGŁÓWEK ORAZ HAMBURGER MENU (KOMPUTER + MOBILE)
+   2. NAGŁÓWEK, HAMBURGER MENU ORAZ HERO BANNER W <HEADER>
    ========================================================================== */
 header {
     background-color: #2e7d32;
     color: #ffffff;
     text-align: center;
+    padding: 0;
+}
+
+.header-bar {
     padding: 25px 15px;
 }
 
@@ -110,36 +114,27 @@ nav ul li a.active {
     color: #ffffff;
 }
 
-/* ==========================================================================
-   3. TREŚĆ GŁÓWNA (MAIN) I HERO BANNER
-   ========================================================================== */
-main {
-    max-width: 1050px;
-    margin: 30px auto;
-    padding: 0 20px;
-}
-
 .hero-banner {
+    width: 100%;
     background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
                 url("images/hero.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    border-radius: 8px;
-    padding: 70px 30px;
-    margin-bottom: 30px;
+    border-top: 3px solid #1b5e20;
+    padding: 75px 20px;
     text-align: center;
     color: #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .hero-content {
-    max-width: 750px;
+    max-width: 780px;
     margin: 0 auto;
 }
 
 .hero-banner h2 {
-    font-size: 2.1rem;
+    font-size: 2.2rem;
     margin-bottom: 12px;
     color: #ffffff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
@@ -150,6 +145,15 @@ main {
     line-height: 1.6;
     color: #f1f8e9;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* ==========================================================================
+   3. TREŚĆ GŁÓWNA (MAIN)
+   ========================================================================== */
+main {
+    max-width: 1050px;
+    margin: 30px auto;
+    padding: 0 20px;
 }
 
 .banner-placeholder {
@@ -1022,9 +1026,8 @@ footer a:hover {
         flex-direction: column;
     }
 
-    main {
-        margin: 15px auto;
-        padding: 0 12px;
+    .header-bar {
+        padding: 20px 12px;
     }
 
     .hero-banner {
@@ -1037,6 +1040,11 @@ footer a:hover {
 
     .hero-banner p {
         font-size: 1rem;
+    }
+
+    main {
+        margin: 20px auto;
+        padding: 0 12px;
     }
 
     .banner-placeholder {

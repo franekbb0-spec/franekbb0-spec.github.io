@@ -15,31 +15,33 @@
 <body>
 
     <header>
-        <div class="content">
-            <h1><a href="index.html">Parki Narodowe Polski</a></h1>
-            <p>Najwyższa forma ochrony ojczystej przyrody</p>
+        <div class="header-bar">
+            <div class="content">
+                <h1><a href="index.html">Parki Narodowe Polski</a></h1>
+                <p>Najwyższa forma ochrony ojczystej przyrody</p>
+            </div>
+            <nav>
+                <button class="hamburger-btn" id="hamburger-btn" aria-label="Otwórz menu">&#9776;</button>
+                <ul id="nav-menu">
+                    <li><a href="index.html" class="active">Start</a></li>
+                    <li><a href="o-projekcie.html">O projekcie</a></li>
+                    <li><a href="zagadnienia.html">Zagadnienia</a></li>
+                    <li><a href="galeria.html">Galeria</a></li>
+                    <li><a href="kontakt.html">Kontakt</a></li>
+                </ul>
+            </nav>
         </div>
-        <nav>
-            <button class="hamburger-btn" id="hamburger-btn" aria-label="Otwórz menu">&#9776;</button>
-            <ul id="nav-menu">
-                <li><a href="index.html" class="active">Start</a></li>
-                <li><a href="o-projekcie.html">O projekcie</a></li>
-                <li><a href="zagadnienia.html">Zagadnienia</a></li>
-                <li><a href="galeria.html">Galeria</a></li>
-                <li><a href="kontakt.html">Kontakt</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        <!-- Hero Banner -->
-        <section class="hero-banner">
+        <!-- Hero Banner w header -->
+        <div class="hero-banner">
             <div class="hero-content">
                 <h2>23 Ostoje Dzikiej Przyrody</h2>
                 <p>Polskie parki narodowe obejmują łącznie ponad 317 tysięcy hektarów, co stanowi około 1% terytorium całego kraju.</p>
             </div>
-        </section>
+        </div>
+    </header>
 
+    <main>
         <!-- Przesuwna galeria 23 parków + dynamiczny podgląd z parki.json + pogoda Open-Meteo + mapa Leaflet -->
         <section class="content-section carousel-section">
             <div class="carousel-header">
