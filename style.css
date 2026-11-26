@@ -26,9 +26,22 @@ body.no-scroll {
    ========================================================================== */
 header.hero-header {
     position: relative;
+    overflow: hidden;
     width: 100%;
     color: #ffffff;
     text-align: center;
+    background-color: #163319;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+}
+
+/* Tło w ::before o stałej wysokości - zdjęcie nie przybliża się podczas otwierania menu */
+header.hero-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: max(100%, 460px);
     background: linear-gradient(
         180deg,
         rgba(15, 42, 18, 0.74) 0%,
@@ -39,12 +52,19 @@ header.hero-header {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.header-top,
+.hero-content {
+    position: relative;
+    z-index: 1;
 }
 
 .header-top {
     padding: 24px 20px 18px;
-    background-color: rgba(15, 42, 18, 0.34);
+    background-color: rgba(15, 42, 18, 0.38);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.16);
@@ -65,7 +85,7 @@ header .content p {
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
 }
 
-/* Przycisk menu: obrót o 90° wyłącznie przy kliknięciu (otwarcie/zamknięcie) */
+/* Przycisk menu: obrót o 90° wyłącznie przy kliknięciu (bez niebieskiego błysku na mobile) */
 .hamburger-btn {
     display: inline-flex;
     align-items: center;
@@ -80,6 +100,8 @@ header .content p {
     line-height: 1;
     border-radius: 8px;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
     transform: rotate(0deg);
     transition:
         transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
@@ -111,15 +133,18 @@ header .content p {
 /* Płynne rozwijanie i zwijanie menu (CSS Grid 0fr -> 1fr) */
 .nav-collapse {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: 0fr;
     opacity: 0;
     margin-top: 0;
     visibility: hidden;
+    pointer-events: none;
+    will-change: grid-template-rows, opacity;
     transition:
-        grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-        opacity 0.28s ease,
-        margin-top 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-        visibility 0.35s;
+        grid-template-rows 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.25s ease,
+        margin-top 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+        visibility 0.32s;
 }
 
 .nav-collapse.open {
@@ -127,6 +152,7 @@ header .content p {
     opacity: 1;
     margin-top: 16px;
     visibility: visible;
+    pointer-events: auto;
 }
 
 nav ul {
@@ -140,8 +166,8 @@ nav ul {
     align-items: center;
     gap: 10px;
     padding: 0;
-    transform: translateY(-10px);
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(-8px);
+    transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-collapse.open ul {
@@ -162,6 +188,7 @@ nav ul li a {
     background-color: rgba(15, 42, 18, 0.56);
     border: 1px solid rgba(255, 255, 255, 0.24);
     border-radius: 6px;
+    -webkit-tap-highlight-color: transparent;
     transition:
         background-color 0.25s ease,
         border-color 0.25s ease,
@@ -1144,8 +1171,16 @@ footer a:hover {
         flex-direction: column;
     }
 
+    header.hero-header::before {
+        height: max(100%, 720px);
+        background-position: center top;
+    }
+
     .header-top {
         padding: 18px 14px 14px;
+        background-color: rgba(15, 42, 18, 0.56);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
     }
 
     header .content h1 a {
@@ -1154,11 +1189,14 @@ footer a:hover {
 
     nav ul {
         flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
         align-items: center;
         gap: 8px;
     }
 
     nav ul li {
+        flex: 0 0 auto;
         width: 100%;
         max-width: 320px;
         padding: 0;
