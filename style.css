@@ -594,7 +594,7 @@ main {
     z-index: 1;
 }
 
-/* Własne ikony markerów (Zadanie dodatkowe) */
+/* Własne ikony markerów */
 .custom-park-icon {
     background: transparent;
     border: none;
@@ -668,7 +668,116 @@ main {
 }
 
 /* ==========================================================================
-   9. INTERAKTYWNA GALERIA (GALERIA.HTML - CSS GRID + LIGHTBOX)
+   9. WIZUALIZACJA DANYCH - WYKRESY CHART.JS (INDEX.HTML)
+   ========================================================================== */
+.charts-intro {
+    margin-bottom: 18px;
+}
+
+.charts-intro code {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.chart-card {
+    background-color: #f9fbf9;
+    border: 1px solid #dcedc8;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 22px;
+}
+
+.chart-card h4 {
+    color: #1b5e20;
+    font-size: 1.15rem;
+    margin-bottom: 4px;
+}
+
+.chart-hint {
+    font-size: 0.88rem;
+    color: #546e7a;
+    margin-bottom: 12px;
+}
+
+.chart-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+
+.chart-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chart-btn-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.chart-btn,
+.chart-sort-btn {
+    background-color: #ffffff;
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.chart-btn:hover,
+.chart-btn.active,
+.chart-sort-btn:hover,
+.chart-sort-btn.active {
+    background-color: #2e7d32;
+    color: #ffffff;
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.chart-wrapper-tall {
+    height: 680px;
+    max-height: 900px;
+}
+
+.chart-wrapper-medium {
+    height: 300px;
+}
+
+#wykresSlupkowy,
+#wykresPowierzchni,
+#wykresTemperatury {
+    width: 100%;
+    max-height: 900px;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.charts-grid .chart-card {
+    margin-bottom: 0;
+}
+
+/* ==========================================================================
+   10. INTERAKTYWNA GALERIA (GALERIA.HTML - CSS GRID + LIGHTBOX)
    ========================================================================== */
 .filter-bar {
     display: flex;
@@ -866,7 +975,7 @@ main {
 }
 
 /* ==========================================================================
-   10. STOPKA (FOOTER)
+   11. STOPKA (FOOTER)
    ========================================================================== */
 footer {
     background-color: #212d27;
@@ -905,7 +1014,7 @@ footer a:hover {
 }
 
 /* ==========================================================================
-   11. RESPONSYWNOŚĆ (@media max-width: 768px)
+   12. RESPONSYWNOŚĆ (@media max-width: 768px)
    ========================================================================== */
 @media (max-width: 768px) {
     .columns-container,
@@ -965,6 +1074,22 @@ footer a:hover {
 
     #mapa {
         height: 350px;
+    }
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-card {
+        padding: 15px;
+    }
+
+    .chart-wrapper-tall {
+        height: 620px;
+    }
+
+    .chart-wrapper-medium {
+        height: 260px;
     }
 
     .lightbox-content img {

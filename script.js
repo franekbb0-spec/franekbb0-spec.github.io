@@ -11,7 +11,7 @@ if (hamburgerBtn && navMenu) {
 }
 
 // ==========================================================================
-// 2. KARUZELA 23 PARKÓW, POGODA OPEN-METEO I MAPA LEAFLET (INDEX.HTML)
+// 2. KARUZELA, POGODA OPEN-METEO, MAPA LEAFLET I WYKRESY CHART.JS (INDEX.HTML)
 // ==========================================================================
 const carouselTrack = document.getElementById('carousel-track');
 const prevBtn = document.getElementById('carousel-prev');
@@ -25,6 +25,14 @@ const detailDesc = document.getElementById('detail-desc');
 const weatherDataEl = document.getElementById('weather-data');
 const mapContainer = document.getElementById('mapa');
 const mapResetBtn = document.getElementById('map-reset-btn');
+
+const wykresStatycznyCanvas = document.getElementById('wykresSlupkowy');
+const wykresPowierzchniCanvas = document.getElementById('wykresPowierzchni');
+const wykresTemperaturyCanvas = document.getElementById('wykresTemperatury');
+const tempChartHeading = document.getElementById('temp-chart-heading');
+const tempChartSubtitle = document.getElementById('temp-chart-subtitle');
+const metricButtons = document.querySelectorAll('.chart-btn');
+const sortButtons = document.querySelectorAll('.chart-sort-btn');
 
 const etykietyStref = {
     gorskie: 'Park górski',
@@ -41,10 +49,63 @@ function opiszKodPogody(code) {
     if (code >= 61 && code <= 67) return 'Opady deszczu';
     if (code >= 71 && code <= 77) return 'Opady śniegu';
     if (code >= 80 && code <= 82) return 'Przelotny deszcz';
-    if (code === 85 || code === 86) return 'Przelotny śnieg';
+    if (code >= 85 && code <= 86) return 'Przelotny śnieg';
     if (code >= 95 && code <= 99) return 'Burza';
     return 'Zmienne warunki';
 }
+
+// --------------------------------------------------------------------------
+// Część 1 z instrukcji: Statyczny wykres słupkowy horyzontalny (Chart.js)
+// --------------------------------------------------------------------------
+function inicjalizujWykresStatyczny() {
+    if (!wykresStatycznyCanvas || typeof Chart === 'undefined') return;
+
+    new Chart(wykresStatycznyCanvas, {
+        type: 'bar',
+        data: {
+            labels: ['1955', '1965', '1975', '1990', '1996', '2001–2026'],
+            datasets: [
+                {
+                    label: 'Łączna liczba parków narodowych w Polsce',
+                    data: [5, 10, 13, 17, 22, 23],
+                    backgroundColor: 'rgba(54, 162, 235, 0.72)',
+                    borderColor: '#1565c0',
+                    borderWidth: 1,
+                    borderRadius: 4
+                }
+            ]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    suggestedMax: 25,
+                    title: {
+                        display: true,
+                        text: 'Liczba utworzonych parków [szt.]'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Rok'
+                    }
+                }
+            }
+        }
+    });
+}
+
+inicjalizujWykresStatyczny();
 
 if (carouselTrack) {
     // Obsługa przycisków strzałek karuzeli
@@ -61,13 +122,21 @@ if (carouselTrack) {
     }
 
     // ----------------------------------------------------------------------
-    // Inicjalizacja mapy Leaflet przed pobraniem danych JSON (Krok 4)
+    // Stan aplikacji, mapa Leaflet i instancje wykresów Chart.js
     // ----------------------------------------------------------------------
     let mapa = null;
+    let wszystkieParki = [];
+    let aktualnaKolejnoscWykresu = [];
+    let aktywnyParkId = null;
+    let aktywnaMetryka = 'powierzchnia_km';
+    let aktywneSortowanie = 'alpha';
+    let numerZapytaniaPogody = 0;
+
+    let wykresJsonInstancja = null;
+    let wykresTempInstancja = null;
+
     const markeryParkow = new Map();
     const kafelkiKaruzeli = new Map();
-    let aktywnyParkId = null;
-    let numerZapytaniaPogody = 0;
 
     if (mapContainer && typeof L !== 'undefined') {
         mapa = L.map('mapa').setView([52.0, 19.0], 6);
@@ -84,7 +153,7 @@ if (carouselTrack) {
         }
     }
 
-    // Tworzenie własnej ikony markera w zależności od strefy i stanu aktywności
+    // Własna ikona markera Leaflet według strefy krajobrazowej
     function utworzIkoneMarkera(kategoria, czyAktywny = false) {
         const klasaStrefy = ['gorskie', 'pojezierne', 'nadmorskie'].includes(kategoria)
             ? kategoria
@@ -100,7 +169,7 @@ if (carouselTrack) {
         });
     }
 
-    // Generowanie rozszerzonego okna informacyjnego markera (Krok 7 + zdjęcie)
+    // Rozszerzone okienko informacyjne markera ze zdjęciem
     function zbudujTrescPopupu(park) {
         return `
             <div class="popup-card">
@@ -109,13 +178,244 @@ if (carouselTrack) {
                 <div class="popup-meta">
                     <strong>Województwo:</strong> ${park.wojewodztwo}<br>
                     <strong>Siedziba:</strong> ${park.siedziba}<br>
+                    <strong>Rok utworzenia:</strong> ${park.rok_utworzenia}<br>
                     <strong>Powierzchnia:</strong> ${park.powierzchnia}
                 </div>
             </div>
         `;
     }
 
-    // Pobieranie aktualnej pogody z API Open-Meteo dla współrzędnych parku
+    // ----------------------------------------------------------------------
+    // Część 2 z instrukcji: Wykres słupkowy z danymi z parki.json (Chart.js)
+    // ----------------------------------------------------------------------
+    function posortujParkiDoWykresu(lista) {
+        const kopia = [...lista];
+        if (aktywneSortowanie === 'desc') {
+            kopia.sort((a, b) => b[aktywnaMetryka] - a[aktywnaMetryka]);
+        } else if (aktywneSortowanie === 'asc') {
+            kopia.sort((a, b) => a[aktywnaMetryka] - b[aktywnaMetryka]);
+        } else {
+            kopia.sort((a, b) => a.nazwa.localeCompare(b.nazwa, 'pl'));
+        }
+        return kopia;
+    }
+
+    function renderujWykresJSON() {
+        if (!wykresPowierzchniCanvas || typeof Chart === 'undefined' || wszystkieParki.length === 0) {
+            return;
+        }
+
+        aktualnaKolejnoscWykresu = posortujParkiDoWykresu(wszystkieParki);
+
+        const nazwy = aktualnaKolejnoscWykresu.map(park => park.nazwa);
+        const wartosci = aktualnaKolejnoscWykresu.map(park => park[aktywnaMetryka]);
+
+        const czyRok = aktywnaMetryka === 'rok_utworzenia';
+        const etykietaSerii = czyRok ? 'Rok utworzenia' : 'Powierzchnia [km²]';
+        const tytulWykresu = czyRok
+            ? 'Rok utworzenia parków narodowych w Polsce'
+            : 'Powierzchnia parków narodowych w Polsce';
+        const tytulOsiX = czyRok ? 'Rok utworzenia' : 'Powierzchnia [km²]';
+
+        const koloryTla = aktualnaKolejnoscWykresu.map(park =>
+            park.id === aktywnyParkId
+                ? 'rgba(249, 168, 37, 0.9)'
+                : 'rgba(46, 204, 113, 0.72)'
+        );
+        const koloryObramowania = aktualnaKolejnoscWykresu.map(park =>
+            park.id === aktywnyParkId ? '#e65100' : 'darkgreen'
+        );
+
+        if (wykresJsonInstancja) {
+            wykresJsonInstancja.destroy();
+        }
+
+        wykresJsonInstancja = new Chart(wykresPowierzchniCanvas, {
+            type: 'bar',
+            data: {
+                labels: nazwy,
+                datasets: [
+                    {
+                        label: etykietaSerii,
+                        data: wartosci,
+                        backgroundColor: koloryTla,
+                        borderColor: koloryObramowania,
+                        borderWidth: 1,
+                        borderRadius: 3
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const indeks = elements[0].index;
+                        const kliknietyPark = aktualnaKolejnoscWykresu[indeks];
+                        if (kliknietyPark) {
+                            pokazSzczegolyParku(kliknietyPark, {
+                                wycentrujMape: true,
+                                przewinKaruzela: true
+                            });
+                        }
+                    }
+                },
+                onHover: (event, elements) => {
+                    event.native.target.style.cursor = elements.length > 0 ? 'pointer' : 'default';
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: tytulWykresu,
+                        font: {
+                            size: 15
+                        },
+                        color: '#1b5e20'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => {
+                                const val = context.parsed.x;
+                                return czyRok
+                                    ? ` Rok utworzenia: ${val}`
+                                    : ` Powierzchnia: ${val.toLocaleString('pl-PL')} km²`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: !czyRok,
+                        min: czyRok ? 1920 : 0,
+                        max: czyRok ? 2010 : undefined,
+                        title: {
+                            display: true,
+                            text: tytulOsiX
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            autoSkip: false,
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Aktualizacja samego podświetlenia słupka po zmianie parku (bez niszczenia wykresu)
+    function zaktualizujPodswietlenieWykresu() {
+        if (!wykresJsonInstancja || aktualnaKolejnoscWykresu.length === 0) return;
+
+        const dataset = wykresJsonInstancja.data.datasets[0];
+        dataset.backgroundColor = aktualnaKolejnoscWykresu.map(park =>
+            park.id === aktywnyParkId
+                ? 'rgba(249, 168, 37, 0.9)'
+                : 'rgba(46, 204, 113, 0.72)'
+        );
+        dataset.borderColor = aktualnaKolejnoscWykresu.map(park =>
+            park.id === aktywnyParkId ? '#e65100' : 'darkgreen'
+        );
+        wykresJsonInstancja.update('none');
+    }
+
+    // ----------------------------------------------------------------------
+    // Wykres temperatury na najbliższe 24h z Open-Meteo dla wybranego parku
+    // ----------------------------------------------------------------------
+    function renderujWykresTemperatury(park, godziny, temperatury) {
+        if (!wykresTemperaturyCanvas || typeof Chart === 'undefined') return;
+
+        if (tempChartHeading) {
+            tempChartHeading.textContent = `Prognoza temperatury (24h) – ${park.nazwa}`;
+        }
+        if (tempChartSubtitle) {
+            tempChartSubtitle.textContent = `Współrzędne: ${park.lat.toFixed(3)}°N, ${park.lon.toFixed(3)}°E • Źródło: Open-Meteo`;
+        }
+
+        if (wykresTempInstancja) {
+            wykresTempInstancja.data.labels = godziny;
+            wykresTempInstancja.data.datasets[0].data = temperatury;
+            wykresTempInstancja.data.datasets[0].label = `Temperatura [°C] (${park.siedziba})`;
+            wykresTempInstancja.update();
+            return;
+        }
+
+        wykresTempInstancja = new Chart(wykresTemperaturyCanvas, {
+            type: 'line',
+            data: {
+                labels: godziny,
+                datasets: [
+                    {
+                        label: `Temperatura [°C] (${park.siedziba})`,
+                        data: temperatury,
+                        borderColor: '#2e7d32',
+                        backgroundColor: 'rgba(46, 125, 50, 0.16)',
+                        fill: true,
+                        tension: 0.35,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => ` ${context.parsed.y} °C`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Godzina (czas lokalny)'
+                        },
+                        ticks: {
+                            maxTicksLimit: 8
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Temperatura [°C]'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Obsługa przełączników metryki i sortowania wykresu z JSON
+    metricButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            metricButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            aktywnaMetryka = btn.dataset.metric;
+            renderujWykresJSON();
+        });
+    });
+
+    sortButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            sortButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            aktywneSortowanie = btn.dataset.sort;
+            renderujWykresJSON();
+        });
+    });
+
+    // Pobieranie aktualnej pogody i godzinowej prognozy 24h z Open-Meteo
     async function pobierzPogode(park) {
         if (!weatherDataEl) return;
 
@@ -123,7 +423,7 @@ if (carouselTrack) {
         weatherDataEl.textContent = 'Pobieranie danych pogodowych...';
 
         try {
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${park.lat}&longitude=${park.lon}&current_weather=true`;
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${park.lat}&longitude=${park.lon}&current_weather=true&hourly=temperature_2m&forecast_days=2&timezone=Europe%2FWarsaw`;
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`Błąd HTTP: ${response.status}`);
@@ -133,31 +433,45 @@ if (carouselTrack) {
             if (biezaceZapytanie !== numerZapytaniaPogody) return;
 
             if (data.current_weather) {
-                const { temperature, windspeed, weathercode } = data.current_weather;
+                const { temperature, windspeed, weathercode, time } = data.current_weather;
                 const opis = opiszKodPogody(weathercode);
                 weatherDataEl.textContent = `${temperature} °C • Wiatr: ${windspeed} km/h • ${opis}`;
+
+                if (data.hourly && Array.isArray(data.hourly.time) && Array.isArray(data.hourly.temperature_2m)) {
+                    const biezacaGodzina = time ? time.slice(0, 13) : '';
+                    let startIdx = data.hourly.time.findIndex(t => t.startsWith(biezacaGodzina));
+                    if (startIdx < 0) startIdx = 0;
+
+                    const godziny24h = data.hourly.time
+                        .slice(startIdx, startIdx + 24)
+                        .map(t => t.slice(11, 16));
+                    const temp24h = data.hourly.temperature_2m.slice(startIdx, startIdx + 24);
+
+                    renderujWykresTemperatury(park, godziny24h, temp24h);
+                }
             } else {
                 weatherDataEl.textContent = 'Brak aktualnych danych pogodowych.';
             }
         } catch (error) {
             if (biezaceZapytanie !== numerZapytaniaPogody) return;
             weatherDataEl.textContent = 'Nie udało się pobrać pogody (sprawdź połączenie z internetem).';
+            if (tempChartSubtitle) {
+                tempChartSubtitle.textContent = 'Brak połączenia z Open-Meteo – nie udało się wygenerować wykresu temperatury.';
+            }
             console.error('Błąd Open-Meteo:', error);
         }
     }
 
-    // Podświetlenie wybranego markera na mapie oraz centrowanie (Kroki 5 i 6)
+    // Podświetlenie wybranego markera na mapie oraz centrowanie
     function zaktualizujMarkerNaMapie(park, wycentrujMape = true) {
         if (!mapa) return;
 
-        // Przywrócenie normalnego wyglądu poprzednio wybranego markera
         if (aktywnyParkId !== null && markeryParkow.has(aktywnyParkId)) {
             const poprzedni = markeryParkow.get(aktywnyParkId);
             poprzedni.marker.setIcon(utworzIkoneMarkera(poprzedni.park.kategoria, false));
             poprzedni.marker.setZIndexOffset(0);
         }
 
-        // Wyróżnienie aktualnie wybranego markera
         if (markeryParkow.has(park.id)) {
             const aktualny = markeryParkow.get(park.id);
             aktualny.marker.setIcon(utworzIkoneMarkera(park.kategoria, true));
@@ -168,15 +482,13 @@ if (carouselTrack) {
                 aktualny.marker.openPopup();
             }
         }
-
-        aktywnyParkId = park.id;
     }
 
-    // Aktualizacja panelu szczegółów, pogody oraz synchronizacja karuzeli i mapy
+    // Główna funkcja synchronizująca karuzelę, kartę szczegółów, pogodę, mapę i wykresy
     function pokazSzczegolyParku(park, opcje = {}) {
         const { wycentrujMape = true, przewinKaruzela = false } = opcje;
 
-        // Podświetlenie aktywnego kafelka w karuzeli
+        // 1. Podświetlenie aktywnego kafelka w karuzeli
         document.querySelectorAll('.carousel-item').forEach(el => el.classList.remove('active'));
         const aktywnyKafelek = kafelkiKaruzeli.get(park.id);
         if (aktywnyKafelek) {
@@ -186,7 +498,7 @@ if (carouselTrack) {
             }
         }
 
-        // Wypełnienie karty szczegółów parku
+        // 2. Wypełnienie karty szczegółów parku
         detailImg.onerror = function () {
             this.onerror = null;
             this.src = 'images/hero.jpg';
@@ -197,27 +509,29 @@ if (carouselTrack) {
         const strefa = etykietyStref[park.kategoria] || park.kategoria;
         detailBadge.textContent = `#${park.id} • ${strefa}`;
         detailTitle.textContent = park.nazwa;
-        detailMeta.textContent = `Województwo: ${park.wojewodztwo} | Siedziba: ${park.siedziba} | Powierzchnia: ${park.powierzchnia}`;
+        detailMeta.textContent = `Województwo: ${park.wojewodztwo} | Siedziba: ${park.siedziba} | Rok utworzenia: ${park.rok_utworzenia} | Powierzchnia: ${park.powierzchnia}`;
         detailDesc.textContent = park.opis;
 
-        // Pobranie danych pogodowych i aktualizacja mapy
-        pobierzPogode(park);
+        // 3. Synchronizacja mapy, wykresu JSON i prognozy pogody
         zaktualizujMarkerNaMapie(park, wycentrujMape);
+        aktywnyParkId = park.id;
+        zaktualizujPodswietlenieWykresu();
+        pobierzPogode(park);
     }
 
-    // Pobranie 23 parków z parki.json i wyrenderowanie karuzeli + markerów
+    // Pobranie 23 parków z parki.json i inicjalizacja wszystkich komponentów
     async function zaladujKaruzelaJSON() {
         try {
             const response = await fetch('parki.json');
             if (!response.ok) {
                 throw new Error(`Błąd HTTP: ${response.status}`);
             }
-            const parki = await response.json();
+            wszystkieParki = await response.json();
 
             carouselTrack.innerHTML = '';
 
-            parki.forEach(park => {
-                // 1. Kafelek w karuzeli
+            wszystkieParki.forEach(park => {
+                // Kafelek karuzeli
                 const item = document.createElement('button');
                 item.type = 'button';
                 item.className = 'carousel-item';
@@ -233,7 +547,7 @@ if (carouselTrack) {
                 carouselTrack.appendChild(item);
                 kafelkiKaruzeli.set(park.id, item);
 
-                // 2. Marker na mapie Leaflet (wszystkie 23 parki widoczne od startu)
+                // Marker na mapie Leaflet
                 if (mapa && typeof park.lat === 'number' && typeof park.lon === 'number') {
                     const marker = L.marker([park.lat, park.lon], {
                         icon: utworzIkoneMarkera(park.kategoria, false)
@@ -249,13 +563,15 @@ if (carouselTrack) {
                 }
             });
 
-            // Domyślnie wyświetl dane pierwszego parku, zostawiając widok mapy na całą Polskę
-            if (parki.length > 0) {
-                pokazSzczegolyParku(parki[0], { wycentrujMape: false, przewinKaruzela: false });
+            // Wyrenderowanie wykresu z JSON i wybór domyślnego parku na start
+            if (wszystkieParki.length > 0) {
+                aktywnyParkId = wszystkieParki[0].id;
+                renderujWykresJSON();
+                pokazSzczegolyParku(wszystkieParki[0], { wycentrujMape: false, przewinKaruzela: false });
             }
         } catch (error) {
             carouselTrack.innerHTML = `<p class="error-msg">Nie udało się pobrać pliku <strong>parki.json</strong>. Uruchom projekt przez Live Server lub GitHub Pages.</p>`;
-            console.error('Błąd karuzeli JSON:', error);
+            console.error('Błąd ładowania JSON:', error);
         }
     }
 

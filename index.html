@@ -6,8 +6,8 @@
     <title>Parki Narodowe w Polsce - Ochrona Dziedzictwa Przyrodniczego</title>
     
     <meta name="author" content="Franciszek Bieniek, Dominik Gilarski">
-    <meta name="description" content="Portal edukacyjny poświęcony 23 parkom narodowym w Polsce, formom ochrony przyrody, aktualnej pogodzie i interaktywnej mapie.">
-    <meta name="keywords" content="parki narodowe, ochrona przyrody, Polska, ekologia, rezerwaty, bioróżnorodność, mapa, Leaflet">
+    <meta name="description" content="Portal edukacyjny poświęcony 23 parkom narodowym w Polsce, formom ochrony przyrody, aktualnej pogodzie, interaktywnej mapie oraz wykresom Chart.js.">
+    <meta name="keywords" content="parki narodowe, ochrona przyrody, Polska, ekologia, rezerwaty, bioróżnorodność, mapa, Leaflet, Chart.js">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
@@ -44,7 +44,7 @@
         <section class="content-section carousel-section">
             <div class="carousel-header">
                 <h3>Przegląd 23 Parków Narodowych</h3>
-                <p>Przesuwaj listę i kliknij wybrany park (lub marker na mapie poniżej), aby sprawdzić szczegółowe dane z bazy JSON, aktualną pogodę i dokładną lokalizację.</p>
+                <p>Przesuwaj listę i kliknij wybrany park (lub marker na mapie / słupek wykresu poniżej), aby sprawdzić szczegółowe dane z bazy JSON, aktualną pogodę i dokładną lokalizację.</p>
             </div>
 
             <div class="carousel-wrapper">
@@ -96,6 +96,58 @@
             </div>
         </section>
 
+        <!-- Sekcja wizualizacji danych (Chart.js: JSON + Open-Meteo + wykres statyczny) -->
+        <section class="content-section charts-section">
+            <div class="charts-intro">
+                <h3>Wizualizacja Danych Statystycznych (Chart.js)</h3>
+                <p>Zestawienia wygenerowane w HTML5 <code>&lt;canvas&gt;</code> na podstawie pliku <code>parki.json</code> oraz danych pogodowych Open-Meteo. Kliknięcie dowolnego słupka na wykresie parków synchronizuje kartę opisu, wykres temperatury oraz mapę Leaflet.</p>
+            </div>
+
+            <!-- Część 2: Wykres słupkowy z danymi z JSON (Powierzchnia / Rok utworzenia) -->
+            <div class="chart-card">
+                <div class="chart-toolbar">
+                    <div>
+                        <h4 id="json-chart-heading">Porównanie parków narodowych (dane z JSON)</h4>
+                        <p class="chart-hint">Aktywny park jest wyróżniony kolorem żółto-złotym. Kliknij dowolny słupek, aby przejść do tego parku na mapie.</p>
+                    </div>
+                    <div class="chart-controls">
+                        <div class="chart-btn-group" role="group" aria-label="Wybór parametru wykresu">
+                            <button type="button" class="chart-btn active" data-metric="powierzchnia_km">Powierzchnia [km²]</button>
+                            <button type="button" class="chart-btn" data-metric="rok_utworzenia">Rok utworzenia</button>
+                        </div>
+                        <div class="chart-btn-group" role="group" aria-label="Sortowanie wykresu">
+                            <button type="button" class="chart-sort-btn active" data-sort="alpha">A–Z</button>
+                            <button type="button" class="chart-sort-btn" data-sort="desc">Malejąco</button>
+                            <button type="button" class="chart-sort-btn" data-sort="asc">Rosnąco</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-wrapper chart-wrapper-tall">
+                    <canvas id="wykresPowierzchni"></canvas>
+                </div>
+            </div>
+
+            <!-- Siatka dwóch mniejszych wykresów: Temperatura Open-Meteo + Wykres statyczny (Część 1) -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h4 id="temp-chart-heading">Prognoza temperatury na 24h (Open-Meteo)</h4>
+                    <p class="chart-hint" id="temp-chart-subtitle">Wykres aktualizuje się automatycznie po wyborze parku w karuzeli, na mapie lub na wykresie powyżej.</p>
+                    <div class="chart-wrapper chart-wrapper-medium">
+                        <canvas id="wykresTemperatury"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h4>Rozwój sieci parków narodowych w Polsce</h4>
+                    <p class="chart-hint">Statyczny wykres słupkowy horyzontalny (Część 1 ćwiczenia) pokazujący łączną liczbę parków w wybranych okresach.</p>
+                    <div class="chart-wrapper chart-wrapper-medium">
+                        <canvas id="wykresSlupkowy"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Układ 3-kolumnowy -->
         <section class="columns-container">
             <article class="column">
@@ -132,6 +184,7 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
