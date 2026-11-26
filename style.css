@@ -7,6 +7,10 @@
     padding: 0;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.6;
@@ -302,6 +306,10 @@ main {
     vertical-align: -0.15em;
 }
 
+.subsection-heading {
+    margin-top: 22px;
+}
+
 .content-section p {
     margin-bottom: 12px;
     line-height: 1.65;
@@ -373,7 +381,398 @@ main {
 }
 
 /* ==========================================================================
-   6. UKŁAD PODSTRONY KONTAKT I FORMULARZ
+   6. KOMPONENTY PODSTRON: O PROJEKCIE I ZAGADNIENIA
+   ========================================================================== */
+.callout-box {
+    margin-top: 14px;
+    padding: 15px 18px;
+    background-color: #f1f8e9;
+    border-left: 4px solid #2e7d32;
+    border-radius: 6px;
+    color: #2e4a30;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.callout-box a {
+    color: #1b5e20;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.callout-box a:hover {
+    text-decoration: underline;
+}
+
+/* Siatka 2-kolumnowa (Odbiorcy w O projekcie) */
+.info-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 14px;
+}
+
+.feature-card {
+    background-color: #f9fbf9;
+    border: 1px solid #dcedc8;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.feature-card h4 {
+    color: #1b5e20;
+    font-size: 1.12rem;
+    margin: 8px 0 8px;
+}
+
+.feature-card p {
+    font-size: 0.94rem;
+    color: #37474f;
+    margin-bottom: 0;
+}
+
+.feature-tag {
+    display: inline-block;
+    background-color: #2e7d32;
+    color: #ffffff;
+    font-size: 0.76rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+.feature-tag.tag-secondary {
+    background-color: #546e7a;
+}
+
+/* Siatka 4 celów projektu */
+.goals-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 14px;
+}
+
+.goal-card {
+    background-color: #f9fbf9;
+    border: 1px solid #e0e0e0;
+    border-top: 4px solid #2e7d32;
+    border-radius: 8px;
+    padding: 18px;
+}
+
+.goal-number {
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: bold;
+    color: #2e7d32;
+    background-color: #e8f5e9;
+    padding: 2px 9px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.goal-card h4 {
+    color: #1b5e20;
+    font-size: 1.06rem;
+    margin-bottom: 6px;
+}
+
+.goal-card p {
+    font-size: 0.93rem;
+    color: #4a5568;
+    margin-bottom: 0;
+}
+
+/* Pasek szybkiej nawigacji po tematach (Zagadnienia) */
+.topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.topic-nav a {
+    display: inline-block;
+    background-color: #ffffff;
+    color: #1b5e20;
+    border: 1px solid #a5d6a7;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.topic-nav a:hover {
+    background-color: #2e7d32;
+    color: #ffffff;
+    border-color: #2e7d32;
+}
+
+.topic-section {
+    scroll-margin-top: 20px;
+}
+
+/* Tabela porównawcza form ochrony obszarowej */
+.table-scroll {
+    overflow-x: auto;
+    margin: 14px 0 16px;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.93rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+    border: 1px solid #dcedc8;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.comparison-table th {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+.comparison-table tbody tr:nth-child(even) {
+    background-color: #f9fbf9;
+}
+
+/* 3 reżimy ochrony (Ścisła / Czynna / Krajobrazowa) */
+.regime-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 14px;
+}
+
+.regime-card {
+    background-color: #f9fbf9;
+    border: 1px solid #e0e0e0;
+    border-top: 4px solid #2e7d32;
+    border-radius: 8px;
+    padding: 18px;
+}
+
+.regime-card.regime-strict {
+    border-top-color: #1b5e20;
+}
+
+.regime-card.regime-active {
+    border-top-color: #0277bd;
+}
+
+.regime-card.regime-landscape {
+    border-top-color: #d97706;
+}
+
+.regime-card h4 {
+    color: #1b5e20;
+    font-size: 1.12rem;
+    margin-bottom: 6px;
+}
+
+.regime-lead {
+    font-weight: bold;
+    color: #2e7d32;
+    font-size: 0.92rem;
+    margin-bottom: 10px;
+}
+
+.regime-card p:last-child {
+    font-size: 0.92rem;
+    color: #37474f;
+    margin-bottom: 0;
+}
+
+/* 4 strefy krajobrazowe (kolory zbieżne ze znacznikami mapy) */
+.zones-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 14px;
+}
+
+.zone-card {
+    background-color: #f9fbf9;
+    border: 1px solid #e0e0e0;
+    border-left: 5px solid #2e7d32;
+    border-radius: 8px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.zone-card.zone-nadmorskie {
+    border-left-color: #0277bd;
+}
+
+.zone-card.zone-pojezierne {
+    border-left-color: #2e7d32;
+}
+
+.zone-card.zone-wyzynne {
+    border-left-color: #d97706;
+}
+
+.zone-card.zone-gorskie {
+    border-left-color: #6d4c41;
+}
+
+.zone-badge {
+    display: inline-block;
+    color: #ffffff;
+    font-size: 0.76rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+}
+
+.badge-nadmorskie {
+    background-color: #0277bd;
+}
+
+.badge-pojezierne {
+    background-color: #2e7d32;
+}
+
+.badge-wyzynne {
+    background-color: #d97706;
+}
+
+.badge-gorskie {
+    background-color: #6d4c41;
+}
+
+.zone-card h4 {
+    color: #1b5e20;
+    font-size: 1.14rem;
+    margin-bottom: 8px;
+}
+
+.zone-card p {
+    font-size: 0.93rem;
+    color: #37474f;
+}
+
+.zone-list {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+    font-size: 0.88rem;
+    color: #2f3640;
+    margin-bottom: 0;
+}
+
+/* Zagrożenia (2x2) */
+.threats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 14px;
+}
+
+.threat-card {
+    background-color: #fffbf7;
+    border: 1px solid #f0e0d0;
+    border-left: 4px solid #c62828;
+    border-radius: 6px;
+    padding: 16px 18px;
+}
+
+.threat-card h4 {
+    color: #8e2424;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+}
+
+.threat-card p {
+    font-size: 0.92rem;
+    color: #4a5568;
+    margin-bottom: 0;
+}
+
+/* Lista 6 zasad świadomego zwiedzania */
+.rules-list {
+    margin-top: 14px;
+    margin-left: 22px;
+}
+
+.rules-list li {
+    margin-bottom: 11px;
+    padding-left: 4px;
+    color: #37474f;
+}
+
+.topic-cta {
+    margin-top: 22px;
+    padding: 18px 20px;
+    background-color: #f4f9f4;
+    border: 1px solid #c8e6c9;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.topic-cta p {
+    margin-bottom: 0;
+    color: #1b5e20;
+    font-weight: bold;
+    flex: 1 1 260px;
+}
+
+.topic-cta-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cta-btn {
+    display: inline-block;
+    background-color: #2e7d32;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.92rem;
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: 2px solid #2e7d32;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.cta-btn:hover {
+    background-color: #1b5e20;
+    border-color: #1b5e20;
+}
+
+.cta-btn-outline {
+    background-color: #ffffff;
+    color: #2e7d32;
+}
+
+.cta-btn-outline:hover {
+    background-color: #2e7d32;
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   7. UKŁAD PODSTRONY KONTAKT I FORMULARZ
    ========================================================================== */
 .contact-layout {
     display: flex;
@@ -432,8 +831,17 @@ main {
     transform: translateY(-2px);
 }
 
+.form-feedback {
+    margin-top: 12px;
+    margin-bottom: 0;
+    font-size: 0.92rem;
+    font-weight: bold;
+    color: #1b5e20;
+    min-height: 1.2em;
+}
+
 /* ==========================================================================
-   7. PRZESUWNA KARUZELA 23 PARKÓW, POGODA OPEN-METEO I PANEL JSON (INDEX.HTML)
+   8. PRZESUWNA KARUZELA 23 PARKÓW, POGODA I PANEL SZCZEGÓŁÓW (INDEX.HTML)
    ========================================================================== */
 .carousel-header {
     margin-bottom: 18px;
@@ -651,7 +1059,7 @@ main {
 }
 
 /* ==========================================================================
-   8. MAPA INTERNETOWA LEAFLET + OPENSTREETMAP (INDEX.HTML)
+   9. MAPA INTERNETOWA LEAFLET + OPENSTREETMAP (INDEX.HTML)
    ========================================================================== */
 .map-section {
     margin-top: 26px;
@@ -825,18 +1233,10 @@ main {
 }
 
 /* ==========================================================================
-   9. WIZUALIZACJA DANYCH - WYKRESY CHART.JS (INDEX.HTML)
+   10. WIZUALIZACJA DANYCH - WYKRESY CHART.JS (INDEX.HTML)
    ========================================================================== */
 .charts-intro {
     margin-bottom: 18px;
-}
-
-.charts-intro code {
-    background-color: #e8f5e9;
-    color: #1b5e20;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.9em;
 }
 
 .chart-card {
@@ -934,7 +1334,7 @@ main {
 }
 
 /* ==========================================================================
-   10. INTERAKTYWNA GALERIA (GALERIA.HTML - CSS GRID + LIGHTBOX)
+   11. INTERAKTYWNA GALERIA (GALERIA.HTML - CSS GRID + LIGHTBOX)
    ========================================================================== */
 .filter-bar {
     display: flex;
@@ -1132,7 +1532,7 @@ main {
 }
 
 /* ==========================================================================
-   11. STOPKA (FOOTER)
+   12. STOPKA (FOOTER)
    ========================================================================== */
 footer {
     background-color: #212d27;
@@ -1171,12 +1571,21 @@ footer a:hover {
 }
 
 /* ==========================================================================
-   12. RESPONSYWNOŚĆ (@media max-width: 768px)
+   13. RESPONSYWNOŚĆ (@media max-width: 768px)
    ========================================================================== */
 @media (max-width: 768px) {
     .columns-container,
     .contact-layout {
         flex-direction: column;
+    }
+
+    .info-grid-2,
+    .goals-grid,
+    .regime-grid,
+    .zones-grid,
+    .threats-grid,
+    .charts-grid {
+        grid-template-columns: 1fr;
     }
 
     header.hero-header::before {
@@ -1232,6 +1641,19 @@ footer a:hover {
         padding: 0 12px;
     }
 
+    .content-section {
+        padding: 18px;
+    }
+
+    .topic-nav {
+        gap: 8px;
+    }
+
+    .topic-nav a {
+        font-size: 0.84rem;
+        padding: 7px 12px;
+    }
+
     .park-details-box {
         flex-direction: column;
         align-items: stretch;
@@ -1263,10 +1685,6 @@ footer a:hover {
 
     #mapa {
         height: 350px;
-    }
-
-    .charts-grid {
-        grid-template-columns: 1fr;
     }
 
     .chart-card {

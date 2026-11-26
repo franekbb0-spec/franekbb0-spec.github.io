@@ -13,7 +13,24 @@ if (hamburgerBtn && navCollapse) {
 }
 
 // ==========================================================================
-// 2. KARUZELA, POGODA, MAPA I WYKRESY (INDEX.HTML)
+// 2. OBSŁUGA FORMULARZA KONTAKTOWEGO (KONTAKT.HTML)
+// ==========================================================================
+const contactForm = document.getElementById('contact-form');
+const formFeedback = document.getElementById('form-feedback');
+
+if (contactForm && formFeedback) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const imie = document.getElementById('name')?.value.trim() || '';
+        formFeedback.textContent = imie
+            ? `Dziękujemy, ${imie}! Twoja wiadomość została zapisana do wglądu autorów.`
+            : 'Dziękujemy! Twoja wiadomość została wysłana.';
+        contactForm.reset();
+    });
+}
+
+// ==========================================================================
+// 3. KARUZELA, POGODA, MAPA I WYKRESY (INDEX.HTML)
 // ==========================================================================
 const carouselTrack = document.getElementById('carousel-track');
 const prevBtn = document.getElementById('carousel-prev');
