@@ -29,7 +29,6 @@ body.no-scroll {
 /* ==========================================================================
    2. BANER (BLUR 0) I PRZYKLEJONA SZKLANA NAWIGACJA (BLUR 4PX) - DESKTOP
    ========================================================================== */
-/* Na desktopie display: contents pozwala <nav> przyklejać się do całego <body> */
 .hero-wrapper {
     display: contents;
 }
@@ -122,7 +121,6 @@ nav.main-nav {
         box-shadow 0.3s ease;
 }
 
-/* Stan po zjechaniu poniżej banera: przyciemnione tło przy zachowaniu blura 4px */
 nav.main-nav.is-stuck {
     background-color: rgba(18, 52, 22, 0.86);
     backdrop-filter: blur(4px);
@@ -169,7 +167,6 @@ nav.main-nav.is-stuck {
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
 }
 
-/* Na desktopie kontener menu jest zawsze otwarty */
 .nav-collapse {
     display: block;
     width: 100%;
@@ -209,7 +206,6 @@ nav.main-nav ul li a {
         transform 0.25s ease;
 }
 
-/* Pseudoelement ::after - animowane podkreślenie odnośników w menu */
 nav.main-nav ul li a::after {
     content: "";
     position: absolute;
@@ -417,7 +413,6 @@ main {
     text-decoration: underline;
 }
 
-/* Siatka 2-kolumnowa (Odbiorcy w O projekcie) */
 .info-grid-2 {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -460,7 +455,6 @@ main {
     background-color: #546e7a;
 }
 
-/* Siatka 4 celów projektu */
 .goals-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -499,7 +493,6 @@ main {
     margin-bottom: 0;
 }
 
-/* Pasek szybkiej nawigacji po tematach (Zagadnienia) */
 .topic-nav {
     display: flex;
     flex-wrap: wrap;
@@ -527,12 +520,10 @@ main {
     border-color: #2e7d32;
 }
 
-/* Odstęp od góry uwzględniający przyklejone menu na desktopie */
 .topic-section {
     scroll-margin-top: 5rem;
 }
 
-/* Tabela porównawcza form ochrony obszarowej */
 .table-scroll {
     overflow-x: auto;
     margin: 1rem 0;
@@ -561,7 +552,6 @@ main {
     background-color: #f9fbf9;
 }
 
-/* 3 reżimy ochrony (Ścisła / Czynna / Krajobrazowa) */
 .regime-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -608,7 +598,6 @@ main {
     margin-bottom: 0;
 }
 
-/* 4 strefy krajobrazowe (kolory zbieżne ze znacznikami mapy) */
 .zones-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -691,7 +680,6 @@ main {
     margin-bottom: 0;
 }
 
-/* Zagrożenia */
 .threats-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -719,7 +707,6 @@ main {
     margin-bottom: 0;
 }
 
-/* Lista 6 zasad świadomego zwiedzania */
 .rules-list {
     margin-top: 1rem;
     margin-left: 1.4rem;
@@ -837,12 +824,17 @@ main {
     font-weight: bold;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
     background-color: #1b5e20;
     transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+    opacity: 0.65;
+    cursor: wait;
 }
 
 .form-feedback {
@@ -854,11 +846,83 @@ main {
     min-height: 1.2em;
 }
 
+.form-feedback.is-error {
+    color: #c62828;
+}
+
 /* ==========================================================================
-   8. PRZESUWNA KARUZELA 23 PARKÓW, POGODA I PANEL SZCZEGÓŁÓW (INDEX.HTML)
+   8. WYSZUKIWARKA, FILTRY, KARUZELA 23 PARKÓW I POGODA (INDEX.HTML)
    ========================================================================== */
 .carousel-header {
-    margin-bottom: 1.15rem;
+    margin-bottom: 1rem;
+}
+
+.park-controls-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    margin-bottom: 0.85rem;
+    padding: 0.85rem 1rem;
+    background-color: #f4f9f4;
+    border: 1px solid #dcedc8;
+    border-radius: 8px;
+}
+
+.park-search-wrap {
+    flex: 1 1 250px;
+    max-width: 380px;
+}
+
+.park-search-input {
+    width: 100%;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid #a5d6a7;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.92rem;
+    background-color: #ffffff;
+    color: #2f3640;
+}
+
+.park-search-input:focus {
+    outline: none;
+    border-color: #2e7d32;
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.18);
+}
+
+.index-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.index-filter-btn {
+    background-color: #ffffff;
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.84rem;
+    font-weight: bold;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.index-filter-btn:hover,
+.index-filter-btn.active {
+    background-color: #2e7d32;
+    color: #ffffff;
+}
+
+.filter-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.86rem;
+    color: #546e7a;
 }
 
 .carousel-wrapper {
@@ -892,6 +956,31 @@ main {
 .carousel-track::-webkit-scrollbar-thumb {
     background: #2e7d32;
     border-radius: 4px;
+}
+
+.empty-filter-box {
+    width: 100%;
+    text-align: center;
+    padding: 1.4rem 1rem;
+    background-color: #f9fbf9;
+    border: 1px dashed #a5d6a7;
+    border-radius: 8px;
+    color: #4a5568;
+}
+
+.empty-filter-box button {
+    margin-top: 0.65rem;
+    background-color: #2e7d32;
+    color: #ffffff;
+    border: none;
+    padding: 0.45rem 1rem;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.empty-filter-box button:hover {
+    background-color: #1b5e20;
 }
 
 .carousel-item {
@@ -958,6 +1047,7 @@ main {
 }
 
 .park-details-box {
+    scroll-margin-top: 5rem;
     display: flex;
     gap: clamp(1.1rem, 2.2vw, 2.25rem);
     background-color: #f4f9f4;
@@ -1075,7 +1165,7 @@ main {
 }
 
 /* ==========================================================================
-   9. MAPA INTERNETOWA LEAFLET + OPENSTREETMAP (INDEX.HTML)
+   9. MAPA INTERNETOWA LEAFLET + PODKŁADY + GEOJSON (INDEX.HTML)
    ========================================================================== */
 .map-section {
     margin-top: 1.75rem;
@@ -1171,7 +1261,6 @@ main {
     z-index: 1;
 }
 
-/* Własne ikony markerów */
 .custom-park-icon {
     background: transparent;
     border: none;
@@ -1214,7 +1303,6 @@ main {
     box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.35), 0 3px 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Rozszerzone okienko informacyjne (Popup ze zdjęciem) */
 .leaflet-popup-content {
     margin: 10px 12px;
     min-width: 220px;
@@ -1351,7 +1439,7 @@ main {
 }
 
 /* ==========================================================================
-   11. INTERAKTYWNA GALERIA (GALERIA.HTML - CSS GRID + LIGHTBOX)
+   11. INTERAKTYWNA GALERIA (GALERIA.HTML - CSS GRID + LIGHTBOX ZE STRZAŁKAMI)
    ========================================================================== */
 .filter-bar {
     display: flex;
@@ -1473,7 +1561,7 @@ main {
     display: none;
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.82);
+    background-color: rgba(0, 0, 0, 0.84);
     z-index: 2000;
     align-items: center;
     justify-content: center;
@@ -1492,18 +1580,31 @@ main {
     border-radius: 8px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+.lightbox-media {
+    position: relative;
+    background-color: #163319;
+}
+
+.lightbox-media img {
+    width: 100%;
+    max-height: 58vh;
+    object-fit: cover;
+    display: block;
 }
 
 .lightbox-close {
     position: absolute;
-    top: 10px;
+    top: 12px;
     right: 14px;
+    z-index: 3;
     background: rgba(0, 0, 0, 0.65);
     color: #ffffff;
-    border: none;
-    width: 36px;
-    height: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     font-size: 1.5rem;
     line-height: 1;
@@ -1515,28 +1616,102 @@ main {
     background: #1b5e20;
 }
 
-.lightbox-content img {
-    width: 100%;
-    max-height: 60vh;
-    object-fit: cover;
-    display: block;
+.lightbox-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background-color: rgba(15, 42, 18, 0.68);
+    color: #ffffff;
+    font-size: 1.45rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.lightbox-nav-btn.prev {
+    left: 12px;
+}
+
+.lightbox-nav-btn.next {
+    right: 12px;
+}
+
+.lightbox-nav-btn:hover {
+    background-color: rgba(46, 125, 50, 0.92);
+    transform: translateY(-50%) scale(1.06);
+}
+
+.lightbox-nav-btn.hidden {
+    display: none;
+}
+
+.lightbox-counter {
+    position: absolute;
+    left: 14px;
+    bottom: 12px;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.65);
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: bold;
+    padding: 0.22rem 0.65rem;
+    border-radius: 12px;
 }
 
 .lightbox-info {
-    padding: clamp(1rem, 2vw, 1.6rem);
+    padding: clamp(1rem, 2vw, 1.5rem);
 }
 
 .lightbox-info h3 {
     color: #1b5e20;
-    font-size: clamp(1.25rem, 1.15rem + 0.35vw, 1.55rem);
-    margin-bottom: 0.4rem;
+    font-size: clamp(1.2rem, 1.12rem + 0.35vw, 1.5rem);
+    margin-bottom: 0.35rem;
 }
 
 .lightbox-meta {
     font-size: 0.9rem;
     font-weight: bold;
     color: #2e7d32;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.65rem;
+}
+
+.lightbox-actions {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.lightbox-map-btn {
+    display: inline-block;
+    background-color: #2e7d32;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    padding: 0.55rem 1.05rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.lightbox-map-btn:hover {
+    background-color: #1b5e20;
+}
+
+.lightbox-keys-hint {
+    font-size: 0.82rem;
+    color: #607d8b;
 }
 
 .error-msg {
@@ -1698,7 +1873,6 @@ body.no-scroll .scroll-top-btn {
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
     }
 
-    /* Wspólne zdjęcie w tle z blurem 4px i zapasem wysokości (bez przeskoku przy rozwijaniu) */
     .hero-wrapper::before {
         content: "";
         position: absolute;
@@ -1763,7 +1937,6 @@ body.no-scroll .scroll-top-btn {
         line-height: 1.3;
     }
 
-    /* Rozpakowanie <nav> do siatki .hero-wrapper, by przycisk i lista były częścią jednego bloku */
     nav.main-nav,
     nav.main-nav.is-stuck {
         display: contents;
@@ -1858,7 +2031,8 @@ body.no-scroll .scroll-top-btn {
         padding: 1.15rem 1.1rem;
     }
 
-    .topic-section {
+    .topic-section,
+    .park-details-box {
         scroll-margin-top: 1.25rem;
     }
 
@@ -1869,6 +2043,15 @@ body.no-scroll .scroll-top-btn {
     .topic-nav a {
         font-size: 0.84rem;
         padding: 0.45rem 0.75rem;
+    }
+
+    .park-controls-bar {
+        padding: 0.75rem;
+    }
+
+    .park-search-wrap {
+        max-width: none;
+        width: 100%;
     }
 
     .park-details-box {
@@ -1910,8 +2093,18 @@ body.no-scroll .scroll-top-btn {
         height: 260px;
     }
 
-    .lightbox-content img {
-        max-height: 45vh;
+    .lightbox-media img {
+        max-height: 44vh;
+    }
+
+    .lightbox-nav-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1.25rem;
+    }
+
+    .lightbox-keys-hint {
+        display: none;
     }
 
     .scroll-top-btn {

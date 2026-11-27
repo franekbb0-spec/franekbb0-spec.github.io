@@ -9,6 +9,7 @@
     <meta name="description" content="Galeria 23 polskich parków narodowych z podziałem na strefy krajobrazowe.">
     <meta name="keywords" content="galeria, parki narodowe, zdjęcia przyrody, Polska, filtrowanie">
     
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%232e7d32'/%3E%3Cpath%20d='M32%2010L16%2034h10l-8%2014h28l-8-14h10L32%2010z'%20fill='%23ffffff'/%3E%3Crect%20x='29'%20y='48'%20width='6'%20height='8'%20fill='%23c8e6c9'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -48,29 +49,38 @@
         <!-- Zielony kafelek podtytułu podstrony -->
         <section class="page-intro-card">
             <h2>Galeria 23 Parków Narodowych</h2>
-            <p>Wybierz strefę krajobrazową lub kliknij kartę, aby powiększyć zdjęcie i przeczytać opis.</p>
+            <p>Wybierz strefę krajobrazową lub kliknij kartę, aby powiększyć zdjęcie, przejrzeć opisy i przejść prosto na mapę.</p>
         </section>
 
         <section class="filter-bar">
-            <button class="filter-btn active" data-filter="wszystkie">Wszystkie (23)</button>
-            <button class="filter-btn" data-filter="gorskie">Górskie</button>
-            <button class="filter-btn" data-filter="wyzynne">Wyżynne</button>
-            <button class="filter-btn" data-filter="pojezierne">Pojezierne i nizinne</button>
-            <button class="filter-btn" data-filter="nadmorskie">Nadmorskie</button>
+            <button type="button" class="filter-btn active" data-filter="wszystkie">Wszystkie (23)</button>
+            <button type="button" class="filter-btn" data-filter="gorskie">Górskie</button>
+            <button type="button" class="filter-btn" data-filter="wyzynne">Wyżynne</button>
+            <button type="button" class="filter-btn" data-filter="pojezierne">Pojezierne i nizinne</button>
+            <button type="button" class="filter-btn" data-filter="nadmorskie">Nadmorskie</button>
         </section>
 
         <section id="gallery-grid" class="gallery-grid"></section>
     </main>
 
-    <!-- Okno modalne (Lightbox) -->
+    <!-- Okno modalne (Lightbox) z nawigacją i przejściem na mapę -->
     <div id="lightbox" class="lightbox" aria-hidden="true">
         <div class="lightbox-content">
-            <button id="lightbox-close" class="lightbox-close" aria-label="Zamknij">&times;</button>
-            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-media">
+                <button type="button" id="lightbox-close" class="lightbox-close" aria-label="Zamknij">&times;</button>
+                <button type="button" id="lightbox-prev" class="lightbox-nav-btn prev" aria-label="Poprzedni park">&#10094;</button>
+                <img id="lightbox-img" src="" alt="">
+                <button type="button" id="lightbox-next" class="lightbox-nav-btn next" aria-label="Następny park">&#10095;</button>
+                <span id="lightbox-counter" class="lightbox-counter">1 / 23</span>
+            </div>
             <div class="lightbox-info">
                 <h3 id="lightbox-title"></h3>
                 <p class="lightbox-meta" id="lightbox-meta"></p>
                 <p id="lightbox-desc"></p>
+                <div class="lightbox-actions">
+                    <a id="lightbox-map-link" href="index.html" class="lightbox-map-btn">Zobacz na mapie i sprawdź pogodę &rarr;</a>
+                    <span class="lightbox-keys-hint">Nawigacja: strzałki &larr; &rarr; / Esc</span>
+                </div>
             </div>
         </div>
     </div>
@@ -88,6 +98,6 @@
         </div>
     </footer>
 
-    <script src="galeria.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

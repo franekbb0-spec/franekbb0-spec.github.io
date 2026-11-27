@@ -1,8 +1,16 @@
 // ==========================================================================
-// 1. OBSŁUGA HAMBURGER MENU Z OBROTEM 90° I PŁYNNYM ROZWIJANIEM (KAŻDA STRONA)
+// 1. WSPÓLNA NAWIGACJA: HAMBURGER MENU (90°), ZAMYKANIE POZA MENU I ESCAPE
 // ==========================================================================
 const hamburgerBtn = document.getElementById('hamburger-btn');
 const navCollapse = document.getElementById('nav-collapse');
+const heroWrapper = document.querySelector('.hero-wrapper');
+
+function zamknijMenuMobilne() {
+    if (!hamburgerBtn || !navCollapse) return;
+    navCollapse.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+}
 
 if (hamburgerBtn && navCollapse) {
     hamburgerBtn.addEventListener('click', () => {
@@ -10,6 +18,31 @@ if (hamburgerBtn && navCollapse) {
         hamburgerBtn.classList.toggle('open', czyOtwarte);
         hamburgerBtn.setAttribute('aria-expanded', String(czyOtwarte));
     });
+
+    // Zamykanie po kliknięciu poza nagłówek/menu
+    document.addEventListener('click', (e) => {
+        if (!navCollapse.classList.contains('open')) return;
+        const klikWewnatrz = heroWrapper
+            ? heroWrapper.contains(e.target)
+            : (navCollapse.contains(e.target) || hamburgerBtn.contains(e.target));
+        if (!klikWewnatrz) {
+            zamknijMenuMobilne();
+        }
+    });
+
+    // Zamykanie klawiszem Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navCollapse.classList.contains('open')) {
+            zamknijMenuMobilne();
+        }
+    });
+
+    // Reset stanu po powiększeniu okna powyżej progu mobilnego
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && navCollapse.classList.contains('open')) {
+            zamknijMenuMobilne();
+        }
+    }, { passive: true });
 }
 
 // ==========================================================================
@@ -21,7 +54,7 @@ const heroHeader = document.querySelector('header.hero-header');
 if (mainNav && heroHeader) {
     const aktualizujStanNav = () => {
         const rect = heroHeader.getBoundingClientRect();
-        const navHeight = mainNav.offsetHeight || 72;
+        const navHeight = mainNav.offsetHeight || 64;
         mainNav.classList.toggle('is-stuck', rect.bottom <= navHeight + 2);
     };
 
@@ -66,29 +99,171 @@ function inicjalizujPrzyciskPowrotuNaGore() {
 inicjalizujPrzyciskPowrotuNaGore();
 
 // ==========================================================================
-// 4. OBSŁUGA FORMULARZA KONTAKTOWEGO (KONTAKT.HTML)
+// 4. FORMULARZ KONTAKTOWY Z INTEGRACJĄ WEB3FORMS (KONTAKT.HTML)
 // ==========================================================================
+const WEB3FORMS_ACCESS_KEY = 'TUTAJ_WKLEJ_SWOJ_KLUCZ_WEB3FORMS';
+
 const contactForm = document.getElementById('contact-form');
 const formFeedback = document.getElementById('form-feedback');
 
 if (contactForm && formFeedback) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const submitBtn = contactForm.querySelector('.submit-btn');
         const imie = document.getElementById('name')?.value.trim() || '';
-        formFeedback.textContent = imie
-            ? `Dziękujemy, ${imie}! Twoja wiadomość została zapisana do wglądu autorów.`
-            : 'Dziękujemy! Twoja wiadomość została wysłana.';
-        contactForm.reset();
+        const email = document.getElementById('email')?.value.trim() || '';
+        const temat = document.getElementById('subject')?.value.trim() || '';
+        const wiadomosc = document.getElementById('message')?.value.trim() || '';
+
+        formFeedback.classList.remove('is-error');
+
+        if (!WEB3FORMS_ACCESS_KEY || WEB3FORMS_ACCESS_KEY === 'TUTAJ_WKLEJ_SWOJ_KLUCZ_WEB3FORMS') {
+            formFeedback.textContent = imie
+                ? `Dziękujemy, ${imie}! Formularz zadziałał w trybie podglądu (wklej klucz Web3Forms w script.js, aby wysyłać realne maile).`
+                : 'Formularz zadziałał w trybie podglądu.';
+            contactForm.reset();
+            return;
+        }
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Wysyłanie...';
+        }
+        formFeedback.textContent = 'Wysyłanie wiadomości...';
+
+        try {
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                },
+                body: JSON.stringify({
+                    access_key: WEB3FORMS_ACCESS_KEY,
+                    name: imie,
+                    email: email,
+                    subject: `[Parki Narodowe Polski] ${temat}`,
+                    message: wiadomosc
+                })
+            });
+
+            const wynik = await response.json();
+            if (response.ok && wynik.success) {
+                formFeedback.textContent = `Dziękujemy, ${imie}! Twoja wiadomość została pomyślnie wysłana.`;
+                contactForm.reset();
+            } else {
+                throw new Error(wynik.message || 'Błąd wysyłki formularza');
+            }
+        } catch (error) {
+            formFeedback.classList.add('is-error');
+            formFeedback.textContent = 'Nie udało się wysłać wiadomości. Spróbuj ponownie za chwilę.';
+            console.error('Błąd Web3Forms:', error);
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Wyślij wiadomość';
+            }
+        }
     });
 }
 
+// Wspólne etykiety i kolory stref krajobrazowych
+const etykietyStrefPelne = {
+    gorskie: 'Park górski',
+    wyzynne: 'Park wyżynny',
+    pojezierne: 'Park pojezierny / nizinny',
+    nadmorskie: 'Park nadmorski'
+};
+
+const etykietyStrefKrotkie = {
+    gorskie: 'Górski',
+    wyzynne: 'Wyżynny',
+    pojezierne: 'Pojezierny / Nizinny',
+    nadmorskie: 'Nadmorski'
+};
+
+const etykietyPrzyciskowStref = {
+    wszystkie: 'Wszystkie',
+    gorskie: 'Górskie',
+    wyzynne: 'Wyżynne',
+    pojezierne: 'Pojezierne i nizinne',
+    nadmorskie: 'Nadmorskie'
+};
+
+const koloryStref = {
+    gorskie: '#6d4c41',
+    wyzynne: '#d97706',
+    pojezierne: '#2e7d32',
+    nadmorskie: '#0277bd'
+};
+
+function aktualizujLicznikiPrzyciskow(przyciski, listaParkow) {
+    przyciski.forEach(btn => {
+        const klucz = btn.dataset.filter;
+        const bazowaNazwa = etykietyPrzyciskowStref[klucz];
+        if (!bazowaNazwa) return;
+        const liczba = klucz === 'wszystkie'
+            ? listaParkow.length
+            : listaParkow.filter(p => p.kategoria === klucz).length;
+        btn.textContent = `${bazowaNazwa} (${liczba})`;
+    });
+}
+
+// Normalizacja nazwy parku do automatycznego dopasowywania GeoJSON (GDOŚ / OSM)
+function normalizujNazweParku(tekst) {
+    return String(tekst || '')
+        .toLowerCase()
+        .replace(/ł/g, 'l')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\bpark\s+narodowy\b/g, ' ')
+        .replace(/\bpn\b/g, ' ')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+}
+
+function pobierzNazweZProperties(props) {
+    if (!props || typeof props !== 'object') return '';
+
+    const priorytetKluczy = [
+        'nazwa',
+        'name:pl',
+        'name',
+        'nazwa_obiektu',
+        'nazwa_ob',
+        'nazwa_pl',
+        'park',
+        'title',
+        'label'
+    ];
+
+    const mapaKluczy = new Map(
+        Object.keys(props).map(k => [k.toLowerCase(), k])
+    );
+
+    for (const szukany of priorytetKluczy) {
+        const oryginalnyKlucz = mapaKluczy.get(szukany);
+        if (oryginalnyKlucz && typeof props[oryginalnyKlucz] === 'string' && props[oryginalnyKlucz].trim()) {
+            return props[oryginalnyKlucz].trim();
+        }
+    }
+
+    return '';
+}
+
 // ==========================================================================
-// 5. KARUZELA, POGODA, MAPA I WYKRESY (INDEX.HTML)
+// 5. STRONA GŁÓWNA: WYSZUKIWARKA, FILTRY, KARUZELA, POGODA, MAPA, WYKRESY
 // ==========================================================================
 const carouselTrack = document.getElementById('carousel-track');
 const prevBtn = document.getElementById('carousel-prev');
 const nextBtn = document.getElementById('carousel-next');
 
+const parkSearchInput = document.getElementById('park-search');
+const indexFilterButtons = document.querySelectorAll('.index-filter-btn');
+const filterStatusEl = document.getElementById('filter-status');
+
+const parkDetailsBox = document.getElementById('park-details-box');
 const detailImg = document.getElementById('detail-img');
 const detailBadge = document.getElementById('detail-badge');
 const detailTitle = document.getElementById('detail-title');
@@ -106,13 +281,6 @@ const tempChartHeading = document.getElementById('temp-chart-heading');
 const tempChartSubtitle = document.getElementById('temp-chart-subtitle');
 const metricButtons = document.querySelectorAll('.chart-btn');
 const sortButtons = document.querySelectorAll('.chart-sort-btn');
-
-const etykietyStref = {
-    gorskie: 'Park górski',
-    wyzynne: 'Park wyżynny',
-    pojezierne: 'Park pojezierny / nizinny',
-    nadmorskie: 'Park nadmorski'
-};
 
 function formatujDzien(dataISO) {
     const dniTygodnia = [
@@ -141,9 +309,7 @@ function opiszKodPogody(code) {
     return 'Zmienne warunki';
 }
 
-// --------------------------------------------------------------------------
 // Statyczny wykres słupkowy horyzontalny
-// --------------------------------------------------------------------------
 function inicjalizujWykresStatyczny() {
     if (!wykresStatycznyCanvas || typeof Chart === 'undefined') return;
 
@@ -208,9 +374,16 @@ if (carouselTrack) {
     }
 
     let mapa = null;
+    let warstwaMarkerow = null;
+    let warstwaGranic = null;
+    let daneGeoJSON = null;
+
     let wszystkieParki = [];
+    let przefiltrowaneParki = [];
     let aktualnaKolejnoscWykresu = [];
     let aktywnyParkId = null;
+    let aktywnaStrefa = 'wszystkie';
+    let aktywnaFraza = '';
     let aktywnaMetryka = 'powierzchnia_km';
     let aktywneSortowanie = 'alpha';
     let numerZapytaniaPogody = 0;
@@ -218,15 +391,42 @@ if (carouselTrack) {
     let wykresJsonInstancja = null;
     let wykresTempInstancja = null;
 
+    const parkiPoId = new Map();
+    const parkiPoNazwieNorm = new Map();
     const markeryParkow = new Map();
+    const poligonyParkow = new Map();
     const kafelkiKaruzeli = new Map();
 
+    // Inicjalizacja mapy Leaflet z przełącznikiem podkładów (OSM + OpenTopoMap) i warstwą GeoJSON
     if (mapContainer && typeof L !== 'undefined') {
         mapa = L.map('mapa').setView([52.0, 19.0], 6);
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        const warstwaOSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
             attribution: '&copy; OpenStreetMap'
-        }).addTo(mapa);
+        });
+
+        const warstwaTopo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            maxZoom: 17,
+            attribution: '&copy; OpenStreetMap, SRTM | Styl: &copy; OpenTopoMap'
+        });
+
+        warstwaOSM.addTo(mapa);
+
+        warstwaMarkerow = L.layerGroup().addTo(mapa);
+        warstwaGranic = L.layerGroup().addTo(mapa);
+
+        L.control.layers(
+            {
+                'Mapa drogowa (OSM)': warstwaOSM,
+                'Mapa topograficzna': warstwaTopo
+            },
+            {
+                'Znaczniki parków': warstwaMarkerow,
+                'Granice parków (GeoJSON)': warstwaGranic
+            },
+            { collapsed: true }
+        ).addTo(mapa);
 
         if (mapResetBtn) {
             mapResetBtn.addEventListener('click', () => {
@@ -251,6 +451,24 @@ if (carouselTrack) {
         });
     }
 
+    function stylPoligonuGeoJSON(kategoria, czyAktywny = false) {
+        if (czyAktywny) {
+            return {
+                color: '#e65100',
+                weight: 3,
+                fillColor: '#f9a825',
+                fillOpacity: 0.36
+            };
+        }
+        const kolor = koloryStref[kategoria] || '#2e7d32';
+        return {
+            color: kolor,
+            weight: 2,
+            fillColor: kolor,
+            fillOpacity: 0.22
+        };
+    }
+
     function zbudujTrescPopupu(park) {
         return `
             <div class="popup-card">
@@ -266,8 +484,195 @@ if (carouselTrack) {
         `;
     }
 
+    // Automatyczne dopasowanie obiektu z GeoJSON (GDOŚ / OSM / własny) do rekordu w parki.json
+    function dopasujParkDoFeature(feature) {
+        const typGeometrii = feature?.geometry?.type;
+        if (typGeometrii !== 'Polygon' && typGeometrii !== 'MultiPolygon') {
+            return null;
+        }
+
+        const props = feature.properties || {};
+        const surowaNazwa = pobierzNazweZProperties(props);
+
+        if (surowaNazwa) {
+            const znormalizowana = normalizujNazweParku(surowaNazwa);
+
+            // Pominięcie ewentualnych warstw otulin
+            if (!znormalizowana || znormalizowana.includes('otulin')) {
+                return null;
+            }
+
+            // 1. Dokładne dopasowanie po rdzeniu nazwy
+            if (parkiPoNazwieNorm.has(znormalizowana)) {
+                return parkiPoNazwieNorm.get(znormalizowana);
+            }
+
+            // 2. Dopasowanie częściowe (np. z dopiskiem w nawiasie lub skrótem)
+            if (znormalizowana.length >= 5) {
+                for (const [kluczNorm, park] of parkiPoNazwieNorm.entries()) {
+                    if (znormalizowana.includes(kluczNorm) || kluczNorm.includes(znormalizowana)) {
+                        return park;
+                    }
+                }
+            }
+        }
+
+        // 3. Awaryjne dopasowanie po numerycznym id (zgodność ze starszym plikiem GeoJSON)
+        if (Number.isInteger(props.id) && parkiPoId.has(props.id)) {
+            return parkiPoId.get(props.id);
+        }
+
+        return null;
+    }
+
+    function renderujGraniceGeoJSON(widoczneIds) {
+        if (!mapa || !warstwaGranic || !daneGeoJSON) return;
+
+        warstwaGranic.clearLayers();
+        poligonyParkow.clear();
+
+        L.geoJSON(daneGeoJSON, {
+            filter: (feature) => {
+                const park = dopasujParkDoFeature(feature);
+                return Boolean(park && widoczneIds.has(park.id));
+            },
+            style: (feature) => {
+                const park = dopasujParkDoFeature(feature);
+                if (!park) return {};
+                return stylPoligonuGeoJSON(park.kategoria, park.id === aktywnyParkId);
+            },
+            onEachFeature: (feature, layer) => {
+                const park = dopasujParkDoFeature(feature);
+                if (!park) return;
+
+                if (!poligonyParkow.has(park.id)) {
+                    poligonyParkow.set(park.id, { layers: [], park });
+                }
+                poligonyParkow.get(park.id).layers.push(layer);
+
+                layer.bindTooltip(park.nazwa, { sticky: true });
+                layer.on('click', () => {
+                    pokazSzczegolyParku(park, { wycentrujMape: true, przewinKaruzela: true });
+                });
+            }
+        }).addTo(warstwaGranic);
+    }
+
     // ----------------------------------------------------------------------
-    // Wykres porównawczy parków
+    // Filtrowanie i wyszukiwanie (synchronizuje karuzelę, markery i GeoJSON)
+    // ----------------------------------------------------------------------
+    function renderujWidokFiltrowany(dopasujWidokMapy = false) {
+        const fraza = aktywnaFraza.trim().toLowerCase();
+
+        przefiltrowaneParki = wszystkieParki.filter(park => {
+            const pasujeStrefa = aktywnaStrefa === 'wszystkie' || park.kategoria === aktywnaStrefa;
+            if (!pasujeStrefa) return false;
+            if (!fraza) return true;
+            const tekst = `${park.nazwa} ${park.wojewodztwo} ${park.siedziba}`.toLowerCase();
+            return tekst.includes(fraza);
+        });
+
+        const widoczneIds = new Set(przefiltrowaneParki.map(p => p.id));
+
+        if (filterStatusEl) {
+            filterStatusEl.textContent = `Wyświetlono: ${przefiltrowaneParki.length} z ${wszystkieParki.length} parków`;
+        }
+
+        // 1. Karuzela
+        carouselTrack.innerHTML = '';
+        kafelkiKaruzeli.clear();
+
+        if (przefiltrowaneParki.length === 0) {
+            carouselTrack.innerHTML = `
+                <div class="empty-filter-box">
+                    <p>Brak parków spełniających wpisane kryteria.</p>
+                    <button type="button" id="clear-filters-btn">Wyczyść filtry</button>
+                </div>
+            `;
+            const clearBtn = document.getElementById('clear-filters-btn');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', zresetujFiltry);
+            }
+        } else {
+            przefiltrowaneParki.forEach(park => {
+                const item = document.createElement('button');
+                item.type = 'button';
+                item.className = 'carousel-item';
+                if (park.id === aktywnyParkId) {
+                    item.classList.add('active');
+                }
+                item.innerHTML = `
+                    <img src="${park.zdjecie}" alt="${park.nazwa}" loading="lazy" onerror="this.onerror=null; this.src='images/hero.jpg';">
+                    <span class="carousel-item-title">${park.nazwa}</span>
+                `;
+
+                item.addEventListener('click', () => {
+                    pokazSzczegolyParku(park, { wycentrujMape: true, przewinKaruzela: false });
+                });
+
+                carouselTrack.appendChild(item);
+                kafelkiKaruzeli.set(park.id, item);
+            });
+        }
+
+        // 2. Markery i granice GeoJSON na mapie
+        if (mapa && warstwaMarkerow) {
+            warstwaMarkerow.clearLayers();
+            const wspolrzedne = [];
+
+            przefiltrowaneParki.forEach(park => {
+                const wpis = markeryParkow.get(park.id);
+                if (wpis) {
+                    wpis.marker.setIcon(utworzIkoneMarkera(park.kategoria, park.id === aktywnyParkId));
+                    wpis.marker.setZIndexOffset(park.id === aktywnyParkId ? 1000 : 0);
+                    warstwaMarkerow.addLayer(wpis.marker);
+                    wspolrzedne.push([park.lat, park.lon]);
+                }
+            });
+
+            renderujGraniceGeoJSON(widoczneIds);
+
+            if (dopasujWidokMapy) {
+                if (aktywnaStrefa === 'wszystkie' && !fraza) {
+                    mapa.closePopup();
+                    mapa.setView([52.0, 19.0], 6);
+                } else if (wspolrzedne.length === 1) {
+                    mapa.setView(wspolrzedne[0], 10);
+                } else if (wspolrzedne.length > 1) {
+                    mapa.fitBounds(wspolrzedne, { padding: [40, 40], maxZoom: 9 });
+                }
+            }
+        }
+    }
+
+    function zresetujFiltry() {
+        aktywnaStrefa = 'wszystkie';
+        aktywnaFraza = '';
+        if (parkSearchInput) parkSearchInput.value = '';
+        indexFilterButtons.forEach(b => {
+            b.classList.toggle('active', b.dataset.filter === 'wszystkie');
+        });
+        renderujWidokFiltrowany(true);
+    }
+
+    indexFilterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            indexFilterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            aktywnaStrefa = btn.dataset.filter;
+            renderujWidokFiltrowany(true);
+        });
+    });
+
+    if (parkSearchInput) {
+        parkSearchInput.addEventListener('input', (e) => {
+            aktywnaFraza = e.target.value;
+            renderujWidokFiltrowany(false);
+        });
+    }
+
+    // ----------------------------------------------------------------------
+    // Wykres porównawczy parków (Chart.js)
     // ----------------------------------------------------------------------
     function posortujParkiDoWykresu(lista) {
         const kopia = [...lista];
@@ -335,6 +740,9 @@ if (carouselTrack) {
                         const indeks = elements[0].index;
                         const kliknietyPark = aktualnaKolejnoscWykresu[indeks];
                         if (kliknietyPark) {
+                            if (!kafelkiKaruzeli.has(kliknietyPark.id)) {
+                                zresetujFiltry();
+                            }
                             pokazSzczegolyParku(kliknietyPark, {
                                 wycentrujMape: true,
                                 przewinKaruzela: true
@@ -404,7 +812,7 @@ if (carouselTrack) {
     }
 
     // ----------------------------------------------------------------------
-    // Wykres temperatury na najbliższe 24h dla wybranego parku
+    // Wykres temperatury 24h (Open-Meteo + Chart.js)
     // ----------------------------------------------------------------------
     function renderujWykresTemperatury(park, godziny, temperatury) {
         if (!wykresTemperaturyCanvas || typeof Chart === 'undefined') return;
@@ -570,15 +978,34 @@ if (carouselTrack) {
         }
     }
 
-    function zaktualizujMarkerNaMapie(park, wycentrujMape = true) {
+    function zaktualizujMarkerIGranice(park, wycentrujMape = true) {
         if (!mapa) return;
 
-        if (aktywnyParkId !== null && markeryParkow.has(aktywnyParkId)) {
-            const poprzedni = markeryParkow.get(aktywnyParkId);
-            poprzedni.marker.setIcon(utworzIkoneMarkera(poprzedni.park.kategoria, false));
-            poprzedni.marker.setZIndexOffset(0);
+        // Reset poprzedniego markera i wszystkich fragmentów poligonu
+        if (aktywnyParkId !== null) {
+            if (markeryParkow.has(aktywnyParkId)) {
+                const poprzedni = markeryParkow.get(aktywnyParkId);
+                poprzedni.marker.setIcon(utworzIkoneMarkera(poprzedni.park.kategoria, false));
+                poprzedni.marker.setZIndexOffset(0);
+            }
+            if (poligonyParkow.has(aktywnyParkId)) {
+                const poprzedniPoligon = poligonyParkow.get(aktywnyParkId);
+                const stylNieaktywny = stylPoligonuGeoJSON(poprzedniPoligon.park.kategoria, false);
+                poprzedniPoligon.layers.forEach(l => l.setStyle(stylNieaktywny));
+            }
         }
 
+        // Podświetlenie aktualnego poligonu (wszystkich części parku)
+        if (poligonyParkow.has(park.id)) {
+            const aktualnyPoligon = poligonyParkow.get(park.id);
+            const stylAktywny = stylPoligonuGeoJSON(park.kategoria, true);
+            aktualnyPoligon.layers.forEach(l => {
+                l.setStyle(stylAktywny);
+                l.bringToFront();
+            });
+        }
+
+        // Podświetlenie aktualnego markera i centrowanie
         if (markeryParkow.has(park.id)) {
             const aktualny = markeryParkow.get(park.id);
             aktualny.marker.setIcon(utworzIkoneMarkera(park.kategoria, true));
@@ -586,7 +1013,9 @@ if (carouselTrack) {
 
             if (wycentrujMape) {
                 mapa.setView([park.lat, park.lon], 10);
-                aktualny.marker.openPopup();
+                if (warstwaMarkerow && warstwaMarkerow.hasLayer(aktualny.marker)) {
+                    aktualny.marker.openPopup();
+                }
             }
         }
     }
@@ -610,19 +1039,20 @@ if (carouselTrack) {
         detailImg.src = park.zdjecie;
         detailImg.alt = park.nazwa;
 
-        const strefa = etykietyStref[park.kategoria] || park.kategoria;
+        const strefa = etykietyStrefPelne[park.kategoria] || park.kategoria;
         detailBadge.textContent = `#${park.id} • ${strefa}`;
         detailTitle.textContent = park.nazwa;
         detailMeta.textContent = `Województwo: ${park.wojewodztwo} | Siedziba: ${park.siedziba} | Rok utworzenia: ${park.rok_utworzenia} | Powierzchnia: ${park.powierzchnia}`;
         detailDesc.textContent = park.opis;
 
-        zaktualizujMarkerNaMapie(park, wycentrujMape);
+        zaktualizujMarkerIGranice(park, wycentrujMape);
         aktywnyParkId = park.id;
         zaktualizujPodswietlenieWykresu();
         pobierzPogode(park);
     }
 
-    async function zaladujKaruzelaJSON() {
+    // Ładowanie parki.json oraz granice-parkow.geojson
+    async function zaladujStroneGlowna() {
         try {
             const response = await fetch('parki.json');
             if (!response.ok) {
@@ -630,30 +1060,14 @@ if (carouselTrack) {
             }
             wszystkieParki = await response.json();
 
-            carouselTrack.innerHTML = '';
-
             wszystkieParki.forEach(park => {
-                const item = document.createElement('button');
-                item.type = 'button';
-                item.className = 'carousel-item';
-                item.innerHTML = `
-                    <img src="${park.zdjecie}" alt="${park.nazwa}" loading="lazy" onerror="this.onerror=null; this.src='images/hero.jpg';">
-                    <span class="carousel-item-title">${park.nazwa}</span>
-                `;
-
-                item.addEventListener('click', () => {
-                    pokazSzczegolyParku(park, { wycentrujMape: true, przewinKaruzela: false });
-                });
-
-                carouselTrack.appendChild(item);
-                kafelkiKaruzeli.set(park.id, item);
+                parkiPoId.set(park.id, park);
+                parkiPoNazwieNorm.set(normalizujNazweParku(park.nazwa), park);
 
                 if (mapa && typeof park.lat === 'number' && typeof park.lon === 'number') {
                     const marker = L.marker([park.lat, park.lon], {
                         icon: utworzIkoneMarkera(park.kategoria, false)
-                    })
-                        .addTo(mapa)
-                        .bindPopup(zbudujTrescPopupu(park));
+                    }).bindPopup(zbudujTrescPopupu(park));
 
                     marker.on('click', () => {
                         pokazSzczegolyParku(park, { wycentrujMape: true, przewinKaruzela: true });
@@ -663,10 +1077,49 @@ if (carouselTrack) {
                 }
             });
 
-            if (wszystkieParki.length > 0) {
-                aktywnyParkId = wszystkieParki[0].id;
+            // Wczytaj warstwę granic GeoJSON (nie blokuje strony w razie braku pliku)
+            try {
+                const geoResp = await fetch('granice-parkow.geojson');
+                if (geoResp.ok) {
+                    daneGeoJSON = await geoResp.json();
+                }
+            } catch (geoError) {
+                console.warn('Nie wczytano warstwy granice-parkow.geojson:', geoError);
+            }
+
+            aktualizujLicznikiPrzyciskow(indexFilterButtons, wszystkieParki);
+
+            // Sprawdź parametr ?park=<id> (przejście z Galerii)
+            const params = new URLSearchParams(window.location.search);
+            const parkIdZAdresu = parseInt(params.get('park'), 10);
+            const wybranyZAdresu = !Number.isNaN(parkIdZAdresu) ? parkiPoId.get(parkIdZAdresu) : null;
+
+            const startowyPark = wybranyZAdresu || wszystkieParki[0];
+            if (startowyPark) {
+                aktywnyParkId = startowyPark.id;
+                renderujWidokFiltrowany(false);
                 renderujWykresJSON();
-                pokazSzczegolyParku(wszystkieParki[0], { wycentrujMape: false, przewinKaruzela: false });
+                pokazSzczegolyParku(startowyPark, {
+                    wycentrujMape: Boolean(wybranyZAdresu),
+                    przewinKaruzela: Boolean(wybranyZAdresu)
+                });
+
+                // Diagnostyka parowania GeoJSON w konsoli deweloperskiej (F12)
+                if (daneGeoJSON) {
+                    const brakujace = wszystkieParki
+                        .filter(p => !poligonyParkow.has(p.id))
+                        .map(p => p.nazwa);
+                    console.info(`GeoJSON: dopasowano granice dla ${poligonyParkow.size}/${wszystkieParki.length} parków.`);
+                    if (brakujace.length > 0) {
+                        console.warn('Brakujące granice w granice-parkow.geojson:', brakujace);
+                    }
+                }
+
+                if (wybranyZAdresu && parkDetailsBox) {
+                    setTimeout(() => {
+                        parkDetailsBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 180);
+                }
             }
         } catch (error) {
             carouselTrack.innerHTML = `<p class="error-msg">Nie udało się wczytać listy parków.</p>`;
@@ -674,5 +1127,166 @@ if (carouselTrack) {
         }
     }
 
-    zaladujKaruzelaJSON();
+    zaladujStroneGlowna();
+}
+
+// ==========================================================================
+// 6. PODSTRONA GALERIA: FILTROWANIE Z LICZNIKAMI + LIGHTBOX ZE STRZAŁKAMI
+// ==========================================================================
+const galleryGrid = document.getElementById('gallery-grid');
+
+if (galleryGrid) {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxTitle = document.getElementById('lightbox-title');
+    const lightboxMeta = document.getElementById('lightbox-meta');
+    const lightboxDesc = document.getElementById('lightbox-desc');
+    const lightboxClose = document.getElementById('lightbox-close');
+    const lightboxPrev = document.getElementById('lightbox-prev');
+    const lightboxNext = document.getElementById('lightbox-next');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+    const lightboxMapLink = document.getElementById('lightbox-map-link');
+
+    let wszystkieParkiGalerii = [];
+    let aktualnaListaGalerii = [];
+    let aktualnyIndeksLightbox = 0;
+
+    function wyswietlSlajdLightbox(indeks) {
+        if (aktualnaListaGalerii.length === 0) return;
+
+        const liczba = aktualnaListaGalerii.length;
+        aktualnyIndeksLightbox = ((indeks % liczba) + liczba) % liczba;
+        const park = aktualnaListaGalerii[aktualnyIndeksLightbox];
+
+        lightboxImg.onerror = function () {
+            this.onerror = null;
+            this.src = 'images/hero.jpg';
+        };
+        lightboxImg.src = park.zdjecie;
+        lightboxImg.alt = park.nazwa;
+        lightboxTitle.textContent = park.nazwa;
+        lightboxMeta.textContent = `Województwo: ${park.wojewodztwo} | Siedziba: ${park.siedziba} | Rok utworzenia: ${park.rok_utworzenia} | Powierzchnia: ${park.powierzchnia}`;
+        lightboxDesc.textContent = park.opis;
+
+        if (lightboxCounter) {
+            lightboxCounter.textContent = `${aktualnyIndeksLightbox + 1} / ${liczba}`;
+        }
+        if (lightboxMapLink) {
+            lightboxMapLink.href = `index.html?park=${park.id}`;
+        }
+        if (lightboxPrev && lightboxNext) {
+            const ukryjStrzalki = liczba <= 1;
+            lightboxPrev.classList.toggle('hidden', ukryjStrzalki);
+            lightboxNext.classList.toggle('hidden', ukryjStrzalki);
+        }
+    }
+
+    function otworzLightbox(indeks) {
+        wyswietlSlajdLightbox(indeks);
+        lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('no-scroll');
+    }
+
+    function zamknijLightbox() {
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('no-scroll');
+    }
+
+    function renderujGalerie(listaParkow) {
+        aktualnaListaGalerii = listaParkow;
+        galleryGrid.innerHTML = '';
+
+        listaParkow.forEach((park, index) => {
+            const card = document.createElement('article');
+            card.className = 'gallery-card';
+            const etykieta = etykietyStrefKrotkie[park.kategoria] || park.kategoria;
+
+            card.innerHTML = `
+                <div class="gallery-img-wrapper">
+                    <img src="${park.zdjecie}" alt="${park.nazwa}" loading="lazy" onerror="this.onerror=null; this.src='images/hero.jpg';">
+                    <span class="gallery-badge">${etykieta}</span>
+                </div>
+                <div class="gallery-card-body">
+                    <h3>${park.nazwa}</h3>
+                    <p class="gallery-location">Woj. ${park.wojewodztwo} &bull; ${park.powierzchnia}</p>
+                    <button type="button" class="gallery-more-btn">Powiększ i zobacz opis &rarr;</button>
+                </div>
+            `;
+
+            card.addEventListener('click', () => otworzLightbox(index));
+            galleryGrid.appendChild(card);
+        });
+    }
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const wybranaKategoria = btn.dataset.filter;
+            if (wybranaKategoria === 'wszystkie') {
+                renderujGalerie(wszystkieParkiGalerii);
+            } else {
+                const przefiltrowane = wszystkieParkiGalerii.filter(park => park.kategoria === wybranaKategoria);
+                renderujGalerie(przefiltrowane);
+            }
+        });
+    });
+
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', zamknijLightbox);
+    }
+
+    if (lightboxPrev) {
+        lightboxPrev.addEventListener('click', (e) => {
+            e.stopPropagation();
+            wyswietlSlajdLightbox(aktualnyIndeksLightbox - 1);
+        });
+    }
+
+    if (lightboxNext) {
+        lightboxNext.addEventListener('click', (e) => {
+            e.stopPropagation();
+            wyswietlSlajdLightbox(aktualnyIndeksLightbox + 1);
+        });
+    }
+
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                zamknijLightbox();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox || !lightbox.classList.contains('open')) return;
+        if (e.key === 'Escape') {
+            zamknijLightbox();
+        } else if (e.key === 'ArrowLeft') {
+            wyswietlSlajdLightbox(aktualnyIndeksLightbox - 1);
+        } else if (e.key === 'ArrowRight') {
+            wyswietlSlajdLightbox(aktualnyIndeksLightbox + 1);
+        }
+    });
+
+    async function zaladujGalerie() {
+        try {
+            const response = await fetch('parki.json');
+            if (!response.ok) {
+                throw new Error(`Błąd HTTP: ${response.status}`);
+            }
+            wszystkieParkiGalerii = await response.json();
+            aktualizujLicznikiPrzyciskow(filterButtons, wszystkieParkiGalerii);
+            renderujGalerie(wszystkieParkiGalerii);
+        } catch (error) {
+            galleryGrid.innerHTML = `<p class="error-msg">Nie udało się wczytać galerii parków.</p>`;
+            console.error('Błąd ładowania galerii:', error);
+        }
+    }
+
+    zaladujGalerie();
 }

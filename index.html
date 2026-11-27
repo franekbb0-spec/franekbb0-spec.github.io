@@ -9,6 +9,7 @@
     <meta name="description" content="Portal edukacyjny poświęcony 23 parkom narodowym w Polsce, formom ochrony przyrody, aktualnej pogodzie, mapie oraz statystykom.">
     <meta name="keywords" content="parki narodowe, ochrona przyrody, Polska, ekologia, rezerwaty, bioróżnorodność, mapa, pogoda">
     
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%232e7d32'/%3E%3Cpath%20d='M32%2010L16%2034h10l-8%2014h28l-8-14h10L32%2010z'%20fill='%23ffffff'/%3E%3Crect%20x='29'%20y='48'%20width='6'%20height='8'%20fill='%23c8e6c9'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
 </head>
@@ -52,11 +53,35 @@
             <p>Polskie parki narodowe obejmują łącznie ponad 317 tysięcy hektarów, co stanowi około 1% terytorium całego kraju.</p>
         </section>
 
-        <!-- Przesuwna lista 23 parków, szczegóły, pogoda i mapa -->
-        <section class="content-section carousel-section">
+        <!-- Wyszukiwarka, filtry, karuzela 23 parków, szczegóły, pogoda i mapa -->
+        <section class="content-section carousel-section" id="przeglad-parkow">
             <div class="carousel-header">
                 <h3>Przegląd 23 Parków Narodowych</h3>
-                <p>Wybierz park z listy, aby zobaczyć jego opis, aktualną pogodę i położenie na mapie.</p>
+                <p>Wyszukaj lub przefiltruj strefę i wybierz park, aby zobaczyć jego opis, aktualną pogodę i położenie na mapie.</p>
+            </div>
+
+            <!-- Wyszukiwarka i filtry stref (synchronizują karuzelę i mapę) -->
+            <div class="park-controls-bar">
+                <div class="park-search-wrap">
+                    <input
+                        type="search"
+                        id="park-search"
+                        class="park-search-input"
+                        placeholder="Szukaj parku, województwa lub siedziby..."
+                        aria-label="Szukaj parku narodowego"
+                    >
+                </div>
+                <div class="index-filter-bar" id="index-filter-bar" role="group" aria-label="Filtrowanie według strefy">
+                    <button type="button" class="index-filter-btn active" data-filter="wszystkie">Wszystkie (23)</button>
+                    <button type="button" class="index-filter-btn" data-filter="gorskie">Górskie</button>
+                    <button type="button" class="index-filter-btn" data-filter="wyzynne">Wyżynne</button>
+                    <button type="button" class="index-filter-btn" data-filter="pojezierne">Pojezierne i nizinne</button>
+                    <button type="button" class="index-filter-btn" data-filter="nadmorskie">Nadmorskie</button>
+                </div>
+            </div>
+
+            <div class="filter-status-row">
+                <span id="filter-status">Wyświetlono: 23 z 23 parków</span>
             </div>
 
             <div class="carousel-wrapper">
@@ -93,7 +118,7 @@
                 <div class="map-header">
                     <div>
                         <h4>Mapa parków narodowych</h4>
-                        <p class="map-subtitle">Kliknij znacznik na mapie lub wybierz park powyżej, aby przybliżyć jego położenie.</p>
+                        <p class="map-subtitle">Kliknij znacznik lub obszar parku, aby przybliżyć jego położenie. W prawym górnym rogu mapy przełączysz podkład na topograficzny lub ukryjesz granice.</p>
                     </div>
                     <button type="button" class="map-reset-btn" id="map-reset-btn">Pokaż całą Polskę</button>
                 </div>
