@@ -1,5 +1,5 @@
 /* ==========================================================================
-   1. RESET I USTAWIENIA BAZOWE (STICKY FOOTER FLEXBOX)
+   1. RESET I USTAWIENIA BAZOWE (STICKY FOOTER FLEXBOX + PŁYNNA TYPOGRAFIA)
    ========================================================================== */
 * {
     box-sizing: border-box;
@@ -13,6 +13,7 @@ html {
 
 body {
     font-family: Arial, Helvetica, sans-serif;
+    font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.1rem);
     line-height: 1.6;
     color: #2f3640;
     background-color: #f7f9f7;
@@ -26,78 +27,127 @@ body.no-scroll {
 }
 
 /* ==========================================================================
-   2. JEDNOLITY HERO HEADER ZE ZDJĘCIEM, OBROTOWYM PRZYCISKIEM I PŁYNNYM MENU
+   2. BANER ZE SZKLANYM BLUREM I PRZYKLEJONA NAWIGACJA (DESKTOP)
    ========================================================================== */
+/* Na desktopie display: contents pozwala <nav> przyklejać się do całego <body> */
+.hero-wrapper {
+    display: contents;
+}
+
 header.hero-header {
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
     width: 100%;
+    padding-bottom: 4.5rem;
     color: #ffffff;
     text-align: center;
     background-color: #163319;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
 }
 
-/* Tło w ::before o stałej wysokości z dużym zapasem - zdjęcie nie skacze przy rozwijaniu menu */
 header.hero-header::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: max(100%, 680px);
+    inset: 0;
     background: linear-gradient(
         180deg,
-        rgba(15, 42, 18, 0.74) 0%,
-        rgba(18, 48, 22, 0.52) 55%,
-        rgba(15, 42, 18, 0.78) 100%
+        rgba(15, 42, 18, 0.56) 0%,
+        rgba(18, 48, 22, 0.42) 55%,
+        rgba(15, 42, 18, 0.68) 100%
     ),
     url("images/hero.jpg");
     background-size: cover;
-    background-position: center top;
+    background-position: center;
     background-repeat: no-repeat;
     z-index: 0;
     pointer-events: none;
 }
 
-.header-top,
-.hero-content {
+header.hero-header .content {
     position: relative;
     z-index: 1;
+    width: 100%;
+    padding: clamp(2.2rem, 5vw, 4.3rem) clamp(1rem, 3vw, 2rem);
+    background-color: rgba(15, 42, 18, 0.24);
+    
+    /* Efekt szkła (blur) */
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    
 }
 
-.header-top {
-    padding: 24px 20px 18px;
-    background-color: rgba(15, 42, 18, 0.38);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+header .content h1,
+header .content p {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 header .content h1 a {
     color: #ffffff;
     text-decoration: none;
-    font-size: 2.2rem;
+    font-size: clamp(1.85rem, 1.55rem + 1.3vw, 3rem);
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 header .content p {
-    font-size: 1.05rem;
-    margin-top: 4px;
-    color: #e8f5e9;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+    font-size: clamp(1rem, 0.92rem + 0.35vw, 1.28rem);
+    margin-top: 0.45rem;
+    color: #f1f8e9;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* Przycisk menu: obrót o 90° wyłącznie przy kliknięciu (bez niebieskiego błysku na mobile) */
+/* Nawigacja wtopiona w dolny pas banera z efektem szkła (blur) + sticky na desktopie */
+nav.main-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1600;
+    flex-shrink: 0;
+    width: 100%;
+    min-height: 4.5rem;
+    margin-top: -4.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0.55rem clamp(1rem, 3vw, 2rem);
+    background-color: rgba(15, 42, 18, 0.36);
+
+    /* Efekt szkła (blur) */
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* Stan po zjechaniu poniżej banera: mocniejsze przyciemnione szkło dla pełnej czytelności */
+nav.main-nav.is-stuck {
+    background-color: rgba(18, 52, 22, 0.84);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top-color: transparent;
+    border-bottom-color: rgba(165, 214, 167, 0.28);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.24);
+}
+
+/* Przycisk hamburgera ukryty na komputerach, widoczny wyłącznie poniżej 768px */
 .hamburger-btn {
-    display: inline-flex;
+    display: none;
     align-items: center;
     justify-content: center;
     width: 48px;
     height: 48px;
-    margin-top: 16px;
     background-color: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     border: 1px solid rgba(255, 255, 255, 0.48);
     color: #ffffff;
     font-size: 1.7rem;
@@ -120,13 +170,6 @@ header .content p {
     pointer-events: none;
 }
 
-@media (hover: hover) {
-    .hamburger-btn:hover {
-        background-color: rgba(255, 255, 255, 0.26);
-        border-color: #ffffff;
-    }
-}
-
 .hamburger-btn.open {
     transform: rotate(90deg);
     background-color: rgba(46, 125, 50, 0.88);
@@ -134,63 +177,40 @@ header .content p {
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
 }
 
-/* Płynne rozwijanie i zwijanie menu (CSS Grid 0fr -> 1fr) */
+/* Na desktopie kontener menu jest zawsze otwarty */
 .nav-collapse {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: 0fr;
-    opacity: 0;
-    margin-top: 0;
-    visibility: hidden;
-    pointer-events: none;
-    will-change: grid-template-rows, opacity;
-    transition:
-        grid-template-rows 0.32s cubic-bezier(0.4, 0, 0.2, 1),
-        opacity 0.25s ease,
-        margin-top 0.32s cubic-bezier(0.4, 0, 0.2, 1),
-        visibility 0.32s;
+    display: block;
+    width: 100%;
 }
 
-.nav-collapse.open {
-    grid-template-rows: 1fr;
-    opacity: 1;
-    margin-top: 16px;
-    visibility: visible;
-    pointer-events: auto;
-}
-
-nav ul {
+nav.main-nav ul {
     list-style: none;
-    overflow: hidden;
-    min-height: 0;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: clamp(0.45rem, 1vw, 0.85rem);
     padding: 0;
-    transform: translateY(-8px);
-    transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.nav-collapse.open ul {
-    transform: translateY(0);
+nav.main-nav ul li {
+    padding: 2px 0;
 }
 
-nav ul li {
-    padding: 3px 0;
-}
-
-nav ul li a {
+nav.main-nav ul li a {
     position: relative;
     display: block;
     color: #ffffff;
     text-decoration: none;
     font-weight: bold;
-    padding: 10px 20px;
-    background-color: rgba(15, 42, 18, 0.56);
-    border: 1px solid rgba(255, 255, 255, 0.24);
+    font-size: clamp(0.88rem, 0.84rem + 0.2vw, 1rem);
+    white-space: nowrap;
+    padding: 0.55rem clamp(0.8rem, 1.3vw, 1.35rem);
+    background-color: rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.26);
     border-radius: 6px;
     -webkit-tap-highlight-color: transparent;
     transition:
@@ -200,11 +220,11 @@ nav ul li a {
 }
 
 /* Pseudoelement ::after - animowane podkreślenie odnośników w menu */
-nav ul li a::after {
+nav.main-nav ul li a::after {
     content: "";
     position: absolute;
-    left: 16px;
-    right: 16px;
+    left: 0.9rem;
+    right: 0.9rem;
     bottom: 5px;
     height: 2px;
     background-color: #a5d6a7;
@@ -213,46 +233,25 @@ nav ul li a::after {
     transition: transform 0.25s ease;
 }
 
-nav ul li a.active {
-    background-color: rgba(46, 125, 50, 0.92);
+nav.main-nav ul li a.active {
+    background-color: rgba(46, 125, 50, 0.88);
     border-color: #a5d6a7;
 }
 
-nav ul li a.active::after {
+nav.main-nav ul li a.active::after {
     transform: scaleX(1);
 }
 
 @media (hover: hover) {
-    nav ul li a:hover {
-        background-color: rgba(46, 125, 50, 0.88);
-        border-color: rgba(255, 255, 255, 0.7);
+    nav.main-nav ul li a:hover {
+        background-color: rgba(46, 125, 50, 0.82);
+        border-color: rgba(255, 255, 255, 0.72);
         transform: scale(1.04);
     }
 
-    nav ul li a:hover::after {
+    nav.main-nav ul li a:hover::after {
         transform: scaleX(1);
     }
-}
-
-/* Treść hero bannera bezpośrednio na tle zdjęcia w headerze */
-.hero-content {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 60px 20px 72px;
-}
-
-.hero-content h2 {
-    font-size: 2.25rem;
-    margin-bottom: 12px;
-    color: #ffffff;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.65);
-}
-
-.hero-content p {
-    font-size: 1.12rem;
-    line-height: 1.6;
-    color: #f1f8e9;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
 }
 
 @keyframes fadeInModal {
@@ -267,14 +266,38 @@ nav ul li a.active::after {
 }
 
 /* ==========================================================================
-   3. TREŚĆ GŁÓWNA (MAIN)
+   3. TREŚĆ GŁÓWNA (MAIN) I ZIELONY KAFELEK PODTYTUŁU PODSTRONY
    ========================================================================== */
 main {
     flex: 1;
-    width: 100%;
-    max-width: 1050px;
-    margin: 30px auto;
-    padding: 0 20px;
+    width: min(90%, 1800px);
+    margin: clamp(1.25rem, 2.5vw, 2.5rem) auto;
+    padding: 0;
+}
+
+.page-intro-card {
+    background: linear-gradient(135deg, #2e7d32 0%, #1f6024 100%);
+    color: #ffffff;
+    border-left: 6px solid #81c784;
+    padding: clamp(1.25rem, 2.2vw, 2rem) clamp(1.25rem, 2.4vw, 2.25rem);
+    margin-bottom: clamp(1.25rem, 2vw, 1.85rem);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(27, 94, 32, 0.18);
+}
+
+.page-intro-card h2 {
+    font-size: clamp(1.38rem, 1.2rem + 0.65vw, 1.95rem);
+    margin-bottom: 0.45rem;
+    color: #ffffff;
+    line-height: 1.25;
+}
+
+.page-intro-card p {
+    font-size: clamp(0.96rem, 0.92rem + 0.2vw, 1.08rem);
+    line-height: 1.6;
+    color: #e8f5e9;
+    margin-bottom: 0;
+    max-width: 85ch;
 }
 
 /* ==========================================================================
@@ -283,16 +306,16 @@ main {
 .content-section {
     background: #ffffff;
     border: 1px solid #e0e0e0;
-    padding: 25px;
-    margin-bottom: 25px;
-    border-radius: 6px;
+    padding: clamp(1.15rem, 2vw, 2rem);
+    margin-bottom: clamp(1.25rem, 2vw, 1.85rem);
+    border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .content-section h3 {
-    margin-bottom: 12px;
+    margin-bottom: 0.8rem;
     color: #1b5e20;
-    font-size: 1.3rem;
+    font-size: clamp(1.2rem, 1.1rem + 0.35vw, 1.5rem);
 }
 
 .content-section h3::before {
@@ -307,22 +330,22 @@ main {
 }
 
 .subsection-heading {
-    margin-top: 22px;
+    margin-top: 1.4rem;
 }
 
 .content-section p {
-    margin-bottom: 12px;
+    margin-bottom: 0.8rem;
     line-height: 1.65;
 }
 
 .content-section ul,
 .content-section ol {
-    margin-left: 25px;
-    margin-bottom: 15px;
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .content-section li {
-    margin-bottom: 8px;
+    margin-bottom: 0.5rem;
 }
 
 /* ==========================================================================
@@ -330,16 +353,16 @@ main {
    ========================================================================== */
 .columns-container {
     display: flex;
-    gap: 20px;
-    margin-bottom: 30px;
+    gap: clamp(1rem, 1.8vw, 1.75rem);
+    margin-bottom: clamp(1.5rem, 2.5vw, 2.25rem);
 }
 
 .column {
     flex: 1;
     background: #ffffff;
     border: 1px solid #e0e0e0;
-    padding: 22px;
-    border-radius: 6px;
+    padding: clamp(1.15rem, 1.8vw, 1.75rem);
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -355,15 +378,15 @@ main {
 }
 
 .column h3 {
-    margin-bottom: 12px;
+    margin-bottom: 0.75rem;
     color: #1b5e20;
-    font-size: 1.2rem;
+    font-size: clamp(1.12rem, 1.05rem + 0.25vw, 1.32rem);
 }
 
 .column p {
     font-size: 0.95rem;
     color: #4a5568;
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
     line-height: 1.55;
 }
 
@@ -384,8 +407,8 @@ main {
    6. KOMPONENTY PODSTRON: O PROJEKCIE I ZAGADNIENIA
    ========================================================================== */
 .callout-box {
-    margin-top: 14px;
-    padding: 15px 18px;
+    margin-top: 1rem;
+    padding: clamp(0.95rem, 1.5vw, 1.25rem);
     background-color: #f1f8e9;
     border-left: 4px solid #2e7d32;
     border-radius: 6px;
@@ -408,21 +431,21 @@ main {
 .info-grid-2 {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-    margin-top: 14px;
+    gap: clamp(1rem, 1.6vw, 1.5rem);
+    margin-top: 1rem;
 }
 
 .feature-card {
     background-color: #f9fbf9;
     border: 1px solid #dcedc8;
     border-radius: 8px;
-    padding: 20px;
+    padding: clamp(1.1rem, 1.8vw, 1.5rem);
 }
 
 .feature-card h4 {
     color: #1b5e20;
     font-size: 1.12rem;
-    margin: 8px 0 8px;
+    margin: 0.5rem 0;
 }
 
 .feature-card p {
@@ -439,7 +462,7 @@ main {
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.4px;
-    padding: 3px 10px;
+    padding: 0.2rem 0.65rem;
     border-radius: 12px;
 }
 
@@ -451,8 +474,8 @@ main {
 .goals-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-    margin-top: 14px;
+    gap: clamp(1rem, 1.5vw, 1.4rem);
+    margin-top: 1rem;
 }
 
 .goal-card {
@@ -460,7 +483,7 @@ main {
     border: 1px solid #e0e0e0;
     border-top: 4px solid #2e7d32;
     border-radius: 8px;
-    padding: 18px;
+    padding: clamp(1rem, 1.5vw, 1.35rem);
 }
 
 .goal-number {
@@ -469,15 +492,15 @@ main {
     font-weight: bold;
     color: #2e7d32;
     background-color: #e8f5e9;
-    padding: 2px 9px;
+    padding: 0.15rem 0.6rem;
     border-radius: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 0.5rem;
 }
 
 .goal-card h4 {
     color: #1b5e20;
     font-size: 1.06rem;
-    margin-bottom: 6px;
+    margin-bottom: 0.4rem;
 }
 
 .goal-card p {
@@ -490,9 +513,9 @@ main {
 .topic-nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 0.65rem;
     justify-content: center;
-    margin-bottom: 24px;
+    margin-bottom: 1.5rem;
 }
 
 .topic-nav a {
@@ -500,7 +523,7 @@ main {
     background-color: #ffffff;
     color: #1b5e20;
     border: 1px solid #a5d6a7;
-    padding: 8px 14px;
+    padding: 0.5rem 0.95rem;
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: bold;
@@ -514,14 +537,15 @@ main {
     border-color: #2e7d32;
 }
 
+/* Odstęp od góry uwzględniający przyklejone menu na desktopie */
 .topic-section {
-    scroll-margin-top: 20px;
+    scroll-margin-top: 5.5rem;
 }
 
 /* Tabela porównawcza form ochrony obszarowej */
 .table-scroll {
     overflow-x: auto;
-    margin: 14px 0 16px;
+    margin: 1rem 0;
 }
 
 .comparison-table {
@@ -533,7 +557,7 @@ main {
 .comparison-table th,
 .comparison-table td {
     border: 1px solid #dcedc8;
-    padding: 10px 12px;
+    padding: 0.65rem 0.85rem;
     text-align: left;
     vertical-align: top;
 }
@@ -551,8 +575,8 @@ main {
 .regime-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-    margin-top: 14px;
+    gap: clamp(1rem, 1.5vw, 1.4rem);
+    margin-top: 1rem;
 }
 
 .regime-card {
@@ -560,7 +584,7 @@ main {
     border: 1px solid #e0e0e0;
     border-top: 4px solid #2e7d32;
     border-radius: 8px;
-    padding: 18px;
+    padding: clamp(1rem, 1.6vw, 1.4rem);
 }
 
 .regime-card.regime-strict {
@@ -578,14 +602,14 @@ main {
 .regime-card h4 {
     color: #1b5e20;
     font-size: 1.12rem;
-    margin-bottom: 6px;
+    margin-bottom: 0.4rem;
 }
 
 .regime-lead {
     font-weight: bold;
     color: #2e7d32;
     font-size: 0.92rem;
-    margin-bottom: 10px;
+    margin-bottom: 0.65rem;
 }
 
 .regime-card p:last-child {
@@ -598,8 +622,8 @@ main {
 .zones-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-    margin-top: 14px;
+    gap: clamp(1rem, 1.6vw, 1.5rem);
+    margin-top: 1rem;
 }
 
 .zone-card {
@@ -607,7 +631,7 @@ main {
     border: 1px solid #e0e0e0;
     border-left: 5px solid #2e7d32;
     border-radius: 8px;
-    padding: 18px 20px;
+    padding: clamp(1.1rem, 1.6vw, 1.45rem);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -636,9 +660,9 @@ main {
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.4px;
-    padding: 3px 10px;
+    padding: 0.2rem 0.65rem;
     border-radius: 12px;
-    margin-bottom: 8px;
+    margin-bottom: 0.5rem;
 }
 
 .badge-nadmorskie {
@@ -660,7 +684,7 @@ main {
 .zone-card h4 {
     color: #1b5e20;
     font-size: 1.14rem;
-    margin-bottom: 8px;
+    margin-bottom: 0.5rem;
 }
 
 .zone-card p {
@@ -669,20 +693,20 @@ main {
 }
 
 .zone-list {
-    margin-top: 10px;
-    padding-top: 10px;
+    margin-top: 0.65rem;
+    padding-top: 0.65rem;
     border-top: 1px solid #e0e0e0;
     font-size: 0.88rem;
     color: #2f3640;
     margin-bottom: 0;
 }
 
-/* Zagrożenia (2x2) */
+/* Zagrożenia */
 .threats-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-    margin-top: 14px;
+    gap: clamp(1rem, 1.5vw, 1.4rem);
+    margin-top: 1rem;
 }
 
 .threat-card {
@@ -690,13 +714,13 @@ main {
     border: 1px solid #f0e0d0;
     border-left: 4px solid #c62828;
     border-radius: 6px;
-    padding: 16px 18px;
+    padding: clamp(1rem, 1.5vw, 1.3rem);
 }
 
 .threat-card h4 {
     color: #8e2424;
     font-size: 1.05rem;
-    margin-bottom: 6px;
+    margin-bottom: 0.4rem;
 }
 
 .threat-card p {
@@ -707,19 +731,19 @@ main {
 
 /* Lista 6 zasad świadomego zwiedzania */
 .rules-list {
-    margin-top: 14px;
-    margin-left: 22px;
+    margin-top: 1rem;
+    margin-left: 1.4rem;
 }
 
 .rules-list li {
-    margin-bottom: 11px;
-    padding-left: 4px;
+    margin-bottom: 0.7rem;
+    padding-left: 0.25rem;
     color: #37474f;
 }
 
 .topic-cta {
-    margin-top: 22px;
-    padding: 18px 20px;
+    margin-top: 1.4rem;
+    padding: clamp(1rem, 1.6vw, 1.35rem);
     background-color: #f4f9f4;
     border: 1px solid #c8e6c9;
     border-radius: 8px;
@@ -727,7 +751,7 @@ main {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
+    gap: 1rem;
 }
 
 .topic-cta p {
@@ -740,7 +764,7 @@ main {
 .topic-cta-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 0.65rem;
 }
 
 .cta-btn {
@@ -750,7 +774,7 @@ main {
     text-decoration: none;
     font-weight: bold;
     font-size: 0.92rem;
-    padding: 10px 18px;
+    padding: 0.65rem 1.15rem;
     border-radius: 6px;
     border: 2px solid #2e7d32;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -776,8 +800,8 @@ main {
    ========================================================================== */
 .contact-layout {
     display: flex;
-    gap: 20px;
-    margin-bottom: 25px;
+    gap: clamp(1rem, 1.8vw, 1.75rem);
+    margin-bottom: 1.5rem;
 }
 
 .contact-layout .content-section {
@@ -786,12 +810,12 @@ main {
 }
 
 .contact-form .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
 }
 
 .contact-form label {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 0.35rem;
     font-weight: bold;
     font-size: 0.9rem;
     color: #333333;
@@ -800,7 +824,7 @@ main {
 .contact-form input,
 .contact-form textarea {
     width: 100%;
-    padding: 10px;
+    padding: 0.65rem;
     border: 1px solid #cccccc;
     border-radius: 4px;
     font-family: inherit;
@@ -818,7 +842,7 @@ main {
     background-color: #2e7d32;
     color: #ffffff;
     border: none;
-    padding: 12px 24px;
+    padding: 0.75rem 1.5rem;
     font-size: 1rem;
     font-weight: bold;
     border-radius: 4px;
@@ -832,7 +856,7 @@ main {
 }
 
 .form-feedback {
-    margin-top: 12px;
+    margin-top: 0.75rem;
     margin-bottom: 0;
     font-size: 0.92rem;
     font-weight: bold;
@@ -844,23 +868,23 @@ main {
    8. PRZESUWNA KARUZELA 23 PARKÓW, POGODA I PANEL SZCZEGÓŁÓW (INDEX.HTML)
    ========================================================================== */
 .carousel-header {
-    margin-bottom: 18px;
+    margin-bottom: 1.15rem;
 }
 
 .carousel-wrapper {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 22px;
+    gap: 0.7rem;
+    margin-bottom: 1.4rem;
 }
 
 .carousel-track {
     display: flex;
-    gap: 14px;
+    gap: clamp(0.75rem, 1vw, 1.1rem);
     overflow-x: auto;
     scroll-behavior: smooth;
-    padding: 8px 4px 14px 4px;
+    padding: 0.5rem 0.25rem 0.9rem;
     scrollbar-width: thin;
     scrollbar-color: #2e7d32 #e8f5e9;
     flex: 1;
@@ -881,7 +905,7 @@ main {
 }
 
 .carousel-item {
-    flex: 0 0 190px;
+    flex: 0 0 clamp(175px, 14vw, 240px);
     background: #f9fbf9;
     border: 2px solid #e0e0e0;
     border-radius: 8px;
@@ -908,14 +932,15 @@ main {
 
 .carousel-item img {
     width: 100%;
-    height: 115px;
+    aspect-ratio: 16 / 10;
+    height: auto;
     object-fit: cover;
     display: block;
 }
 
 .carousel-item-title {
-    padding: 10px;
-    font-size: 0.86rem;
+    padding: 0.65rem;
+    font-size: 0.88rem;
     font-weight: bold;
     color: #1b5e20;
     line-height: 1.3;
@@ -925,8 +950,8 @@ main {
     background-color: #2e7d32;
     color: #ffffff;
     border: none;
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     font-size: 1.2rem;
     cursor: pointer;
@@ -944,17 +969,17 @@ main {
 
 .park-details-box {
     display: flex;
-    gap: 24px;
+    gap: clamp(1.1rem, 2.2vw, 2.25rem);
     background-color: #f4f9f4;
     border: 1px solid #c8e6c9;
     border-radius: 8px;
-    padding: 20px;
+    padding: clamp(1rem, 1.8vw, 1.6rem);
     align-items: flex-start;
 }
 
 .park-details-img {
-    flex: 0 0 320px;
-    height: 260px;
+    flex: 0 0 clamp(280px, 36%, 540px);
+    aspect-ratio: 16 / 10;
     border-radius: 6px;
     overflow: hidden;
 }
@@ -968,6 +993,7 @@ main {
 
 .park-details-info {
     flex: 1;
+    min-width: 0;
 }
 
 .park-details-badge {
@@ -976,27 +1002,27 @@ main {
     color: #ffffff;
     font-size: 0.8rem;
     font-weight: bold;
-    padding: 4px 12px;
+    padding: 0.25rem 0.75rem;
     border-radius: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 0.65rem;
 }
 
 .park-details-info h4 {
     color: #1b5e20;
-    font-size: 1.45rem;
-    margin-bottom: 6px;
+    font-size: clamp(1.3rem, 1.15rem + 0.45vw, 1.7rem);
+    margin-bottom: 0.4rem;
 }
 
 .park-details-meta {
     font-size: 0.92rem;
     font-weight: bold;
     color: #2e7d32;
-    margin-bottom: 10px;
+    margin-bottom: 0.65rem;
 }
 
 .park-details-desc {
     color: #37474f;
-    margin-bottom: 12px;
+    margin-bottom: 0.8rem;
 }
 
 .park-weather-box {
@@ -1004,15 +1030,15 @@ main {
     border: 1px solid #c8e6c9;
     border-left: 4px solid #2e7d32;
     border-radius: 6px;
-    padding: 12px 14px;
-    margin-bottom: 14px;
+    padding: 0.75rem 0.95rem;
+    margin-bottom: 0.9rem;
     font-size: 0.92rem;
 }
 
 .weather-current-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px 10px;
+    gap: 0.35rem 0.65rem;
     align-items: center;
 }
 
@@ -1026,20 +1052,20 @@ main {
 }
 
 .weather-forecast {
-    margin-top: 10px;
+    margin-top: 0.65rem;
     overflow-x: auto;
 }
 
 .weather-forecast table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.84rem;
+    font-size: 0.85rem;
 }
 
 .weather-forecast th,
 .weather-forecast td {
     border: 1px solid #dcedc8;
-    padding: 6px 8px;
+    padding: 0.4rem 0.55rem;
     text-align: left;
 }
 
@@ -1062,8 +1088,8 @@ main {
    9. MAPA INTERNETOWA LEAFLET + OPENSTREETMAP (INDEX.HTML)
    ========================================================================== */
 .map-section {
-    margin-top: 26px;
-    padding-top: 22px;
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
     border-top: 1px solid #e0e0e0;
 }
 
@@ -1071,14 +1097,14 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 15px;
-    margin-bottom: 12px;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .map-header h4 {
     color: #1b5e20;
-    font-size: 1.25rem;
-    margin-bottom: 4px;
+    font-size: clamp(1.15rem, 1.08rem + 0.3vw, 1.4rem);
+    margin-bottom: 0.25rem;
 }
 
 .map-subtitle {
@@ -1091,7 +1117,7 @@ main {
     background-color: #ffffff;
     color: #2e7d32;
     border: 2px solid #2e7d32;
-    padding: 8px 16px;
+    padding: 0.5rem 1rem;
     border-radius: 6px;
     font-size: 0.9rem;
     font-weight: bold;
@@ -1108,8 +1134,8 @@ main {
 .map-legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px 20px;
-    margin-bottom: 12px;
+    gap: 0.65rem 1.25rem;
+    margin-bottom: 0.75rem;
     font-size: 0.88rem;
     color: #37474f;
 }
@@ -1117,7 +1143,7 @@ main {
 .legend-item {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 0.45rem;
 }
 
 .legend-dot {
@@ -1146,8 +1172,8 @@ main {
 }
 
 #mapa {
-    margin-top: 12px;
-    height: 440px;
+    margin-top: 0.75rem;
+    height: clamp(360px, 48vh, 640px);
     width: 100%;
     border: 2px solid #bac2ca;
     border-radius: 8px;
@@ -1202,7 +1228,7 @@ main {
 .leaflet-popup-content {
     margin: 10px 12px;
     min-width: 220px;
-    max-width: 260px;
+    max-width: 270px;
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.45;
 }
@@ -1215,7 +1241,8 @@ main {
 
 .popup-img {
     width: 100%;
-    height: 120px;
+    aspect-ratio: 16 / 10;
+    height: auto;
     object-fit: cover;
     border-radius: 5px;
     display: block;
@@ -1236,27 +1263,27 @@ main {
    10. WIZUALIZACJA DANYCH - WYKRESY CHART.JS (INDEX.HTML)
    ========================================================================== */
 .charts-intro {
-    margin-bottom: 18px;
+    margin-bottom: 1.15rem;
 }
 
 .chart-card {
     background-color: #f9fbf9;
     border: 1px solid #dcedc8;
     border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 22px;
+    padding: clamp(1rem, 1.6vw, 1.5rem);
+    margin-bottom: 1.4rem;
 }
 
 .chart-card h4 {
     color: #1b5e20;
-    font-size: 1.15rem;
-    margin-bottom: 4px;
+    font-size: clamp(1.08rem, 1.02rem + 0.25vw, 1.3rem);
+    margin-bottom: 0.25rem;
 }
 
 .chart-hint {
     font-size: 0.88rem;
     color: #546e7a;
-    margin-bottom: 12px;
+    margin-bottom: 0.75rem;
 }
 
 .chart-toolbar {
@@ -1264,20 +1291,20 @@ main {
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: wrap;
-    gap: 14px;
-    margin-bottom: 10px;
+    gap: 0.9rem;
+    margin-bottom: 0.65rem;
 }
 
 .chart-controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 0.65rem;
 }
 
 .chart-btn-group {
     display: inline-flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 0.4rem;
 }
 
 .chart-btn,
@@ -1285,7 +1312,7 @@ main {
     background-color: #ffffff;
     color: #2e7d32;
     border: 1px solid #2e7d32;
-    padding: 6px 12px;
+    padding: 0.4rem 0.8rem;
     font-size: 0.85rem;
     font-weight: bold;
     border-radius: 5px;
@@ -1304,16 +1331,16 @@ main {
 .chart-wrapper {
     position: relative;
     width: 100%;
-    margin-top: 12px;
+    margin-top: 0.75rem;
 }
 
 .chart-wrapper-tall {
-    height: 680px;
+    height: clamp(600px, 60vh, 840px);
     max-height: 900px;
 }
 
 .chart-wrapper-medium {
-    height: 300px;
+    height: clamp(270px, 32vh, 420px);
 }
 
 #wykresSlupkowy,
@@ -1326,7 +1353,7 @@ main {
 .charts-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
+    gap: clamp(1rem, 1.6vw, 1.5rem);
 }
 
 .charts-grid .chart-card {
@@ -1339,16 +1366,16 @@ main {
 .filter-bar {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 0.65rem;
     justify-content: center;
-    margin-bottom: 25px;
+    margin-bottom: 1.6rem;
 }
 
 .filter-btn {
     background-color: #ffffff;
     color: #2e7d32;
     border: 2px solid #2e7d32;
-    padding: 8px 18px;
+    padding: 0.5rem 1.15rem;
     font-size: 0.95rem;
     font-weight: bold;
     border-radius: 20px;
@@ -1364,9 +1391,9 @@ main {
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-    gap: 22px;
-    margin-bottom: 35px;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(260px, 20vw, 330px), 1fr));
+    gap: clamp(1rem, 1.6vw, 1.6rem);
+    margin-bottom: 2.2rem;
 }
 
 .gallery-card {
@@ -1388,7 +1415,7 @@ main {
 
 .gallery-img-wrapper {
     position: relative;
-    height: 200px;
+    aspect-ratio: 16 / 10;
     overflow: hidden;
     background-color: #e8f5e9;
 }
@@ -1413,12 +1440,12 @@ main {
     font-size: 0.78rem;
     font-weight: bold;
     text-transform: uppercase;
-    padding: 4px 10px;
+    padding: 0.25rem 0.65rem;
     border-radius: 12px;
 }
 
 .gallery-card-body {
-    padding: 18px;
+    padding: 1.15rem;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -1428,13 +1455,13 @@ main {
 .gallery-card-body h3 {
     color: #1b5e20;
     font-size: 1.15rem;
-    margin-bottom: 6px;
+    margin-bottom: 0.35rem;
 }
 
 .gallery-location {
     font-size: 0.9rem;
     color: #546e7a;
-    margin-bottom: 14px;
+    margin-bottom: 0.9rem;
 }
 
 .gallery-more-btn {
@@ -1460,7 +1487,7 @@ main {
     z-index: 2000;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 1.25rem;
 }
 
 .lightbox.open {
@@ -1470,7 +1497,7 @@ main {
 
 .lightbox-content {
     background: #ffffff;
-    max-width: 750px;
+    max-width: min(92vw, 920px);
     width: 100%;
     border-radius: 8px;
     overflow: hidden;
@@ -1500,32 +1527,32 @@ main {
 
 .lightbox-content img {
     width: 100%;
-    max-height: 430px;
+    max-height: 60vh;
     object-fit: cover;
     display: block;
 }
 
 .lightbox-info {
-    padding: 20px 25px;
+    padding: clamp(1rem, 2vw, 1.6rem);
 }
 
 .lightbox-info h3 {
     color: #1b5e20;
-    font-size: 1.4rem;
-    margin-bottom: 6px;
+    font-size: clamp(1.25rem, 1.15rem + 0.35vw, 1.55rem);
+    margin-bottom: 0.4rem;
 }
 
 .lightbox-meta {
     font-size: 0.9rem;
     font-weight: bold;
     color: #2e7d32;
-    margin-bottom: 12px;
+    margin-bottom: 0.75rem;
 }
 
 .error-msg {
     background-color: #ffebee;
     color: #c62828;
-    padding: 15px;
+    padding: 1rem;
     border-radius: 6px;
     text-align: center;
     grid-column: 1 / -1;
@@ -1535,22 +1562,23 @@ main {
    12. STOPKA (FOOTER)
    ========================================================================== */
 footer {
+    flex-shrink: 0;
     background-color: #212d27;
     color: #eceff1;
     text-align: center;
-    padding: 25px 15px;
-    margin-top: 40px;
+    padding: clamp(1.25rem, 2vw, 1.85rem) 1rem;
+    margin-top: 2.5rem;
     clear: both;
 }
 
 footer .content ul {
     list-style: none;
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
     padding: 0;
 }
 
 footer .content ul li {
-    margin: 6px 0;
+    margin: 0.4rem 0;
     font-size: 0.95rem;
 }
 
@@ -1566,7 +1594,7 @@ footer a:hover {
 .copyright {
     font-size: 0.85rem;
     border-top: 1px solid #33443b;
-    padding-top: 15px;
+    padding-top: 1rem;
     color: #b0bec5;
 }
 
@@ -1575,8 +1603,8 @@ footer a:hover {
    ========================================================================== */
 .scroll-top-btn {
     position: fixed;
-    right: 24px;
-    bottom: 24px;
+    right: clamp(16px, 2vw, 28px);
+    bottom: clamp(18px, 2vw, 28px);
     width: 48px;
     height: 48px;
     border-radius: 50%;
@@ -1638,7 +1666,17 @@ body.no-scroll .scroll-top-btn {
 }
 
 /* ==========================================================================
-   14. RESPONSYWNOŚĆ (@media max-width: 768px)
+   14. SZEROKIE EKRANY: FULL HD, 2K, 4K (@media min-width: 1360px)
+   ========================================================================== */
+@media (min-width: 1360px) {
+    .goals-grid,
+    .threats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+/* ==========================================================================
+   15. URZĄDZENIA MOBILNE I TABLETY (@media max-width: 768px)
    ========================================================================== */
 @media (max-width: 768px) {
     .columns-container,
@@ -1655,82 +1693,159 @@ body.no-scroll .scroll-top-btn {
         grid-template-columns: 1fr;
     }
 
-    header.hero-header::before {
-        height: max(100%, 920px);
+    /* Na mobile cały baner + rozwijane menu dzielą jedno nieruchome zdjęcie w tle */
+    .hero-wrapper {
+        display: block;
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+        width: 100%;
+        background-color: #163319;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+    }
+
+    .hero-wrapper::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: max(100%, 760px);
+        background: linear-gradient(
+            180deg,
+            rgba(15, 42, 18, 0.56) 0%,
+            rgba(18, 48, 22, 0.42) 50%,
+            rgba(15, 42, 18, 0.74) 100%
+        ),
+        url("images/hero.jpg");
+        background-size: cover;
         background-position: center top;
+        background-repeat: no-repeat;
+        z-index: 0;
+        pointer-events: none;
     }
 
-    .header-top {
-        padding: 18px 14px 14px;
-        background-color: rgba(15, 42, 18, 0.56);
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
+    header.hero-header {
+        background: transparent;
+        padding-bottom: 0;
+        overflow: visible;
     }
 
-    header .content h1 a {
-        font-size: 1.75rem;
+    header.hero-header::before {
+        display: none;
     }
 
-    nav ul {
+    header.hero-header .content {
+        padding: 1.65rem 1rem 1.35rem;
+        background-color: rgba(15, 42, 18, 0.26);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+
+    /* Na urządzeniach mobilnych nawigacja NIE jest przyklejona, ale zachowuje szklany blur na tle banera */
+    nav.main-nav,
+    nav.main-nav.is-stuck {
+        position: relative;
+        top: auto;
+        z-index: 1;
+        min-height: 0;
+        margin-top: 0;
+        padding: 0.75rem 1rem;
+        background-color: rgba(15, 42, 18, 0.36);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-top: 1px solid rgba(255, 255, 255, 0.16);
+        border-bottom: none;
+        box-shadow: none;
+    }
+
+    .hamburger-btn {
+        display: inline-flex;
+    }
+
+    .nav-collapse {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: 0fr;
+        opacity: 0;
+        margin-top: 0;
+        visibility: hidden;
+        pointer-events: none;
+        will-change: grid-template-rows, opacity;
+        transition:
+            grid-template-rows 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+            opacity 0.25s ease,
+            margin-top 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+            visibility 0.32s;
+    }
+
+    .nav-collapse.open {
+        grid-template-rows: 1fr;
+        opacity: 1;
+        margin-top: 0.85rem;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    nav.main-nav ul {
+        overflow: hidden;
+        min-height: 0;
         flex-direction: column;
         flex-wrap: nowrap;
         justify-content: flex-start;
         align-items: center;
-        gap: 8px;
+        gap: 0.5rem;
+        transform: translateY(-8px);
+        transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    nav ul li {
+    .nav-collapse.open ul {
+        transform: translateY(0);
+    }
+
+    nav.main-nav ul li {
         flex: 0 0 auto;
         width: 100%;
         max-width: 320px;
         padding: 0;
     }
 
-    nav ul li a {
+    nav.main-nav ul li a {
         text-align: center;
-        padding: 14px 20px;
-    }
-
-    .hero-content {
-        padding: 38px 15px 46px;
-    }
-
-    .hero-content h2 {
-        font-size: 1.6rem;
-    }
-
-    .hero-content p {
-        font-size: 1rem;
+        padding: 0.85rem 1.25rem;
+        background-color: rgba(15, 42, 18, 0.48);
     }
 
     main {
-        margin: 20px auto;
-        padding: 0 12px;
+        width: 95%;
+        margin: 1.2rem auto;
     }
 
-    .content-section {
-        padding: 18px;
+    .page-intro-card {
+        padding: 1.15rem 1.1rem;
+    }
+
+    .topic-section {
+        scroll-margin-top: 1.25rem;
     }
 
     .topic-nav {
-        gap: 8px;
+        gap: 0.5rem;
     }
 
     .topic-nav a {
         font-size: 0.84rem;
-        padding: 7px 12px;
+        padding: 0.45rem 0.75rem;
     }
 
     .park-details-box {
         flex-direction: column;
         align-items: stretch;
-        padding: 15px;
     }
 
     .park-details-img {
         flex: none;
         width: 100%;
-        height: 200px;
     }
 
     .carousel-btn {
@@ -1738,7 +1853,7 @@ body.no-scroll .scroll-top-btn {
     }
 
     .carousel-item {
-        flex: 0 0 160px;
+        flex: 0 0 165px;
     }
 
     .map-header {
@@ -1754,10 +1869,6 @@ body.no-scroll .scroll-top-btn {
         height: 350px;
     }
 
-    .chart-card {
-        padding: 15px;
-    }
-
     .chart-wrapper-tall {
         height: 620px;
     }
@@ -1767,20 +1878,14 @@ body.no-scroll .scroll-top-btn {
     }
 
     .lightbox-content img {
-        max-height: 260px;
-    }
-
-    .lightbox-info {
-        padding: 15px 18px;
+        max-height: 45vh;
     }
 
     .scroll-top-btn {
-        right: 16px;
-        bottom: 18px;
         width: 44px;
         height: 44px;
         background-color: rgba(46, 125, 50, 0.82);
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
     }
 }

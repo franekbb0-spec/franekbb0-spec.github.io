@@ -10,7 +10,23 @@ if (hamburgerBtn && navCollapse) {
     });
 }
 
-// 2. Przycisk powrotu na górę strony
+// 2. Płynne przyciemnienie szklanego menu po przyklejeniu do góry (desktop)
+const mainNav = document.querySelector('nav.main-nav');
+const heroHeader = document.querySelector('header.hero-header');
+
+if (mainNav && heroHeader) {
+    const aktualizujStanNav = () => {
+        const rect = heroHeader.getBoundingClientRect();
+        const navHeight = mainNav.offsetHeight || 72;
+        mainNav.classList.toggle('is-stuck', rect.bottom <= navHeight + 2);
+    };
+
+    window.addEventListener('scroll', aktualizujStanNav, { passive: true });
+    window.addEventListener('resize', aktualizujStanNav, { passive: true });
+    aktualizujStanNav();
+}
+
+// 3. Przycisk powrotu na górę strony
 function inicjalizujPrzyciskPowrotuNaGore() {
     if (document.getElementById('scroll-top-btn')) return;
 
@@ -43,7 +59,7 @@ function inicjalizujPrzyciskPowrotuNaGore() {
 
 inicjalizujPrzyciskPowrotuNaGore();
 
-// 3. Referencje do elementów galerii i przycisków filtrowania
+// 4. Referencje do elementów galerii i przycisków filtrowania
 const galleryGrid = document.getElementById('gallery-grid');
 const filterButtons = document.querySelectorAll('.filter-btn');
 
@@ -64,7 +80,7 @@ const etykietyKategorii = {
     nadmorskie: 'Nadmorski'
 };
 
-// 4. Pobranie danych o parkach
+// 5. Pobranie danych o parkach
 async function zaladujDane() {
     try {
         const response = await fetch('parki.json');
@@ -79,7 +95,7 @@ async function zaladujDane() {
     }
 }
 
-// 5. Dynamiczne generowanie kart
+// 6. Dynamiczne generowanie kart
 function renderujGalerie(listaParkow) {
     galleryGrid.innerHTML = '';
 
@@ -105,7 +121,7 @@ function renderujGalerie(listaParkow) {
     });
 }
 
-// 6. Obsługa filtrowania po strefach krajobrazowych
+// 7. Obsługa filtrowania po strefach krajobrazowych
 filterButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         filterButtons.forEach(b => b.classList.remove('active'));
@@ -121,7 +137,7 @@ filterButtons.forEach(btn => {
     });
 });
 
-// 7. Otwieranie i zamykanie podglądu powiększenia (Lightbox + blokada scrolla)
+// 8. Otwieranie i zamykanie podglądu powiększenia (Lightbox + blokada scrolla)
 function otworzLightbox(park) {
     lightboxImg.onerror = function () {
         this.onerror = null;
