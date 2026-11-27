@@ -27,7 +27,7 @@ body.no-scroll {
 }
 
 /* ==========================================================================
-   2. BANER ZE SZKLANYM BLUREM I PRZYKLEJONA NAWIGACJA (DESKTOP)
+   2. BANER (BLUR 0) I PRZYKLEJONA SZKLANA NAWIGACJA (BLUR 4PX) - DESKTOP
    ========================================================================== */
 /* Na desktopie display: contents pozwala <nav> przyklejać się do całego <body> */
 .hero-wrapper {
@@ -39,7 +39,7 @@ header.hero-header {
     overflow: hidden;
     flex-shrink: 0;
     width: 100%;
-    padding-bottom: 4.5rem;
+    padding-bottom: 3.9rem;
     color: #ffffff;
     text-align: center;
     background-color: #163319;
@@ -67,13 +67,10 @@ header.hero-header .content {
     position: relative;
     z-index: 1;
     width: 100%;
-    padding: clamp(2.2rem, 5vw, 4.3rem) clamp(1rem, 3vw, 2rem);
-    background-color: rgba(15, 42, 18, 0.24);
-    
-    /* Efekt szkła (blur) */
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
-    
+    padding: clamp(1rem, 2vw, 1.85rem) clamp(1rem, 3vw, 2rem);
+    background-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 header .content h1,
@@ -86,39 +83,36 @@ header .content p {
 header .content h1 a {
     color: #ffffff;
     text-decoration: none;
-    font-size: clamp(1.85rem, 1.55rem + 1.3vw, 3rem);
+    font-size: clamp(1.8rem, 1.5rem + 1.2vw, 2.85rem);
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
 }
 
 header .content p {
-    font-size: clamp(1rem, 0.92rem + 0.35vw, 1.28rem);
-    margin-top: 0.45rem;
+    font-size: clamp(0.98rem, 0.92rem + 0.3vw, 1.22rem);
+    margin-top: 0.25rem;
     color: #f1f8e9;
-    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.55);
 }
 
-/* Nawigacja wtopiona w dolny pas banera z efektem szkła (blur) + sticky na desktopie */
+/* Nawigacja wtopiona w dolny pas banera z blurem 4px + sticky na desktopie */
 nav.main-nav {
     position: sticky;
     top: 0;
     z-index: 1600;
     flex-shrink: 0;
     width: 100%;
-    min-height: 4.5rem;
-    margin-top: -4.5rem;
+    min-height: 3.9rem;
+    margin-top: -3.9rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 0.55rem clamp(1rem, 3vw, 2rem);
+    padding: 0.45rem clamp(1rem, 3vw, 2rem);
     background-color: rgba(15, 42, 18, 0.36);
-
-    /* Efekt szkła (blur) */
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    
     border-top: 1px solid rgba(255, 255, 255, 0.18);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
@@ -128,11 +122,11 @@ nav.main-nav {
         box-shadow 0.3s ease;
 }
 
-/* Stan po zjechaniu poniżej banera: mocniejsze przyciemnione szkło dla pełnej czytelności */
+/* Stan po zjechaniu poniżej banera: przyciemnione tło przy zachowaniu blura 4px */
 nav.main-nav.is-stuck {
-    background-color: rgba(18, 52, 22, 0.84);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: rgba(18, 52, 22, 0.86);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border-top-color: transparent;
     border-bottom-color: rgba(165, 214, 167, 0.28);
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.24);
@@ -143,14 +137,12 @@ nav.main-nav.is-stuck {
     display: none;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
     background-color: rgba(255, 255, 255, 0.14);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
     border: 1px solid rgba(255, 255, 255, 0.48);
     color: #ffffff;
-    font-size: 1.7rem;
+    font-size: 1.6rem;
     line-height: 1;
     border-radius: 8px;
     cursor: pointer;
@@ -206,10 +198,8 @@ nav.main-nav ul li a {
     font-weight: bold;
     font-size: clamp(0.88rem, 0.84rem + 0.2vw, 1rem);
     white-space: nowrap;
-    padding: 0.55rem clamp(0.8rem, 1.3vw, 1.35rem);
+    padding: 0.5rem clamp(0.8rem, 1.3vw, 1.35rem);
     background-color: rgba(255, 255, 255, 0.13);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
     border: 1px solid rgba(255, 255, 255, 0.26);
     border-radius: 6px;
     -webkit-tap-highlight-color: transparent;
@@ -539,7 +529,7 @@ main {
 
 /* Odstęp od góry uwzględniający przyklejone menu na desktopie */
 .topic-section {
-    scroll-margin-top: 5.5rem;
+    scroll-margin-top: 5rem;
 }
 
 /* Tabela porównawcza form ochrony obszarowej */
@@ -1693,42 +1683,54 @@ body.no-scroll .scroll-top-btn {
         grid-template-columns: 1fr;
     }
 
-    /* Na mobile cały baner + rozwijane menu dzielą jedno nieruchome zdjęcie w tle */
+    /* Jednolity blok banera i menu: tekst po lewej, przycisk hamburgera po prawej */
     .hero-wrapper {
-        display: block;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: 0.75rem;
         position: relative;
         overflow: hidden;
         flex-shrink: 0;
         width: 100%;
+        padding: 0.9rem 1rem;
         background-color: #163319;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
     }
 
+    /* Wspólne zdjęcie w tle z blurem 4px i zapasem wysokości (bez przeskoku przy rozwijaniu) */
     .hero-wrapper::before {
         content: "";
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: max(100%, 760px);
+        top: -10px;
+        left: -10px;
+        width: calc(100% + 20px);
+        height: max(calc(100% + 20px), 620px);
         background: linear-gradient(
             180deg,
             rgba(15, 42, 18, 0.56) 0%,
-            rgba(18, 48, 22, 0.42) 50%,
+            rgba(18, 48, 22, 0.48) 50%,
             rgba(15, 42, 18, 0.74) 100%
         ),
         url("images/hero.jpg");
         background-size: cover;
         background-position: center top;
         background-repeat: no-repeat;
+        filter: blur(4px);
         z-index: 0;
         pointer-events: none;
     }
 
     header.hero-header {
+        grid-column: 1;
+        grid-row: 1;
+        position: relative;
+        z-index: 1;
+        min-width: 0;
         background: transparent;
         padding-bottom: 0;
         overflow: visible;
+        text-align: left;
     }
 
     header.hero-header::before {
@@ -1736,34 +1738,65 @@ body.no-scroll .scroll-top-btn {
     }
 
     header.hero-header .content {
-        padding: 1.65rem 1rem 1.35rem;
-        background-color: rgba(15, 42, 18, 0.26);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
+        padding: 0;
+        background: transparent;
     }
 
-    /* Na urządzeniach mobilnych nawigacja NIE jest przyklejona, ale zachowuje szklany blur na tle banera */
+    header .content h1,
+    header .content p {
+        max-width: none;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    header .content h1 {
+        line-height: 1.2;
+    }
+
+    header .content h1 a {
+        font-size: clamp(1.22rem, 5vw, 1.65rem);
+    }
+
+    header .content p {
+        font-size: clamp(0.78rem, 3.2vw, 0.94rem);
+        margin-top: 0.2rem;
+        line-height: 1.3;
+    }
+
+    /* Rozpakowanie <nav> do siatki .hero-wrapper, by przycisk i lista były częścią jednego bloku */
     nav.main-nav,
     nav.main-nav.is-stuck {
-        position: relative;
-        top: auto;
-        z-index: 1;
-        min-height: 0;
+        display: contents;
+        position: static;
         margin-top: 0;
-        padding: 0.75rem 1rem;
-        background-color: rgba(15, 42, 18, 0.36);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-top: 1px solid rgba(255, 255, 255, 0.16);
-        border-bottom: none;
+        padding: 0;
+        min-height: 0;
+        background: transparent;
+        border: none;
         box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
     }
 
     .hamburger-btn {
+        grid-column: 2;
+        grid-row: 1;
+        position: relative;
+        z-index: 1;
+        align-self: center;
+        justify-self: end;
         display: inline-flex;
+        width: 44px;
+        height: 44px;
+        font-size: 1.55rem;
     }
 
     .nav-collapse {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        position: relative;
+        z-index: 1;
+        width: 100%;
         display: grid;
         grid-template-columns: minmax(0, 1fr);
         grid-template-rows: 0fr;
@@ -1782,7 +1815,7 @@ body.no-scroll .scroll-top-btn {
     .nav-collapse.open {
         grid-template-rows: 1fr;
         opacity: 1;
-        margin-top: 0.85rem;
+        margin-top: 0.9rem;
         visibility: visible;
         pointer-events: auto;
     }
@@ -1812,8 +1845,8 @@ body.no-scroll .scroll-top-btn {
 
     nav.main-nav ul li a {
         text-align: center;
-        padding: 0.85rem 1.25rem;
-        background-color: rgba(15, 42, 18, 0.48);
+        padding: 0.8rem 1.25rem;
+        background-color: rgba(15, 42, 18, 0.52);
     }
 
     main {
