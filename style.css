@@ -1046,12 +1046,12 @@ main {
     transform: scale(1.06);
 }
 
-/* Siatka karty szczegółów: po lewej zdjęcie + prognoza 24h, po prawej opis + pogoda */
+/* Siatka karty szczegółów: po lewej zdjęcie + prognoza 24h, po prawej opis + pogoda, na dole pasek akcji */
 .park-details-box {
     scroll-margin-top: 5rem;
     display: grid;
     grid-template-columns: clamp(300px, 39%, 540px) minmax(0, 1fr);
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto 1fr auto;
     column-gap: clamp(1.1rem, 2.2vw, 2.15rem);
     row-gap: 1rem;
     background-color: #f4f9f4;
@@ -1235,7 +1235,7 @@ main {
     border: 1px solid #c8e6c9;
     border-radius: 10px;
     padding: clamp(0.85rem, 1.4vw, 1.15rem);
-    margin-bottom: 0.95rem;
+    margin-bottom: 0;
     box-shadow: 0 2px 8px rgba(27, 94, 32, 0.06);
 }
 
@@ -1451,16 +1451,62 @@ main {
     flex-shrink: 0;
 }
 
-.park-details-link {
-    align-self: flex-start;
-    margin-top: auto;
-    color: #1b5e20;
-    font-weight: bold;
-    text-decoration: none;
+/* Dolny pasek z przyciskiem-pigułką do galerii */
+.park-details-actions {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 0.9rem;
+    border-top: 1px solid #dcedc8;
 }
 
-.park-details-link:hover {
-    text-decoration: underline;
+.park-details-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.62rem 1.35rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #2e7d32 0%, #1f6024 100%);
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 3px 10px rgba(27, 94, 32, 0.22);
+    -webkit-tap-highlight-color: transparent;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.park-details-link svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+}
+
+.park-details-link .link-arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+@media (hover: hover) {
+    .park-details-link:hover {
+        text-decoration: none;
+        background: linear-gradient(135deg, #256a29 0%, #174c1b 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 14px rgba(27, 94, 32, 0.3);
+    }
+
+    .park-details-link:hover .link-arrow {
+        transform: translateX(4px);
+    }
+}
+
+.park-details-link:active {
+    transform: scale(0.97);
 }
 
 /* ==========================================================================
@@ -2144,13 +2190,19 @@ body.no-scroll .scroll-top-btn {
 
     .park-details-img,
     .park-details-info,
-    .park-hourly-card {
+    .park-hourly-card,
+    .park-details-actions {
         grid-column: 1;
         grid-row: auto;
     }
 
     .park-details-info {
         height: auto;
+    }
+
+    .park-details-actions {
+        justify-content: center;
+        padding-top: 0.85rem;
     }
 }
 
@@ -2427,7 +2479,7 @@ body.no-scroll .scroll-top-btn {
     }
 }
 
-/* Bardzo wąskie ekrany: prognoza 3-dniowa w formie poziomych wierszy */
+/* Bardzo wąskie ekrany: prognoza 3-dniowa w formie poziomych wierszy + szeroka pigułka */
 @media (max-width: 480px) {
     .weather-forecast-grid {
         grid-template-columns: 1fr;
@@ -2458,5 +2510,9 @@ body.no-scroll .scroll-top-btn {
 
     .weather-day-rain {
         justify-self: end;
+    }
+
+    .park-details-link {
+        width: 100%;
     }
 }
