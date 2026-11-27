@@ -90,11 +90,12 @@
                 <button type="button" class="carousel-btn next" id="carousel-next" aria-label="Przesuń w prawo">&#10095;</button>
             </div>
 
-            <!-- Karta z danymi wybranego parku oraz pogodą -->
+            <!-- Karta z danymi wybranego parku, pogodą i przesuwną prognozą 24h -->
             <div class="park-details-box" id="park-details-box">
                 <div class="park-details-img">
                     <img id="detail-img" src="images/hero.jpg" alt="Podgląd parku narodowego">
                 </div>
+
                 <div class="park-details-info">
                     <span class="park-details-badge" id="detail-badge">Ładowanie...</span>
                     <h4 id="detail-title">Wybierz park z listy powyżej</h4>
@@ -102,14 +103,29 @@
                     <p class="park-details-desc" id="detail-desc"></p>
 
                     <div class="park-weather-box" id="park-weather">
-                        <div class="weather-current-row">
-                            <span class="weather-label">Aktualna pogoda:</span>
-                            <span class="weather-value" id="weather-data">Ładowanie...</span>
-                        </div>
-                        <div class="weather-forecast" id="weather-forecast"></div>
+                        <div class="weather-loading">Pobieranie aktualnej pogody i prognozy...</div>
                     </div>
 
                     <a href="galeria.html" class="park-details-link">Zobacz pełną galerię &rarr;</a>
+                </div>
+
+                <!-- Przesuwna godzinowa prognoza temperatury (24h) pod zdjęciem parku -->
+                <div class="park-hourly-card" id="park-hourly-card">
+                    <div class="hourly-card-head">
+                        <div class="hourly-card-titles">
+                            <h5 id="temp-chart-heading">Prognoza godzinowa (24h)</h5>
+                            <p class="hourly-subtitle" id="temp-chart-subtitle">Przesuń w bok, aby zobaczyć kolejne godziny</p>
+                        </div>
+                        <div class="hourly-nav-btns">
+                            <button type="button" class="hourly-scroll-btn" id="hourly-prev" aria-label="Przesuń prognozę w lewo">&#10094;</button>
+                            <button type="button" class="hourly-scroll-btn" id="hourly-next" aria-label="Przesuń prognozę w prawo">&#10095;</button>
+                        </div>
+                    </div>
+                    <div class="hourly-chart-scroll" id="hourly-chart-scroll">
+                        <div class="hourly-chart-inner">
+                            <canvas id="wykresTemperatury"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -137,7 +153,7 @@
         <!-- Sekcja statystyk i wykresów -->
         <section class="content-section charts-section">
             <div class="charts-intro">
-                <h3>Statystyki i prognoza pogody</h3>
+                <h3>Statystyki parków narodowych</h3>
             </div>
 
             <div class="chart-card">
@@ -164,21 +180,11 @@
                 </div>
             </div>
 
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <h4 id="temp-chart-heading">Prognoza temperatury na 24h</h4>
-                    <p class="chart-hint" id="temp-chart-subtitle">Wybierz park, aby zobaczyć prognozę godzinową.</p>
-                    <div class="chart-wrapper chart-wrapper-medium">
-                        <canvas id="wykresTemperatury"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <h4>Rozwój sieci parków narodowych w Polsce</h4>
-                    <p class="chart-hint">Łączna liczba parków na przestrzeni lat.</p>
-                    <div class="chart-wrapper chart-wrapper-medium">
-                        <canvas id="wykresSlupkowy"></canvas>
-                    </div>
+            <div class="chart-card chart-card-last">
+                <h4>Rozwój sieci parków narodowych w Polsce</h4>
+                <p class="chart-hint">Łączna liczba parków na przestrzeni lat.</p>
+                <div class="chart-wrapper chart-wrapper-medium">
+                    <canvas id="wykresSlupkowy"></canvas>
                 </div>
             </div>
         </section>

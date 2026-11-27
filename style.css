@@ -851,7 +851,7 @@ main {
 }
 
 /* ==========================================================================
-   8. WYSZUKIWARKA, FILTRY, KARUZELA 23 PARKÓW I POGODA (INDEX.HTML)
+   8. WYSZUKIWARKA, FILTRY, KARUZELA, KARTA POGODOWA I PRZESUWNY WYKRES 24H
    ========================================================================== */
 .carousel-header {
     margin-bottom: 1rem;
@@ -1046,22 +1046,29 @@ main {
     transform: scale(1.06);
 }
 
+/* Siatka karty szczegółów: po lewej zdjęcie + prognoza 24h, po prawej opis + pogoda */
 .park-details-box {
     scroll-margin-top: 5rem;
-    display: flex;
-    gap: clamp(1.1rem, 2.2vw, 2.25rem);
+    display: grid;
+    grid-template-columns: clamp(300px, 39%, 540px) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(1.1rem, 2.2vw, 2.15rem);
+    row-gap: 1rem;
     background-color: #f4f9f4;
     border: 1px solid #c8e6c9;
     border-radius: 8px;
     padding: clamp(1rem, 1.8vw, 1.6rem);
-    align-items: flex-start;
+    align-items: start;
 }
 
 .park-details-img {
-    flex: 0 0 clamp(280px, 36%, 540px);
-    aspect-ratio: 16 / 10;
-    border-radius: 6px;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    aspect-ratio: 16 / 9.6;
+    border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .park-details-img img {
@@ -1072,11 +1079,16 @@ main {
 }
 
 .park-details-info {
-    flex: 1;
+    grid-column: 2;
+    grid-row: 1 / span 2;
     min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .park-details-badge {
+    align-self: flex-start;
     display: inline-block;
     background-color: #2e7d32;
     color: #ffffff;
@@ -1102,59 +1114,346 @@ main {
 
 .park-details-desc {
     color: #37474f;
-    margin-bottom: 0.8rem;
-}
-
-.park-weather-box {
-    background-color: #ffffff;
-    border: 1px solid #c8e6c9;
-    border-left: 4px solid #2e7d32;
-    border-radius: 6px;
-    padding: 0.75rem 0.95rem;
     margin-bottom: 0.9rem;
-    font-size: 0.92rem;
 }
 
-.weather-current-row {
+/* Przesuwna karta godzinowej prognozy 24h (pod zdjęciem, obok pogody) */
+.park-hourly-card {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
+    width: 100%;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(145deg, #ffffff 0%, #f3f9f4 100%);
+    border: 1px solid #c8e6c9;
+    border-radius: 10px;
+    padding: 0.85rem 0.95rem 0.7rem;
+    box-shadow: 0 2px 8px rgba(27, 94, 32, 0.06);
+}
+
+.hourly-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin-bottom: 0.45rem;
+}
+
+.hourly-card-titles {
+    min-width: 0;
+}
+
+.hourly-card-titles h5 {
+    color: #1b5e20;
+    font-size: 0.96rem;
+    line-height: 1.25;
+    margin-bottom: 0.12rem;
+}
+
+.hourly-subtitle {
+    font-size: 0.78rem;
+    color: #607d8b;
+    margin-bottom: 0;
+    line-height: 1.3;
+}
+
+.hourly-nav-btns {
+    display: inline-flex;
+    gap: 0.3rem;
+    flex-shrink: 0;
+}
+
+.hourly-scroll-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid #a5d6a7;
+    background-color: #ffffff;
+    color: #2e7d32;
+    font-size: 0.82rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.hourly-scroll-btn:hover {
+    background-color: #2e7d32;
+    border-color: #2e7d32;
+    color: #ffffff;
+}
+
+.hourly-chart-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.3rem;
+    cursor: grab;
+    scrollbar-width: thin;
+    scrollbar-color: #81c784 #e8f5e9;
+}
+
+.hourly-chart-scroll.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+}
+
+.hourly-chart-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.hourly-chart-scroll::-webkit-scrollbar-track {
+    background: #e8f5e9;
+    border-radius: 999px;
+}
+
+.hourly-chart-scroll::-webkit-scrollbar-thumb {
+    background: #66bb6a;
+    border-radius: 999px;
+}
+
+.hourly-chart-scroll::-webkit-scrollbar-thumb:hover {
+    background: #2e7d32;
+}
+
+.hourly-chart-inner {
+    position: relative;
+    width: 1120px;
+    height: 175px;
+}
+
+/* Nowoczesna karta pogodowa z ikonami SVG i kafelkami prognozy 3-dniowej */
+.park-weather-box {
+    background: linear-gradient(145deg, #ffffff 0%, #f3f9f4 100%);
+    border: 1px solid #c8e6c9;
+    border-radius: 10px;
+    padding: clamp(0.85rem, 1.4vw, 1.15rem);
+    margin-bottom: 0.95rem;
+    box-shadow: 0 2px 8px rgba(27, 94, 32, 0.06);
+}
+
+.weather-loading,
+.weather-error {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    color: #546e7a;
+    padding: 0.35rem 0;
+}
+
+.weather-error {
+    color: #c62828;
+}
+
+.weather-now {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem 0.65rem;
     align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem 1.25rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid #dcedc8;
 }
 
-.weather-label {
+.weather-now-main {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.weather-icon-lg {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border: 1px solid #e0efe2;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.weather-icon-lg svg {
+    width: 42px;
+    height: 42px;
+    display: block;
+}
+
+.weather-now-temp-wrap {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.weather-now-temp {
+    font-size: clamp(1.55rem, 1.35rem + 0.65vw, 2.05rem);
+    font-weight: 800;
+    color: #1b5e20;
+    letter-spacing: -0.5px;
+}
+
+.weather-now-desc {
+    font-size: 0.92rem;
+    font-weight: bold;
+    color: #37474f;
+    margin-top: 0.12rem;
+}
+
+.weather-now-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.weather-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background-color: #ffffff;
+    border: 1px solid #dcedc8;
+    border-radius: 20px;
+    padding: 0.32rem 0.72rem;
+    font-size: 0.82rem;
+    color: #37474f;
+    white-space: nowrap;
+}
+
+.weather-pill strong {
+    color: #1b5e20;
+}
+
+.weather-pill svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    color: #2e7d32;
+}
+
+.weather-forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin-top: 0.85rem;
+}
+
+.weather-day-card {
+    background-color: #ffffff;
+    border: 1px solid #e1eee3;
+    border-radius: 8px;
+    padding: 0.65rem 0.7rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.32rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+@media (hover: hover) {
+    .weather-day-card:hover {
+        border-color: #81c784;
+        transform: translateY(-2px);
+    }
+}
+
+.weather-day-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
+}
+
+.weather-day-name {
+    font-size: 0.84rem;
     font-weight: bold;
     color: #1b5e20;
 }
 
-.weather-value {
-    color: #37474f;
+.weather-day-date {
+    font-size: 0.74rem;
+    color: #607d8b;
 }
 
-.weather-forecast {
-    margin-top: 0.65rem;
-    overflow-x: auto;
+.weather-day-icon {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.weather-forecast table {
+.weather-day-icon svg {
+    width: 32px;
+    height: 32px;
+    display: block;
+}
+
+.weather-day-temps {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+}
+
+.temp-max {
+    font-weight: 800;
+    color: #c85a17;
+}
+
+.temp-min {
+    font-weight: bold;
+    color: #0277bd;
+}
+
+.weather-temp-bar {
+    position: relative;
     width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
+    height: 5px;
+    background-color: #e8f0ea;
+    border-radius: 999px;
+    overflow: hidden;
 }
 
-.weather-forecast th,
-.weather-forecast td {
-    border: 1px solid #dcedc8;
-    padding: 0.4rem 0.55rem;
-    text-align: left;
+.weather-temp-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #29b6f6 0%, #66bb6a 55%, #f57c00 100%);
 }
 
-.weather-forecast th {
-    background-color: #e8f5e9;
-    color: #1b5e20;
+.weather-day-rain {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.22rem;
+    font-size: 0.76rem;
+    color: #607d8b;
+}
+
+.weather-day-rain.has-rain {
+    color: #0277bd;
+    font-weight: bold;
+}
+
+.weather-day-rain svg {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
 }
 
 .park-details-link {
+    align-self: flex-start;
+    margin-top: auto;
     color: #1b5e20;
     font-weight: bold;
     text-decoration: none;
@@ -1352,6 +1651,10 @@ main {
     margin-bottom: 1.4rem;
 }
 
+.chart-card-last {
+    margin-bottom: 0;
+}
+
 .chart-card h4 {
     color: #1b5e20;
     font-size: clamp(1.08rem, 1.02rem + 0.25vw, 1.3rem);
@@ -1418,7 +1721,7 @@ main {
 }
 
 .chart-wrapper-medium {
-    height: clamp(270px, 32vh, 420px);
+    height: clamp(270px, 32vh, 380px);
 }
 
 #wykresSlupkowy,
@@ -1426,16 +1729,6 @@ main {
 #wykresTemperatury {
     width: 100%;
     max-height: 900px;
-}
-
-.charts-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(1rem, 1.6vw, 1.5rem);
-}
-
-.charts-grid .chart-card {
-    margin-bottom: 0;
 }
 
 /* ==========================================================================
@@ -1841,7 +2134,28 @@ body.no-scroll .scroll-top-btn {
 }
 
 /* ==========================================================================
-   15. URZĄDZENIA MOBILNE I TABLETY (@media max-width: 768px)
+   15. TABLETY I WĘŻSZE OKNA: KARTA PARKU W 1 KOLUMNIE (@media max-width: 900px)
+   ========================================================================== */
+@media (max-width: 900px) {
+    .park-details-box {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto;
+    }
+
+    .park-details-img,
+    .park-details-info,
+    .park-hourly-card {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .park-details-info {
+        height: auto;
+    }
+}
+
+/* ==========================================================================
+   16. URZĄDZENIA MOBILNE (@media max-width: 768px)
    ========================================================================== */
 @media (max-width: 768px) {
     .columns-container,
@@ -1853,8 +2167,7 @@ body.no-scroll .scroll-top-btn {
     .goals-grid,
     .regime-grid,
     .zones-grid,
-    .threats-grid,
-    .charts-grid {
+    .threats-grid {
         grid-template-columns: 1fr;
     }
 
@@ -2054,22 +2367,20 @@ body.no-scroll .scroll-top-btn {
         width: 100%;
     }
 
-    .park-details-box {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .park-details-img {
-        flex: none;
-        width: 100%;
-    }
-
     .carousel-btn {
         display: none;
     }
 
     .carousel-item {
         flex: 0 0 165px;
+    }
+
+    .hourly-nav-btns {
+        display: none;
+    }
+
+    .hourly-chart-inner {
+        height: 165px;
     }
 
     .map-header {
@@ -2113,5 +2424,39 @@ body.no-scroll .scroll-top-btn {
         background-color: rgba(46, 125, 50, 0.82);
         backdrop-filter: blur(4px);
         -webkit-backdrop-filter: blur(4px);
+    }
+}
+
+/* Bardzo wąskie ekrany: prognoza 3-dniowa w formie poziomych wierszy */
+@media (max-width: 480px) {
+    .weather-forecast-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .weather-day-card {
+        display: grid;
+        grid-template-columns: minmax(76px, 1fr) 36px minmax(92px, 1.2fr) auto;
+        align-items: center;
+        text-align: left;
+        gap: 0.55rem;
+        padding: 0.55rem 0.75rem;
+    }
+
+    .weather-day-head {
+        align-items: flex-start;
+    }
+
+    .weather-day-temps {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+    }
+
+    .weather-temp-bar {
+        grid-column: 3;
+    }
+
+    .weather-day-rain {
+        justify-self: end;
     }
 }
